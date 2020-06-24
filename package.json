@@ -1,0 +1,32 @@
+{
+  "name": "geoserver-node-client",
+  "version": "0.0.1",
+  "description": "Node.js client for GeoServer REST API",
+  "type": "module",
+  "main": "geoserver-rest-client.js",
+  "scripts": {
+    "demo": "node demo/index.js",
+    "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js",
+    "lint": "eslint index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "GeoServer",
+    "REST",
+    "Client"
+  ],
+  "author": "C. Mayer, meggsimum (info_at*meggsimum?dot?de)",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jsdoc": "^3.6.4"
+  }
+}
