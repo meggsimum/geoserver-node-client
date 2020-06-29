@@ -129,6 +129,43 @@ export default class DatastoreClient {
   }
 
   /**
+   * Creates a WMS based data store.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {String} wmsCapabilitiesUrl Base WMS capabilities URL
+   */
+  async createWmsStore (workspace, dataStore, wmsCapabilitiesUrl) {
+    const body = {
+      wmsStore: {
+        name: dataStore,
+        type: 'WMS',
+        capabilitiesURL: wmsCapabilitiesUrl
+      }
+    };
+
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'workspaces/' + workspace + '/wmsstores';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (response.status === 201) {
+      return true;
+    } else {
+      console.warn(await response.text());
+      return false;
+    }
+  }
+
+  /**
    * Creates a WFS based data store.
    *
    * @param {String} workspace The WS to create the data store in

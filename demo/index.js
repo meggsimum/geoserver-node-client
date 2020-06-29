@@ -51,6 +51,10 @@ grc.getVersion().then(versionInfo => {
 // grc.datastores.deleteCoverageStore('test', 'test', true).then(gsWmsStores => {
 //   console.log('Deleted coverage store', prettyJson(gsWmsStores));
 // });
+// const wmsUrl = 'https://ows.terrestris.de/osm/service?';
+// grc.datastores.createWmsStore(ws, 'testWmsDs', wmsUrl).then(retVal => {
+//   console.log('Created WMS data store', prettyJson(retVal));
+// });
 // const wfsCapsUrl = 'https://ows.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
 // const namespaceUrl = 'http://test';
 // grc.datastores.createWfsStore(ws, 'testWfsDs', wfsCapsUrl, namespaceUrl).then(retVal => {
