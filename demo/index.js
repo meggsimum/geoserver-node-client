@@ -78,6 +78,9 @@ grc.getVersion().then(versionInfo => {
 // grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestName2', 'Test Title 2', 'EPSG:31468', true).then(retVal => {
 //   console.log('Created Layer', prettyJson(retVal));
 // });
+// grc.layers.publishWmsLayer(ws, 'testWmsDs', 'OSM-Overlay-WMS', 'aTestName4Wms', 'Test Title WMS', 'EPSG:900913', true).then(retVal => {
+//   console.log('Created WMS Layer', prettyJson(retVal));
+// });
 // grc.layers.publishDbRaster(ws, 'testdataStore', 'nativeRasterName', 'a-db-raster', 'Dummy DB Raster Title', null, true).then(retVal => {
 //   console.log('Created DB Raster Layer', prettyJson(retVal))
 // });

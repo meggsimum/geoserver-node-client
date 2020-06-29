@@ -162,6 +162,50 @@ export default class LayerClient {
   }
 
   /**
+   *
+   * @param {String} workspace Workspace to publish WMS layer in
+   * @param {String} dataStore The datastore where the WMS is connected
+   * @param {String} nativeName Native name of WMS layer
+   * @param {String} [name] Published name of WMS layer
+   * @param {String} [title] Published title of WMS layer
+   * @param {String} [srs="EPSG:4326"] The SRS of the WMS layer
+   * @param {String} enabled Flag to enable WMS layer by default
+   */
+  async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled) {
+    try {
+      const body = {
+        wmsLayer: {
+          name: name || nativeName,
+          nativeName: nativeName,
+          title: title || name || nativeName,
+          srs: srs || 'EPSG:4326',
+          enabled: enabled
+        }
+      };
+
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'workspaces/' + workspace + '/wmsstores/' + dataStore + '/wmslayers', {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (response.status === 201) {
+        return true;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
    * Publishes a raster stored in a database.
    *
    * @param {String} workspace Workspace to publish layer in
