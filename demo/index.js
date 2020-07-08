@@ -44,6 +44,18 @@ grc.getVersion().then(versionInfo => {
 // grc.datastores.getWmtsStores(ws).then(gsWmsStores => {
 //   console.log('GeoServer WMTS stores in WS', ws, prettyJson(gsWmsStores));
 // });
+// grc.datastores.getDataStore(ws, 'foo').then(gsStore => {
+//   console.log('GeoServer data store ', prettyJson(gsStore));
+// });
+// grc.datastores.getCoverageStore(ws, 'foo').then(gsStore => {
+//   console.log('GeoServer coverage store ', prettyJson(gsStore));
+// });
+// grc.datastores.getWmsStore(ws, 'foo').then(gsStore => {
+//   console.log('GeoServer wms store ', prettyJson(gsStore));
+// });
+// grc.datastores.getWmtsStore(ws, 'foo').then(gsStore => {
+//   console.log('GeoServer wmts store ', prettyJson(gsStore));
+// });
 // const geotiff = '/opt/STK10_32354_5670_6_nwfarbe.tif';
 // grc.datastores.createGeotiffFromFile('test', 'testDs', 'HymptyLayer', 'DumptyTitle', geotiff).then(gsWmsStores => {
 //   console.log('GeoServer create GeoTIFF', prettyJson(gsWmsStores));

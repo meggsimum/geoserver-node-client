@@ -83,6 +83,78 @@ export default class DatastoreClient {
   }
 
   /**
+   * Get specific DataStore by name in a workspace.
+   *
+   * @param {String} workspace The workspace to search DataStore in
+   * @param {String} dataStore DataStore name
+   */
+  async getDataStore (workspace, dataStore) {
+    return this.getStore(workspace, dataStore, 'datastores');
+  }
+
+  /**
+   * Get specific CoverageStore by name in a workspace.
+   *
+   * @param {String} workspace The workspace to search CoverageStore in
+   * @param {String} covStore CoverageStore name
+   */
+  async getCoverageStore (workspace, covStore) {
+    return this.getStore(workspace, covStore, 'coveragestores');
+  }
+
+  /**
+   * Get specific WmsStore by name in a workspace.
+   *
+   * @param {String} workspace The workspace to search WmsStore in
+   * @param {String} wmsStore WmsStore name
+   */
+  async getWmsStore (workspace, wmsStore) {
+    return this.getStore(workspace, wmsStore, 'wmsstores');
+  }
+
+  /**
+   * Get specific WmtsStore by name in a workspace.
+   *
+   * @param {String} workspace The workspace to search WmtsStore in
+   * @param {String} wmtsStore WmtsStore name
+   */
+  async getWmtsStore (workspace, wmtsStore) {
+    return this.getStore(workspace, wmtsStore, 'wmtsstores');
+  }
+
+  /**
+   * @private
+   * @param {String} workspace
+   * @param {String} storeName
+   * @param {String} storeType
+   */
+  async getStore (workspace, storeName, storeType) {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+      if (response.status === 200) {
+        return await response.json();
+      } else if (response.status === 404) {
+        console.warn('No ' + storeType + ' with name "' + storeName + '" found');
+        return false;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
    * Creates a GeoTIFF store from a file by path and publishes it as layer.
    * The GeoTIFF file has to be placed on the server, where your GeoServer
    * is running.
