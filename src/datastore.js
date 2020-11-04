@@ -201,6 +201,46 @@ export default class DatastoreClient {
   }
 
   /**
+   * Creates an ImageMosaic store from a zip archive with the 3 necessary files
+   *   - datastore.properties
+   *   - indexer.properties
+   *   - timeregex.properties
+   *
+   * The zip archive has to be given as absolute path, so before it has to be
+   * placed on the server, where your GeoServer is running.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {String} zipArchivePath Aboslute path to zip archive with the 3 properties files
+   */
+  async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
+    try {
+      const readStream = fs.createReadStream(zipArchivePath);
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/zip'
+        },
+        body: readStream
+      });
+
+      if (response.status === 201) {
+        return await response.text();
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  /**
    * Creates a WMS based data store.
    *
    * @param {String} workspace The WS to create the data store in
