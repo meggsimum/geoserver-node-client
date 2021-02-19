@@ -107,6 +107,9 @@ grc.getVersion().then(versionInfo => {
 // grc.layers.deleteFeatureType(ws, 'testdataStore', 'aTestName2', true).then(retVal => {
 //   console.log('Deleted Layer', prettyJson(retVal))
 // });
+// grc.layers.enableTimeCoverage(ws, 'testDs', 'HymptyLayer', 'DISCRETE_INTERVAL', 3600000, 'MAXIMUM').then(retVal => {
+//   console.log('Enabled time for layer', prettyJson(retVal))
+// });
 
 // STYLES
 

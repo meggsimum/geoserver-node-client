@@ -278,4 +278,66 @@ export default class LayerClient {
       return false;
     }
   }
+
+  /**
+   * Enables TIME dimension for the given coverage layer.
+   *
+   * @param {String} workspace Workspace where layer to enable time dimension for is in
+   * @param {String} datastore The datastore where the layer to enable time dimension for is in
+   * @param {String} name Layer to enable time dimension for
+   * @param {String} presentation Presentation type: 'LIST' or 'DISCRETE_INTERVAL' or 'CONTINUOUS_INTERVAL'
+   * @param {Number} resolution Resolution in milliseconds, e.g. 3600000 for 1 hour
+   * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
+   * @param {Boolean} [nearestMatchEnabled] Enable nearest match
+   * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
+   */
+  async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled) {
+    try {
+      const body = {
+        coverage: {
+          metadata: {
+            entry: [
+              {
+                '@key': 'time',
+                dimensionInfo: {
+                  enabled: true,
+                  presentation: 'DISCRETE_INTERVAL',
+                  resolution: resolution,
+                  units: 'ISO8601',
+                  defaultValue: {
+                    strategy: defaultValue
+                  },
+                  nearestMatchEnabled: nearestMatchEnabled,
+                  rawNearestMatchEnabled: rawNearestMatchEnabled
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + name + '.json';
+      console.log(url);
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (response.status === 200) {
+        return true;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 }
