@@ -75,6 +75,14 @@ grc.getVersion().then(versionInfo => {
 // grc.datastores.deleteDataStore(ws, 'testWfsDs', false).then(gsWmsStores => {
 //   console.log('Deleted data store', prettyJson(gsWmsStores));
 // });
+// const initZipArchivePath = '/home/meggs/workspace/meggsimum/sauber/sauber-sdi-docker/geoserver_publisher/gs-img-mosaic-tpl/init.zip';
+// grc.datastores.createImageMosaicStore('test-cm', 'testCovStore', initZipArchivePath).then(retVal => {
+//   console.log('Created Image Mosaic Store', retVal);
+// });
+// const gpkgPath = 'natural_earth_vector.gpkg';
+// grc.datastores.createGpkgStore(ws, 'testGpkgStore', gpkgPath).then(retVal => {
+//   console.log('Created GPKG Store', retVal);
+// });
 
 // LAYERS
 

@@ -399,4 +399,52 @@ export default class DatastoreClient {
       return false;
     }
   }
+
+  /**
+   * Creates a GeoPackage store from a file placed in the geoserver_data dir.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {String} gpkgPath Relative path to GeoPackage file within geoserver_data dir
+   */
+  async createGpkgStore (workspace, dataStore, gpkgPath) {
+    const body = {
+      dataStore: {
+        name: dataStore,
+        type: 'GeoPackage',
+        connectionParameters: {
+          entry: [
+            {
+              '@key': 'database',
+              $: `file:${gpkgPath}`
+            },
+            {
+              '@key': 'dbtype',
+              $: 'geopkg'
+            }
+          ]
+        }
+      }
+    };
+
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'workspaces/' + workspace + '/datastores';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (response.status === 201) {
+      return true;
+    } else {
+      console.warn(await response.text());
+      return false;
+    }
+  }
 }
