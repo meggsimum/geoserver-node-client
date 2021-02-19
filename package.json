@@ -7,7 +7,7 @@
   "scripts": {
     "demo": "node demo/index.js",
     "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js",
-    "lint": "eslint index.js",
+    "lint": "eslint src/*.js demo/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
