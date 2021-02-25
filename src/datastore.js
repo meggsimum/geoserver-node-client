@@ -201,6 +201,89 @@ export default class DatastoreClient {
   }
 
   /**
+   * Creates a PostGIS based data store.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name to be created
+   * @param {String} pgHost The PostGIS DB host
+   * @param {String} pgPort The PostGIS DB port
+   * @param {String} pgUser The PostGIS DB user
+   * @param {String} pgPassword The PostGIS DB password
+   * @param {String} pgSchema The PostGIS DB schema
+   * @param {String} pgDb The PostGIS DB name
+   * @param {String} [exposePk] expose primary key, defaults to false
+   */
+  async createPostgisStore (workspace, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk) {
+    const body = {
+      dataStore: {
+        name: dataStore,
+        type: 'PostGIS',
+        enabled: true,
+        connectionParameters: {
+          entry: [
+            {
+              '@key': 'dbtype',
+              $: 'postgis'
+            },
+            {
+              '@key': 'schema',
+              $: pgSchema
+            },
+            {
+              '@key': 'database',
+              $: pgDb
+            },
+            {
+              '@key': 'host',
+              $: pgHost
+            },
+            {
+              '@key': 'port',
+              $: pgPort
+            },
+            {
+              '@key': 'passwd',
+              $: pgPassword
+            },
+            {
+              '@key': 'namespace',
+              $: workspace
+            },
+            {
+              '@key': 'user',
+              $: pgUser
+            },
+            {
+              '@key': 'Expose primary keys',
+              $: exposePk || false
+            }
+          ]
+        }
+      }
+    };
+
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'workspaces/' + workspace + '/datastores';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (response.status === 201) {
+      return true;
+    } else {
+      console.warn(await response.text());
+      return false;
+    }
+  }
+
+  /**
    * Creates an ImageMosaic store from a zip archive with the 3 necessary files
    *   - datastore.properties
    *   - indexer.properties
