@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/style.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/style.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
+import WorkspaceClient from './workspace.js';
+
+/**
+ * Client for GeoServer styles
+ *
+ * @module StyleClient
+ */
+export default class StyleClient {
+  /**
+   * Creates a GeoServer REST StyleClient instance.
+   *
+   * @param {String} url The URL of the GeoServer REST API endpoint
+   * @param {String} user The user for the GeoServer REST API
+   * @param {String} password The password for the GeoServer REST API
+   */
+  constructor (url, user, password) {
+    this.url = url.endsWith('/') ? url : url + '/';
+    this.user = user;
+    this.password = password;
+  }
+
+  /**
+   * Returns all default styles.
+   * 
+   * @returns {Object|Boolean} An object with the default styles or 'false' 
+   */
+  async getDefaults () {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'styles.json', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns all styles in a workspace.
+   *
+   * @param {String} workspace Workspace name to get styles for
+   * 
+   * @returns {Object|Boolean} An object with all styles or 'false'
+   */
+  async getInWorkspace (workspace) {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'workspaces/' + workspace + '/styles.json', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns all styles defined in workspaces.
+   * 
+   * @returns {Object|Boolean} An object with all styles or 'false'
+   */
+  async getAllWorkspaceStyles () {
+    try {
+      const allStyles = [];
+      const ws = new WorkspaceClient(this.url, this.user, this.password);
+      const allWs = await ws.getAll();
+
+      // go over all workspaces and query the styles for
+      for (let i = 0; i &lt; allWs.workspaces.workspace.length; i++) {
+        const ws = allWs.workspaces.workspace[i];
+        const wsStyles = await this.getInWorkspace(ws.name);
+
+        if (wsStyles.styles.style) {
+          wsStyles.styles.style.forEach(wsStyle => {
+            allStyles.push(wsStyle);
+          });
+        }
+      }
+
+      return allStyles;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns all styles as combined object (default ones and those in
+   * workspaces).
+   * 
+   * @returns {Object|Boolean} An object with all styles or 'false'
+   */
+  async getAll () {
+    try {
+      const defaultStyles = await this.getDefaults();
+      const wsStyles = await this.getAllWorkspaceStyles();
+      const allStyles = defaultStyles.styles.style.concat(wsStyles);
+
+      return allStyles;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Publishes a new SLD style.
+   *
+   * @param {String} workspace The workspace to publish style in
+   * @param {String} name Name of the style
+   * @param {String} sldBody SLD style (as XML text)
+   * 
+   * @returns {Boolean} If the style could be published
+   */
+  async publish (workspace, name, sldBody) {
+    try {
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/vnd.ogc.sld+xml'
+        },
+        body: sldBody
+      });
+
+      if (response.status === 201) {
+        return true;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Mar 02 2021 16:05:39 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
