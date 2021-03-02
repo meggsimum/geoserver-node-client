@@ -275,7 +275,6 @@ describe('Security', () => {
 
   it('can create a user', async () => {
     const result = await grc.security.createUser(dummyUser, dummyPassword);
-    console.log(result);
     expect(result).to.be.true;
   })
 
