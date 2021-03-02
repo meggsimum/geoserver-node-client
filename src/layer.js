@@ -85,6 +85,8 @@ export default class LayerClient {
    * @param {String} [title] Published title of FeatureType
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
+   * 
+   * @returns {Boolean} If FeatureType could be published.
    */
   async publishFeatureTypeDefaultDataStore (workspace, nativeName, name, title, srs, enabled) {
     try {
@@ -131,7 +133,7 @@ export default class LayerClient {
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
    * 
-   * @returns {Boolean} If the feature type could be published
+   * @returns {Boolean} If the FeatureType could be published
    */
   async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled) {
     try {
@@ -168,7 +170,8 @@ export default class LayerClient {
   }
 
   /**
-   *
+   *  Publishes a WMS layer.
+   * 
    * @param {String} workspace Workspace to publish WMS layer in
    * @param {String} dataStore The datastore where the WMS is connected
    * @param {String} nativeName Native name of WMS layer
@@ -223,6 +226,8 @@ export default class LayerClient {
    * @param {String} [title] Published title of layer
    * @param {String} [srs="EPSG:4326"] The SRS of the layer
    * @param {String} enabled Flag to enable layer by default
+   * 
+   * @returns {Boolean} If raster could be published
    */
   async publishDbRaster (workspace, coverageStore, nativeName, name, title, srs, enabled) {
     try {
@@ -265,7 +270,7 @@ export default class LayerClient {
    * @param {String} name Layer to delete
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
-   * @returns {Boolean} If the feature type could be deleted.
+   * @returns {Boolean} If the feature type could be deleted
    */
   async deleteFeatureType (workspace, datastore, name, recurse) {
     try {
@@ -300,6 +305,8 @@ export default class LayerClient {
    * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
    * @param {Boolean} [nearestMatchEnabled] Enable nearest match
    * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
+   * 
+   * @returns If time dimension could be enabled
    */
   async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled) {
     try {
