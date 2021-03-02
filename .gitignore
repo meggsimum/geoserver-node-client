@@ -1,2 +1,6 @@
 node_modules/
 out/
+
+# GeoPackage
+*gpkg-shm
+*gpkg-wal

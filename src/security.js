@@ -19,6 +19,7 @@ export default class SecurityClient {
     this.password = password;
   }
 
+  // TODO: I could not get it working, got Code '406'
   /**
    * Returns all users registered in GeoServer.
    */
@@ -49,6 +50,8 @@ export default class SecurityClient {
    *
    * @param {String} username The name of the user to be created
    * @param {String} password The password of the user to be created
+   * 
+   * @returns {Boolean} If the user could be created
    */
   async createUser (username, password) {
     const body = {
@@ -91,6 +94,8 @@ export default class SecurityClient {
    * @param {String} username The name of the user to be created
    * @param {String} password The password of the user to be created
    * @param {Boolean} enabled Enable / disable the user
+   * 
+   * @returns {Boolean} If user could be updated
    */
   async updateUser (username, password, enabled) {
     const body = {
@@ -128,6 +133,8 @@ export default class SecurityClient {
    *
    * @param {String} username The name of the user to add the role to
    * @param {String} role The role to associate
+   * 
+   * @returns {Boolean} If the role could be associated
    */
   async associateUserRole (username, role) {
     try {

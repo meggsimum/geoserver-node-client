@@ -24,6 +24,8 @@ export default class LayerClient {
    * e.g. "myWs:myLayer".
    *
    * @param {String} qualifiedName GeoServer layer name with workspace prefix
+   * 
+   * @returns {Object|Boolean} An object with layer information or 'false'
    */
   async get (qualifiedName) {
     try {
@@ -49,6 +51,8 @@ export default class LayerClient {
 
   /**
    * Returns all layers in the GeoServer.
+   * 
+   * @returns {Object|Boolean} An object with all layer information or 'false'
    */
   async getAll () {
     try {
@@ -126,6 +130,8 @@ export default class LayerClient {
    * @param {String} [title] Published title of FeatureType
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
+   * 
+   * @returns {Boolean} If the feature type could be published
    */
   async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled) {
     try {
@@ -170,6 +176,8 @@ export default class LayerClient {
    * @param {String} [title] Published title of WMS layer
    * @param {String} [srs="EPSG:4326"] The SRS of the WMS layer
    * @param {String} enabled Flag to enable WMS layer by default
+   * 
+   * @returns {Boolean} If the wms layer could be published
    */
   async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled) {
     try {
@@ -256,6 +264,8 @@ export default class LayerClient {
    * @param {String} datastore The datastore where the layer to delete is in
    * @param {String} name Layer to delete
    * @param {Boolean} recurse Flag to enable recursive deletion
+   *
+   * @returns {Boolean} If the feature type could be deleted.
    */
   async deleteFeatureType (workspace, datastore, name, recurse) {
     try {

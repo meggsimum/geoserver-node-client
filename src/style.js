@@ -22,6 +22,8 @@ export default class StyleClient {
 
   /**
    * Returns all default styles.
+   * 
+   * @returns {Object|Boolean} An object with the default styles or 'false' 
    */
   async getDefaults () {
     try {
@@ -50,6 +52,8 @@ export default class StyleClient {
    * Returns all styles in a workspace.
    *
    * @param {String} workspace Workspace name to get styles for
+   * 
+   * @returns {Object|Boolean} An object with all styles or 'false'
    */
   async getInWorkspace (workspace) {
     try {
@@ -76,6 +80,8 @@ export default class StyleClient {
 
   /**
    * Returns all styles defined in workspaces.
+   * 
+   * @returns {Object|Boolean} An object with all styles or 'false'
    */
   async getAllWorkspaceStyles () {
     try {
@@ -104,6 +110,8 @@ export default class StyleClient {
   /**
    * Returns all styles as combined object (default ones and those in
    * workspaces).
+   * 
+   * @returns {Object|Boolean} An object with all styles or 'false'
    */
   async getAll () {
     try {
@@ -123,6 +131,8 @@ export default class StyleClient {
    * @param {String} workspace The workspace to publish style in
    * @param {String} name Name of the style
    * @param {String} sldBody SLD style (as XML text)
+   * 
+   * @returns {Boolean} If the style could be published
    */
   async publish (workspace, name, sldBody) {
     try {
