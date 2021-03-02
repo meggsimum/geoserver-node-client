@@ -4,11 +4,18 @@ Node.js client for GeoServer REST API.
 
 **CAUTION: This is highly bleeding edge, heavily under development and therefore breaking changes can be made at every time!**
 
-### How do I get set up? ###
+### Installation
 
-* Check out this repo
-* npm install
-* npm run demo
+```shell
+git clone https://github.com/chrismayer/geoserver-node-client
+
+cd geoserver-node-client
+
+npm install
+
+npm run demo
+```
+
 
 ### Tests
 
