@@ -340,4 +340,68 @@ export default class LayerClient {
       return false;
     }
   }
+
+  /**
+   * Enables TIME dimension for the given FeatureType layer.
+   *
+   * @param {String} workspace Workspace where layer to enable time dimension for is in
+   * @param {String} datastore The datastore where the FeatureType to enable time dimension for is in
+   * @param {String} name FeatureType to enable time dimension for
+   * @param {String} attribute Data column / attribute holding the time values
+   * @param {String} presentation Presentation type: 'LIST' or 'DISCRETE_INTERVAL' or 'CONTINUOUS_INTERVAL'
+   * @param {Number} resolution Resolution in milliseconds, e.g. 3600000 for 1 hour
+   * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
+   * @param {Boolean} [nearestMatchEnabled] Enable nearest match
+   * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
+   * @param {String} [acceptableInterval] Tolerance interval for nearest mach (e.g. 'PT30M'), only has an effect if 'nearestMatchEnabled' is true
+   */
+  async enableTimeFeatureType (workspace, dataStore, name, attribute, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
+    try {
+      const body = {
+        featureType: {
+          metadata: {
+            entry: [
+              {
+                '@key': 'time',
+                dimensionInfo: {
+                  enabled: true,
+                  attribute: attribute,
+                  presentation: presentation,
+                  resolution: resolution,
+                  units: 'ISO8601',
+                  defaultValue: {
+                    strategy: defaultValue
+                  },
+                  nearestMatchEnabled: nearestMatchEnabled,
+                  rawNearestMatchEnabled: rawNearestMatchEnabled,
+                  acceptableInterval: acceptableInterval
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes/' + name + '.json';
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (response.status === 200) {
+        return true;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
 }
