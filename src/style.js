@@ -157,4 +157,82 @@ export default class StyleClient {
       return false;
     }
   }
+
+  /**
+   * Assigns a style to a layer.
+   * 
+   * @param {String} qualifiedName GeoServer layer name with workspace prefix
+   * @param {String} styleName The name of the style
+   * @param {String} [workspaceStyle] The workspace of the style
+   * @param {Boolean} [isDefaultStyle=true] If the style should be the default style of the layer
+   * 
+   * @returns {Boolean} If the style could be assigned
+   */
+  async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
+    try {
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      
+      const styleBody = await this.getStyleInformation(styleName, workspaceStyle);
+
+      const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(styleBody)
+      });
+
+      if (response.status === 201) {
+        return true;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Get information about a style.
+   * 
+   * @param {String} styleName The name of the style
+   * @param {String} [workspace] The name of the workspace
+   * 
+   * @returns {Object|Boolean} An object about the style or 'false'
+   */
+  async getStyleInformation (styleName, workspace) {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+
+      let url;
+      if (workspace) {
+        url = this.url + 'workspaces/' + workspace + '/styles/' + styleName + '.json';
+      } else {
+        url = this.url + 'styles/' + styleName + '.json';
+      }
+
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
 }

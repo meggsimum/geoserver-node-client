@@ -144,7 +144,6 @@ describe('Layer', () => {
   it('can publish a FeatureType', async () => {
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
-    // TODO: sometimes timeout comes earlier than response
     const dataStoreResult = await grc.datastores.createWfsStore(
       workSpace,
       wfsDataStore,
@@ -222,6 +221,10 @@ describe('Layer', () => {
 
 describe('style', () => {
   let createdWorkSpace;
+  const styleName = 'my-style-name';
+  const featureLayerName = 'my-feature-layer-name'
+  const wfsDataStore = 'my-wfs-datastore';
+
   before('create workspace', async () => {
     createdWorkSpace = await grc.workspaces.create(workSpace);
   });
@@ -236,7 +239,7 @@ describe('style', () => {
 
     const result = await grc.styles.publish(
       workSpace,
-      "my-style-name",
+      styleName,
       sldBody
     );
     expect(result).to.be.true;
@@ -245,6 +248,42 @@ describe('style', () => {
   it('can get all styles', async () => {
     const result = await grc.styles.getAll();
     expect(result.length).to.equal(6)
+  })
+
+  it('can assign a style to a layer', async () => {
+
+    const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
+    const namespaceUrl = 'http://test';
+
+    const dataStoreResult = await grc.datastores.createWfsStore(
+      workSpace,
+      wfsDataStore,
+      wfsCapsUrl,
+      namespaceUrl
+    );
+    expect(dataStoreResult).to.be.true;
+
+    const layerResult = await grc.layers.publishFeatureType(
+      workSpace,
+      wfsDataStore,
+      'osm_osm-country-borders',
+      featureLayerName,
+      'My Feature title',
+      'EPSG:4326',
+      true
+    );
+    expect(layerResult).to.be.true;
+
+    const qualifiedName = workSpace + ':' + featureLayerName;
+    const workspaceStyle = workSpace;
+    const isDefaultStyle = true;
+    const result = await grc.styles.assignStyleToLayer(qualifiedName, styleName, workspaceStyle, isDefaultStyle);
+    expect(result).to.be.true;
+  });
+
+  it('can get style information', async () => {
+    const result = await grc.styles.getStyleInformation(styleName, workSpace);
+    expect(result.style.name).to.equal(styleName);
   })
 
   it('can get styles in specific workspace', async () => {
@@ -280,7 +319,6 @@ describe('Security', () => {
 
   it('can associate a user role', async () => {
     const result = await grc.security.associateUserRole(dummyUser, 'ADMIN');
-    console.log(result);
     expect(result).to.be.true;
   })
 
@@ -293,6 +331,5 @@ describe('Security', () => {
   after(async () => {
     const recursive = true;
     const result = await grc.workspaces.delete(createdWorkSpace, recursive);
-    // TODO: test if workspace has been deleted properly
   });
 });
