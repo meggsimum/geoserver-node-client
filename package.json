@@ -6,7 +6,7 @@
   "main": "geoserver-rest-client.js",
   "scripts": {
     "demo": "node demo/index.js",
-    "docs": "./node_modules/.bin/jsdoc -d docs geoserver-rest-client.js src/*.js",
+    "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js",
     "lint": "eslint src/*.js demo/index.js",
     "test": "mocha --timeout 10000"
   },

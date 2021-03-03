@@ -1,5 +1,9 @@
 node_modules/
 
+# the built documentation
+out/
+
 # GeoPackage
 *gpkg-shm
 *gpkg-wal
+
