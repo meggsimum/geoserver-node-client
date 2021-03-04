@@ -1,0 +1,54 @@
+name: ci-geoserver-node-client
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  run-tests-maintenance:
+    runs-on: ubuntu-latest
+    env:
+      GEOSERVER_VERSION: 2.17.5
+    steps:
+      - uses: actions/checkout@v2
+
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+      # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      - run: docker run -d -p 8080:8080 meggsimum/geoserver:${GEOSERVER_VERSION}
+      # finishes when tomcat of GeoServer is running
+      - run: .github/workflows/wait-for.sh "localhost:8080"
+      # we use wget to ensure that GeoServer is running
+      - run: wget http://localhost:8080/geoserver/web
+
+      - run: npm install
+      - run: npm run test
+  
+  run-tests-stable:
+    runs-on: ubuntu-latest
+    env:
+      GEOSERVER_VERSION: 2.18.2
+    steps:
+      - uses: actions/checkout@v2
+
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+      # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      - run: docker run -d -p 8080:8080 meggsimum/geoserver:${GEOSERVER_VERSION}
+      # finishes when tomcat of GeoServer is running
+      - run: .github/workflows/wait-for.sh "localhost:8080"
+      # we use wget to ensure that GeoServer is running
+      - run: wget http://localhost:8080/geoserver/web
+
+      - run: npm install
+      - run: npm run test

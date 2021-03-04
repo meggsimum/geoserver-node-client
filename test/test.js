@@ -7,8 +7,7 @@ const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);
 
 const workSpace = 'my-workspace';
-// TODO: adapt to multiple versions
-const geoServerVersion = '2.17.5';
+const geoServerVersion = process.env.GEOSERVER_VERSION;
 
 describe('Basic GeoServer', () => {
   it('should exist', async () => {
