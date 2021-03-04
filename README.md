@@ -7,7 +7,7 @@ Node.js client for GeoServer REST API.
 ### Installation
 
 ```shell
-git clone https://github.com/chrismayer/geoserver-node-client
+git clone https://github.com/meggsimum/geoserver-node-client
 
 cd geoserver-node-client
 
