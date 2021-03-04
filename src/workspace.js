@@ -21,6 +21,8 @@ export default class WorkspaceClient {
 
   /**
    * Returns all workspaces.
+   * 
+   * @returns {Object|Boolean} An Object describing the workspaces or 'false'
    */
   async getAll () {
     try {
@@ -44,6 +46,8 @@ export default class WorkspaceClient {
    * Creates a new workspace.
    *
    * @param {String} name Name of the new workspace
+   *
+   * @returns {String|Boolean} The name of the created workspace or 'false'
    */
   async create (name) {
     try {
@@ -81,7 +85,9 @@ export default class WorkspaceClient {
    * Deletes a workspace.
    *
    * @param {String} name Name of the workspace to delete
-   * @param {String} recurse Flag to enable recursive deletion
+   * @param {Boolean} recurse Flag to enable recursive deletion
+   * 
+   * @returns {Boolean} If Deletion was successful
    */
   async delete (name, recurse) {
     try {
@@ -97,8 +103,7 @@ export default class WorkspaceClient {
 
       // TODO map other HTTP status
       if (response.status === 200) {
-        const responseText = await response.text();
-        return responseText;
+        return true;
       } else {
         return false;
       }

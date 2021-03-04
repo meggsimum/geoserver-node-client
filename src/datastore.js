@@ -24,6 +24,8 @@ export default class DatastoreClient {
    * Get all DataStores in a workspace.
    *
    * @param {String} workspace The workspace to get DataStores for
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getDataStores (workspace) {
     return this.getStores(workspace, 'datastores');
@@ -33,6 +35,8 @@ export default class DatastoreClient {
    * Get all CoverageStores in a workspace.
    *
    * @param {String} workspace The workspace to get CoverageStores for
+   *
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getCoverageStores (workspace) {
     return this.getStores(workspace, 'coveragestores');
@@ -42,6 +46,8 @@ export default class DatastoreClient {
    * Get all WmsStores in a workspace.
    *
    * @param {String} workspace The workspace to get WmsStores for
+   *
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getWmsStores (workspace) {
     return this.getStores(workspace, 'wmsstores');
@@ -51,6 +57,8 @@ export default class DatastoreClient {
    * Get all WmtsStores in a workspace.
    *
    * @param {String} workspace The workspace to get WmtsStores for
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getWmtsStores (workspace) {
     return this.getStores(workspace, 'wmtsstores');
@@ -58,8 +66,12 @@ export default class DatastoreClient {
 
   /**
    * @private
+   * Get information about various store types in a workspace.
+   * 
    * @param {String} workspace
    * @param {String} storeType
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getStores (workspace, storeType) {
     try {
@@ -87,6 +99,8 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to search DataStore in
    * @param {String} dataStore DataStore name
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getDataStore (workspace, dataStore) {
     return this.getStore(workspace, dataStore, 'datastores');
@@ -97,6 +111,8 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to search CoverageStore in
    * @param {String} covStore CoverageStore name
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getCoverageStore (workspace, covStore) {
     return this.getStore(workspace, covStore, 'coveragestores');
@@ -107,6 +123,8 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to search WmsStore in
    * @param {String} wmsStore WmsStore name
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getWmsStore (workspace, wmsStore) {
     return this.getStore(workspace, wmsStore, 'wmsstores');
@@ -117,7 +135,9 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to search WmtsStore in
    * @param {String} wmtsStore WmtsStore name
-   */
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
+s  */
   async getWmtsStore (workspace, wmtsStore) {
     return this.getStore(workspace, wmtsStore, 'wmtsstores');
   }
@@ -127,6 +147,8 @@ export default class DatastoreClient {
    * @param {String} workspace
    * @param {String} storeName
    * @param {String} storeType
+   * 
+   * @returns {Object|Boolean} An object containing store details or 'false' 
    */
   async getStore (workspace, storeName, storeType) {
     try {
@@ -164,6 +186,8 @@ export default class DatastoreClient {
    * @param {String} layerName The published name of the new layer
    * @param {String} layerTitle The published title of the new layer
    * @param {String} filePath The path to the GeoTIFF file on the server
+   * 
+   * @returns {String|Boolean} The successful response text or 'false'
    */
   async createGeotiffFromFile (workspace, coverageStore, layerName, layerTitle, filePath) {
     try {
@@ -212,6 +236,8 @@ export default class DatastoreClient {
    * @param {String} pgSchema The PostGIS DB schema
    * @param {String} pgDb The PostGIS DB name
    * @param {String} [exposePk] expose primary key, defaults to false
+   * 
+   * @returns {Boolean} If the store could be created
    */
   async createPostgisStore (workspace, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk) {
     const body = {
@@ -295,6 +321,8 @@ export default class DatastoreClient {
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
    * @param {String} zipArchivePath Aboslute path to zip archive with the 3 properties files
+   * 
+   * @returns {String|Boolen} The response text or 'false'
    */
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
     try {
@@ -329,6 +357,8 @@ export default class DatastoreClient {
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
    * @param {String} wmsCapabilitiesUrl Base WMS capabilities URL
+   * 
+   * @returns {Boolean} If store could be created
    */
   async createWmsStore (workspace, dataStore, wmsCapabilitiesUrl) {
     const body = {
@@ -367,6 +397,8 @@ export default class DatastoreClient {
    * @param {String} dataStore The data store name
    * @param {String} wfsCapabilitiesUrl WFS capabilities URL
    * @param {String} namespaceUrl URL of the GeoServer namespace
+   * 
+   * @returns {Boolean} If store could be created
    */
   async createWfsStore (workspace, dataStore, wfsCapabilitiesUrl, namespaceUrl) {
     const body = {
@@ -415,6 +447,8 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace where the data store is in
    * @param {String} coverageStore Name of data store to delete
    * @param {String} recurse Flag to enable recursive deletion
+   * 
+   * @returns {Boolean} If the datastore could be deleted
    */
   async deleteDataStore (workspace, dataStore, recurse) {
     try {
@@ -452,6 +486,8 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace where the CoverageStore is in
    * @param {String} coverageStore Name of CoverageStore to delete
    * @param {String} recurse Flag to enable recursive deletion
+   * 
+   * @returns {Boolean} If the datastore could be deleted
    */
   async deleteCoverageStore (workspace, coverageStore, recurse) {
     try {
@@ -489,6 +525,8 @@ export default class DatastoreClient {
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
    * @param {String} gpkgPath Relative path to GeoPackage file within geoserver_data dir
+   * 
+   * @returns {Boolean} If store could be created
    */
   async createGpkgStore (workspace, dataStore, gpkgPath) {
     const body = {

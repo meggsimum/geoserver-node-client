@@ -41,7 +41,9 @@ export default class GeoServerRestClient {
   }
 
   /**
-   * Returns the version information.
+   * Get the GeoServer version.
+   * 
+   * @returns {String|Boolean} The version of GeoServer or 'false'
    */
   async getVersion () {
     try {
@@ -62,6 +64,8 @@ export default class GeoServerRestClient {
 
   /**
    * Checks if the configured GeoServer REST connection exists.
+   * 
+   * @returns {Boolean} If the connection exists
    */
   async exists () {
     try {
