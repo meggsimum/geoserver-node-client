@@ -1,0 +1,24 @@
+name: publish-docs
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-publish-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Install and Build
+        run: |
+          npm install
+          npm run docs
+          # prevents Jekyll defaults by GitHub
+          touch out/.nojekyll
+
+      - name: Publish docs
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: out # The folder the action should deploy.
