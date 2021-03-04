@@ -1,8 +1,12 @@
-# geoserver-node-client
+# GeoServer Node Client
 
-Node.js client for GeoServer REST API.
+Node.js client for the GeoServer REST API.
 
 **CAUTION: This is highly bleeding edge, heavily under development and therefore breaking changes can be made at every time!**
+
+### API-Docs ###
+
+Detailed API-Docs can be found [here](https://meggsimum.github.io/geoserver-node-client/index.html).
 
 ### Installation
 
@@ -36,4 +40,4 @@ npm run test
 
 ### Who do I talk to? ###
 
-* Christian Mayer (meggsimum) - info __at## meggsimum ~~dot** de
+* meggsimum (Christian Mayer) - info __at## meggsimum ~~dot** de
