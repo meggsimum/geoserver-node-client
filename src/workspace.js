@@ -90,9 +90,6 @@ export default class WorkspaceClient {
    * @returns {Boolean} If Deletion was successful
    */
   async delete (name, recurse) {
-    if (!recurse){
-      return false;
-    }
     try {
       const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
