@@ -344,8 +344,8 @@ export default class LayerClient {
   /**
    * Enables TIME dimension for the given FeatureType layer.
    *
-   * @param {String} workspace Workspace where layer to enable time dimension for is in
-   * @param {String} datastore The datastore where the FeatureType to enable time dimension for is in
+   * @param {String} workspace Workspace containing layer to enable time dimension for
+   * @param {String} datastore The datastore containing the FeatureType to enable time dimension for
    * @param {String} name FeatureType to enable time dimension for
    * @param {String} attribute Data column / attribute holding the time values
    * @param {String} presentation Presentation type: 'LIST' or 'DISCRETE_INTERVAL' or 'CONTINUOUS_INTERVAL'
@@ -354,6 +354,8 @@ export default class LayerClient {
    * @param {Boolean} [nearestMatchEnabled] Enable nearest match
    * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
    * @param {String} [acceptableInterval] Tolerance interval for nearest mach (e.g. 'PT30M'), only has an effect if 'nearestMatchEnabled' is true
+   *
+   * @returns {Boolean} If TIME dimension could be enabled
    */
   async enableTimeFeatureType (workspace, dataStore, name, attribute, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
     try {
