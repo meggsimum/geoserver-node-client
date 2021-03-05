@@ -21,6 +21,29 @@ describe('Basic GeoServer', () => {
   })
 });
 
+describe('Settings', () => {
+
+  it('returns contact information', async () => {
+    let contactInfo = await grc.settings.getContactInformation();
+    expect(contactInfo).to.not.be.false;
+  })
+
+  it('can update contact information', async () => {
+    const address = 'Unter den Linden';
+    const city = 'Berlin';
+    const country = 'Deutschland';
+    const postalCode = '123445';
+    const state = 'Berlin';
+    const email = 'example email address';
+    const organization = 'A organization';
+    const contactPerson = 'My contact persion' ;
+    const phoneNumber = '1231234234123';
+    
+    let result = await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
+    expect(result).to.be.true;
+  })
+});
+
 describe('Workspace', () => {
   it('has no workspace', async () => {
     const gsWorkspaces = await grc.workspaces.getAll();
@@ -299,7 +322,7 @@ describe('style', () => {
     const recursive = true;
     await grc.workspaces.delete(createdWorkSpace, recursive);
   });
-})
+});
 
 describe('Security', () => {
   let createdWorkSpace;

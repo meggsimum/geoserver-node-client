@@ -7,7 +7,7 @@ import fetch from 'node-fetch';
  */
 export default class SecurityClient {
   /**
-   * Creates a GeoServer REST LayerClient instance.
+   * Creates a GeoServer REST SecurityClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} user The user for the GeoServer REST API
