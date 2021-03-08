@@ -5,6 +5,7 @@ import WorkspaceClient from './src/workspace.js';
 import DatastoreClient from './src/datastore.js';
 import ImageMosaicClient from './src/imagemosaic.js';
 import SecurityClient from './src/security.js';
+import SettingsClient from './src/settings.js';
 
 /**
  * Client for GeoServer REST API.
@@ -38,6 +39,8 @@ export default class GeoServerRestClient {
     this.imagemosaics = new ImageMosaicClient(this.url, this.user, this.password);
     /** @member {SecurityClient} security GeoServer REST client instance for security related modifications */
     this.security = new SecurityClient(this.url, this.user, this.password);
+    /** @member {SettingsClient} settings GeoServer REST client instance for settings */
+    this.settings = new SettingsClient(this.url, this.user, this.password);
   }
 
   /**
