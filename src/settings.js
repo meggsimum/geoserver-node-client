@@ -21,6 +21,8 @@ export default class SettingsClient {
 
   /**
    * Get the contact information of the GeoServer.
+   * 
+   * @returns {Object|Boolean} An object with contact information or 'false'
    */
   async getContactInformation() {
     try {
@@ -53,6 +55,8 @@ export default class SettingsClient {
    * @param {String} [organization] The contact's organization
    * @param {String} [contactPerson] The contact person
    * @param {String} [phoneNumber] The contact's phone number
+   * 
+   * @returns {Boolean} If contact information could be updated.
    */
   async updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
     try {
