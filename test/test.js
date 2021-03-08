@@ -32,15 +32,21 @@ describe('Settings', () => {
     const address = 'Unter den Linden';
     const city = 'Berlin';
     const country = 'Deutschland';
-    const postalCode = '123445';
+    const postalCode = 123445;
     const state = 'Berlin';
     const email = 'example email address';
     const organization = 'A organization';
     const contactPerson = 'My contact persion' ;
-    const phoneNumber = '1231234234123';
+    const phoneNumber = 1231234234123;
     
     let result = await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
     expect(result).to.be.true;
+
+    let contactResponse = await grc.settings.getContactInformation();
+
+    // test two sample values
+    expect(address).to.equal(contactResponse.contact.address);
+    expect(state).to.equal(contactResponse.contact.addressState);
   })
 });
 
