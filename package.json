@@ -8,6 +8,7 @@
     "demo": "node demo/index.js",
     "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
     "lint": "eslint src/*.js demo/index.js",
+    "pretest": "npm run lint",
     "test": "mocha --timeout 10000"
   },
   "keywords": [
