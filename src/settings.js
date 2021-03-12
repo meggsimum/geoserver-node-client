@@ -13,7 +13,7 @@ export default class SettingsClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor(url, user, password) {
+  constructor (url, user, password) {
     this.url = url.endsWith('/') ? url : url + '/';
     this.user = user;
     this.password = password;
@@ -21,10 +21,10 @@ export default class SettingsClient {
 
   /**
    * Get the contact information of the GeoServer.
-   * 
+   *
    * @returns {Object|Boolean} An object with contact information or 'false'
    */
-  async getContactInformation() {
+  async getContactInformation () {
     try {
       const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
@@ -43,9 +43,9 @@ export default class SettingsClient {
 
   /**
    * Update the contact information.
-   * 
+   *
    * Deleting is not supported.
-   * 
+   *
    * @param {String} [address] The contact's address
    * @param {String} [city] The contact's city
    * @param {String} [country] The contact's country
@@ -55,21 +55,22 @@ export default class SettingsClient {
    * @param {String} [organization] The contact's organization
    * @param {String} [contactPerson] The contact person
    * @param {String} [phoneNumber] The contact's phone number
-   * 
+   *
    * @returns {Boolean} If contact information could be updated.
    */
-  async updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
+  async updateContactInformation (address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
     try {
-      let contact = {};
-      contact.address = address;
-      contact.addressCity = city;
-      contact.addressCountry = country;
-      contact.addressPostalCode = postalCode;
-      contact.addressState = state;
-      contact.contactEmail = email;
-      contact.contactOrganization = organization;
-      contact.contactPerson = contactPerson;
-      contact.contactVoice = phoneNumber;
+      const contact = {
+        address: address,
+        addressCity: city,
+        addressCountry: country,
+        addressPostalCode: postalCode,
+        addressState: state,
+        contactEmail: email,
+        contactOrganization: organization,
+        contactPerson: contactPerson,
+        contactVoice: phoneNumber
+      };
 
       const body = {
         contact: contact

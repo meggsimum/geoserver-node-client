@@ -21,7 +21,7 @@ export default class WorkspaceClient {
 
   /**
    * Returns all workspaces.
-   * 
+   *
    * @returns {Object|Boolean} An Object describing the workspaces or 'false'
    */
   async getAll () {
@@ -86,7 +86,7 @@ export default class WorkspaceClient {
    *
    * @param {String} name Name of the workspace to delete
    * @param {Boolean} recurse Flag to enable recursive deletion
-   * 
+   *
    * @returns {Boolean} If Deletion was successful
    */
   async delete (name, recurse) {

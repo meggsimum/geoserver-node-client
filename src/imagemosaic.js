@@ -25,7 +25,7 @@ export default class ImageMosaicClient {
    * @param {String} workspace Workspace of image mosaic
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {*} coverage Name of image mosaic
-   * 
+   *
    * @returns {Object|Boolean} An object with the granules or 'false'
    */
   async getGranules (workspace, coverageStore, coverage) {
@@ -60,7 +60,7 @@ export default class ImageMosaicClient {
    * @param {String} workspace Workspace of image mosaic
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} filePath Server path of folder to harvest
-   * 
+   *
    * @returns {Object|Boolean} An object with the granules or 'false'
    */
   async harvestGranules (workspace, coverageStore, filePath) {
@@ -96,7 +96,7 @@ export default class ImageMosaicClient {
    * @param {String} workspace Workspace of image mosaic
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} filePath Server file path of new granule
-   * 
+   *
    * @returns {Boolean} If granule could be added
    */
   async addGranuleByServerFile (workspace, coverageStore, filePath) {
@@ -133,7 +133,7 @@ export default class ImageMosaicClient {
    * @param {*} coverageStore CoverageStore of image mosaic
    * @param {*} coverage Name of image mosaic
    * @param {*} covFileLocation Location of coverage file
-   * 
+   *
    * @returns {Boolean} If granule could be deleted
    */
   async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {

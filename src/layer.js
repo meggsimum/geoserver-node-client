@@ -24,7 +24,7 @@ export default class LayerClient {
    * e.g. "myWs:myLayer".
    *
    * @param {String} qualifiedName GeoServer layer name with workspace prefix
-   * 
+   *
    * @returns {Object|Boolean} An object with layer information or 'false'
    */
   async get (qualifiedName) {
@@ -51,7 +51,7 @@ export default class LayerClient {
 
   /**
    * Returns all layers in the GeoServer.
-   * 
+   *
    * @returns {Object|Boolean} An object with all layer information or 'false'
    */
   async getAll () {
@@ -85,7 +85,7 @@ export default class LayerClient {
    * @param {String} [title] Published title of FeatureType
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
-   * 
+   *
    * @returns {Boolean} If FeatureType could be published.
    */
   async publishFeatureTypeDefaultDataStore (workspace, nativeName, name, title, srs, enabled) {
@@ -132,7 +132,7 @@ export default class LayerClient {
    * @param {String} [title] Published title of FeatureType
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
-   * 
+   *
    * @returns {Boolean} If the FeatureType could be published
    */
   async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled) {
@@ -171,7 +171,7 @@ export default class LayerClient {
 
   /**
    *  Publishes a WMS layer.
-   * 
+   *
    * @param {String} workspace Workspace to publish WMS layer in
    * @param {String} dataStore The datastore where the WMS is connected
    * @param {String} nativeName Native name of WMS layer
@@ -179,7 +179,7 @@ export default class LayerClient {
    * @param {String} [title] Published title of WMS layer
    * @param {String} [srs="EPSG:4326"] The SRS of the WMS layer
    * @param {String} enabled Flag to enable WMS layer by default
-   * 
+   *
    * @returns {Boolean} If the wms layer could be published
    */
   async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled) {
@@ -226,7 +226,7 @@ export default class LayerClient {
    * @param {String} [title] Published title of layer
    * @param {String} [srs="EPSG:4326"] The SRS of the layer
    * @param {String} enabled Flag to enable layer by default
-   * 
+   *
    * @returns {Boolean} If raster could be published
    */
   async publishDbRaster (workspace, coverageStore, nativeName, name, title, srs, enabled) {
@@ -305,7 +305,7 @@ export default class LayerClient {
    * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
    * @param {Boolean} [nearestMatchEnabled] Enable nearest match
    * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
-   * 
+   *
    * @returns If time dimension could be enabled
    */
   async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled) {
