@@ -1,3 +1,5 @@
+/* global describe:false, it:false, before:false, after:false */
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import GeoServerRestClient from '../geoserver-rest-client.js';
 
@@ -22,9 +24,8 @@ describe('Basic GeoServer', () => {
 });
 
 describe('Settings', () => {
-
   it('returns contact information', async () => {
-    let contactInfo = await grc.settings.getContactInformation();
+    const contactInfo = await grc.settings.getContactInformation();
     expect(contactInfo).to.not.be.false;
   })
 
@@ -36,13 +37,13 @@ describe('Settings', () => {
     const state = 'Berlin';
     const email = 'example email address';
     const organization = 'A organization';
-    const contactPerson = 'My contact persion' ;
+    const contactPerson = 'My contact persion';
     const phoneNumber = 1231234234123;
-    
-    let result = await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
+
+    const result = await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
     expect(result).to.be.true;
 
-    let contactResponse = await grc.settings.getContactInformation();
+    const contactResponse = await grc.settings.getContactInformation();
 
     // test two sample values
     expect(address).to.equal(contactResponse.contact.address);
@@ -159,7 +160,6 @@ describe('Datastore', () => {
 });
 
 describe('Layer', () => {
-
   let createdWorkSpace;
   const wmsLayerName = 'my-wms-layer-name';
   const featureLayerName = 'my-feature-layer-name'
@@ -279,7 +279,6 @@ describe('style', () => {
   })
 
   it('can assign a style to a layer', async () => {
-
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
 
@@ -358,6 +357,6 @@ describe('Security', () => {
 
   after(async () => {
     const recursive = true;
-    const result = await grc.workspaces.delete(createdWorkSpace, recursive);
+    await grc.workspaces.delete(createdWorkSpace, recursive);
   });
 });
