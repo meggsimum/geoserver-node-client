@@ -187,7 +187,8 @@ describe('Layer', () => {
       featureLayerName,
       'My Feature title',
       'EPSG:4326',
-      true
+      true,
+      'Sample Abstract'
     );
     expect(result).to.be.true;
   });
@@ -209,7 +210,8 @@ describe('Layer', () => {
       wmsLayerName,
       'My WMS Title',
       'EPSG:900913',
-      true
+      true,
+      'Sample Abstract'
     );
     expect(result).to.be.true;
   })
