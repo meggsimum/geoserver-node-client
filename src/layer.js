@@ -131,10 +131,11 @@ export default class LayerClient {
    * @param {String} [title] Published title of FeatureType
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
+   * @param {String} [abstract] The abstract of the layer
    *
    * @returns {Boolean} If FeatureType could be published.
    */
-  async publishFeatureTypeDefaultDataStore (workspace, nativeName, name, title, srs, enabled) {
+  async publishFeatureTypeDefaultDataStore (workspace, nativeName, name, title, srs, enabled, abstract) {
     try {
       const body = {
         featureType: {
@@ -142,7 +143,8 @@ export default class LayerClient {
           nativeName: name,
           title: title || name,
           srs: srs || 'EPSG:4326',
-          enabled: enabled
+          enabled: enabled,
+          abstract: abstract || ''
         }
       };
 
@@ -178,10 +180,11 @@ export default class LayerClient {
    * @param {String} [title] Published title of FeatureType
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
+   * @param {String} [abstract] The abstract of the layer
    *
    * @returns {Boolean} If the FeatureType could be published
    */
-  async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled) {
+  async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
     try {
       const body = {
         featureType: {
@@ -189,7 +192,8 @@ export default class LayerClient {
           nativeName: nativeName,
           title: title || name,
           srs: srs || 'EPSG:4326',
-          enabled: enabled
+          enabled: enabled,
+          abstract: abstract || ''
         }
       };
 
@@ -225,10 +229,11 @@ export default class LayerClient {
    * @param {String} [title] Published title of WMS layer
    * @param {String} [srs="EPSG:4326"] The SRS of the WMS layer
    * @param {String} enabled Flag to enable WMS layer by default
+   * @param {String} [abstract] The abstract of the layer
    *
    * @returns {Boolean} If the wms layer could be published
    */
-  async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled) {
+  async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
     try {
       const body = {
         wmsLayer: {
@@ -236,7 +241,8 @@ export default class LayerClient {
           nativeName: nativeName,
           title: title || name || nativeName,
           srs: srs || 'EPSG:4326',
-          enabled: enabled
+          enabled: enabled,
+          abstract: abstract || ''
         }
       };
 
@@ -272,10 +278,11 @@ export default class LayerClient {
    * @param {String} [title] Published title of layer
    * @param {String} [srs="EPSG:4326"] The SRS of the layer
    * @param {String} enabled Flag to enable layer by default
+   * @param {String} [abstract] The abstract of the layer
    *
    * @returns {Boolean} If raster could be published
    */
-  async publishDbRaster (workspace, coverageStore, nativeName, name, title, srs, enabled) {
+  async publishDbRaster (workspace, coverageStore, nativeName, name, title, srs, enabled, abstract) {
     try {
       const body = {
         coverage: {
@@ -283,7 +290,8 @@ export default class LayerClient {
           nativeName: nativeName,
           title: title || name,
           srs: srs,
-          enabled: enabled
+          enabled: enabled,
+          abstract: abstract || ''
         }
       };
 
