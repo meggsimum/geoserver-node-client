@@ -214,6 +214,19 @@ describe('Layer', () => {
     expect(result).to.be.true;
   })
 
+  it('can modify the attribution', async () => {
+    const attributionText = 'sample attribution';
+    const attributionLink = 'http://www.example.com';
+
+    const attributionResult = await grc.layers.modifyAttribution(`${workSpace}:${wmsLayerName}`, attributionText, attributionLink);
+
+    const layerProperties = await grc.layers.get(`${workSpace}:${wmsLayerName}`);
+
+    expect(attributionResult).to.be.true;
+    expect(layerProperties.layer.attribution.title).to.equal(attributionText);
+    expect(layerProperties.layer.attribution.href).to.equal(attributionLink);
+  })
+
   it('can get retrieve all layers', async () => {
     const result = await grc.layers.getAll();
     expect(result.layers.layer.length).to.equal(2);

@@ -50,6 +50,52 @@ export default class LayerClient {
   }
 
   /**
+   * Sets the attribution text and link of a layer.
+   *
+   * @param {String} qualifiedName GeoServer layer name with workspace prefix
+   * @param {String} [attributionText] The attribution text
+   * @param {String} [attributionLink] The attribution link
+   *
+   * @returns {Boolean} If attribution could be updated
+   */
+  async modifyAttribution (qualifiedName, attributionText, attributionLink) {
+    try {
+      // take existing layer properties as template
+      const jsonBody = await this.get(qualifiedName);
+
+      // set attribution text and link
+      if (attributionText) {
+        jsonBody.layer.attribution.title = attributionText;
+      }
+      if (attributionLink) {
+        jsonBody.layer.attribution.href = attributionLink;
+      }
+
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const url = this.url + 'layers/' + qualifiedName + '.json';
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonBody)
+      });
+
+      if (response.status === 200) {
+        return true;
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  /**
    * Returns all layers in the GeoServer.
    *
    * @returns {Object|Boolean} An object with all layer information or 'false'
