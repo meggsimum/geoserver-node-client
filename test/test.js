@@ -24,6 +24,47 @@ describe('Basic GeoServer', () => {
 });
 
 describe('Settings', () => {
+  after(async () => {
+    await grc.settings.updateSettings({
+      global: {
+        settings: {
+          verbose: true
+        }
+      }
+    });
+    await grc.settings.updateProxyBaseUrl('');
+  });
+
+  it('returns settings object', async () => {
+    const settings = await grc.settings.getSettings();
+    expect(settings).to.not.be.false;
+    expect(settings.global.settings.charset).to.not.be.false;
+  })
+
+  it('updates settings object', async () => {
+    const settingsJson = {
+      global: {
+        settings: {
+          verbose: false
+        }
+      }
+    };
+    const updateOk = await grc.settings.updateSettings(settingsJson);
+    expect(updateOk).to.be.true;
+
+    const settings = await grc.settings.getSettings();
+    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
+  })
+
+  it('updates proxyBaseUrl', async () => {
+    const url = 'http://foobar.de/geoserver';
+    const updateOk = await grc.settings.updateProxyBaseUrl(url);
+    expect(updateOk).to.be.true;
+
+    const settings = await grc.settings.getSettings();
+    expect(settings.global.settings.proxyBaseUrl).to.equal(url);
+  })
+
   it('returns contact information', async () => {
     const contactInfo = await grc.settings.getContactInformation();
     expect(contactInfo).to.not.be.false;

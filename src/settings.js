@@ -20,6 +20,72 @@ export default class SettingsClient {
   }
 
   /**
+   * Get the complete GeoServer settings object.
+   *
+   * @returns {Object|Boolean} Settings object or 'false'
+   */
+  async getSettings () {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'settings.json', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+      return await response.json();
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Update the global GeoServer settings.
+   *
+   * @param {GeoServer} settings
+   * @returns {Boolean} Flag indicating if request was successful
+   */
+  async updateSettings (settings) {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'settings', {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+          Authorization: 'Basic ' + auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(settings)
+      });
+
+      return response.status === 200;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Update the global proxyBaseUrl setting.
+   *
+   * @param {String} proxyBaseUrl The proxy base URL
+   * @returns {Boolean} Flag indicating if request was successful
+   */
+  async updateProxyBaseUrl (proxyBaseUrl) {
+    const settingsJson = {
+      global: {
+        settings: {
+          proxyBaseUrl: proxyBaseUrl
+        }
+      }
+    };
+
+    return await this.updateSettings(settingsJson);
+  }
+
+  /**
    * Get the contact information of the GeoServer.
    *
    * @returns {Object|Boolean} An object with contact information or 'false'
