@@ -74,13 +74,15 @@ export default class SettingsClient {
    * @returns {Boolean} Flag indicating if request was successful
    */
   async updateProxyBaseUrl (proxyBaseUrl) {
-    const settingsJson = {
-      global: {
-        settings: {
-          proxyBaseUrl: proxyBaseUrl
-        }
-      }
-    };
+    const settingsJson = await this.getSettings();
+
+    if (!settingsJson.global && !settingsJson.global.settings) {
+      // settings seem to be wrongly formated
+      return false;
+    }
+
+    // add proxyBaseUrl to settings
+    settingsJson.global.settings.proxyBaseUrl = proxyBaseUrl;
 
     return await this.updateSettings(settingsJson);
   }
