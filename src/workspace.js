@@ -43,6 +43,33 @@ export default class WorkspaceClient {
   }
 
   /**
+   * Returns a workspace.
+   *
+   * @param {String} name Name of the workspace
+   * @returns {Object|Boolean} An object describing the workspaces or 'false'
+   */
+  async get (name) {
+    try {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'workspaces/' + name + '.json', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+      if (response.status === 200) {
+        return await response.json();
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
    * Creates a new workspace.
    *
    * @param {String} name Name of the new workspace

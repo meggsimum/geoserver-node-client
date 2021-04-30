@@ -109,6 +109,11 @@ describe('Workspace', () => {
     expect(gsWorkspaces.workspaces.workspace[0].name).to.equal(workSpace);
   });
 
+  it('query dedicated workspace', async () => {
+    const gsWorkspace = await grc.workspaces.get(workSpace);
+    expect(gsWorkspace.workspace.name).to.equal(workSpace);
+  });
+
   it('delete workspace', async () => {
     const recursive = true;
     const result = await grc.workspaces.delete(workSpace, recursive);
