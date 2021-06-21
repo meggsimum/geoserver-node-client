@@ -181,11 +181,20 @@ export default class LayerClient {
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
    * @param {String} enabled Flag to enable FeatureType by default
    * @param {String} [abstract] The abstract of the layer
+   * @param {String} [nativeBoundingBox] The native BoundingBox of the FeatureType (has to be set if no data is in store at creation time)
    *
    * @returns {Boolean} If the FeatureType could be published
    */
-  async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
+  async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled, abstract, nativeBoundingBox) {
     try {
+      // apply CRS info for native BBOX if not provided
+      if (nativeBoundingBox && !nativeBoundingBox.crs) {
+        nativeBoundingBox.crs = {
+          '@class': 'projected',
+          $: srs
+        }
+      }
+
       const body = {
         featureType: {
           name: name || nativeName,
@@ -193,7 +202,8 @@ export default class LayerClient {
           title: title || name,
           srs: srs || 'EPSG:4326',
           enabled: enabled,
-          abstract: abstract || ''
+          abstract: abstract || '',
+          nativeBoundingBox: nativeBoundingBox
         }
       };
 
