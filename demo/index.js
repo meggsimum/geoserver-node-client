@@ -98,6 +98,19 @@ grc.getVersion().then(versionInfo => {
 // grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestName2', 'Test Title 2', 'EPSG:31468', true).then(retVal => {
 //   console.log('Created Layer', prettyJson(retVal));
 // });
+// const nativeBoundingBox = {
+//   minx: 8.15,
+//   maxx: 8.16,
+//   miny: 50.0,
+//   maxy: 50.1,
+//   crs: {
+//     '@class': 'projected',
+//     $: 'EPSG:4326'
+//   }
+// };
+// grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestNameBbox', 'Test Title Bbox', 'EPSG:4326', true, null, nativeBoundingBox).then(retVal => {
+//   console.log('Created FT with explicit native BBOX', prettyJson(retVal));
+// });
 // grc.layers.publishWmsLayer(ws, 'testWmsDs', 'OSM-Overlay-WMS', 'aTestName4Wms', 'Test Title WMS', 'EPSG:900913', true).then(retVal => {
 //   console.log('Created WMS Layer', prettyJson(retVal));
 // });

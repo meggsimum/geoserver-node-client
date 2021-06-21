@@ -234,6 +234,29 @@ describe('Layer', () => {
     expect(result).to.be.true;
   });
 
+  it('can publish a FeatureType with explicit native BBOX', async () => {
+    const ftName = featureLayerName + '_native_bbox';
+    const nativeBoundingBox = {
+      minx: 8.15,
+      maxx: 8.16,
+      miny: 50.0,
+      maxy: 50.1
+    };
+
+    const result = await grc.layers.publishFeatureType(
+      workSpace,
+      wfsDataStore,
+      'osm_osm-country-borders',
+      ftName,
+      'My Feature title native BBOX',
+      'EPSG:4326',
+      true,
+      'Sample Abstract native BBOX',
+      nativeBoundingBox
+    );
+    expect(result).to.be.true;
+  });
+
   it('can publish a WMS layer', async () => {
     // TODO: make sure WMS url is still working
     const wmsUrl = 'https://ows.terrestris.de/osm/service?';
@@ -272,7 +295,7 @@ describe('Layer', () => {
 
   it('can get retrieve all layers', async () => {
     const result = await grc.layers.getAll();
-    expect(result.layers.layer.length).to.equal(2);
+    expect(result.layers.layer.length).to.equal(3);
   })
 
   it('can get a layer by qualified name', async () => {
