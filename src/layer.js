@@ -487,4 +487,36 @@ export default class LayerClient {
       return false;
     }
   }
+
+  /**
+   * Returns a dedicated coverage object.
+   *
+   * @param {String} workspace Workspace containing the coverage
+   * @param {String} coverageStore The coveragestore containing the coverage
+   * @param {String} name Coverage to query
+   *
+   * @returns {Object|Boolean} An object with coverage information or 'false'
+   */
+  async getCoverage (workspace, coverageStore, name) {
+    try {
+      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + name + '.json';
+      const response = await fetch(url, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: 'Basic ' + auth
+        }
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      } else {
+        console.warn(await response.text());
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
 }

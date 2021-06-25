@@ -325,6 +325,13 @@ describe('Layer', () => {
     expect(result).to.be.true;
   })
 
+  it('has function to query coverages', async () => {
+    // query a non-existing coverage to check that the function exists
+    // TODO test valid response once we have coverages in test setup
+    const result = await grc.layers.getCoverage(workSpace, 'testCovStore', 'testCoverage');
+    expect(result).to.be.false;
+  })
+
   after('delete Workspace', async () => {
     const recursive = true;
     await grc.workspaces.delete(createdWorkSpace, recursive);
