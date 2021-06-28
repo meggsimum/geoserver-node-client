@@ -60,6 +60,9 @@ grc.getVersion().then(versionInfo => {
 // grc.datastores.createGeotiffFromFile('test', 'testDs', 'HymptyLayer', 'DumptyTitle', geotiff).then(gsWmsStores => {
 //   console.log('GeoServer create GeoTIFF', prettyJson(gsWmsStores));
 // });
+// grc.datastores.createImageMosaicStore('image_mosaics', 'myname', '/path/to/properties.zip').then(res => {
+//   console.log('res', res);
+// });
 // grc.datastores.deleteCoverageStore('test', 'test', true).then(gsWmsStores => {
 //   console.log('Deleted coverage store', prettyJson(gsWmsStores));
 // });
@@ -122,6 +125,9 @@ grc.getVersion().then(versionInfo => {
 // });
 // grc.layers.enableTimeCoverage(ws, 'testDs', 'HymptyLayer', 'DISCRETE_INTERVAL', 3600000, 'MAXIMUM').then(retVal => {
 //   console.log('Enabled time for layer', prettyJson(retVal))
+// });
+// grc.layers.getCoverage(ws, 'testCovStore', 'testCoverage').then(cov => {
+//   console.log(cov.coverage);
 // });
 
 // STYLES
