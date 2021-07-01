@@ -1,0 +1,8 @@
+{
+    "hooks": {
+      "before:init": ["npm run lint", "npm test"]
+    },
+    "github": {
+      "release": true
+    }
+}
