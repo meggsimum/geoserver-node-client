@@ -48,6 +48,31 @@ Then, in an other terminal, run:
 npm run test
 ```
 
+### Release
+
+The release to GitHub and npm is done via [release-it](https://github.com/release-it/release-it). This is the workflow for releasing:
+
+1. Make sure a `GITHUB_TOKEN` is available as environment varible. See [here](https://github.com/release-it/release-it/blob/master/docs/github-releases.md) for more information.
+
+```shell
+export GITHUB_TOKEN=ADD-YOUR-TOKEN-HERE
+```
+
+2. Make sure you are logged in to npm and ensure you have the rights to make a release.
+
+```shell
+npm login
+# then enter your credentials
+```
+
+3. Locally checkout the latest `master` branch that you would like to release, then run:
+
+```shell
+npm run release
+```
+
+4. Follow the questions in the commandline.
+
 ### Who do I talk to? ###
 
 * meggsimum (Christian Mayer) - info __at## meggsimum ~~dot** de
