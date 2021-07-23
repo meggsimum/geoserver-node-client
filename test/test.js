@@ -9,6 +9,10 @@ const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);
 
 const workSpace = 'my-workspace';
+
+const nameSpace = 'my-namespace';
+const nameSpaceUri = 'http://www.example.com';
+
 const geoServerVersion = process.env.GEOSERVER_VERSION;
 
 describe('Basic GeoServer', () => {
@@ -123,6 +127,40 @@ describe('Workspace', () => {
   it('has no workspace', async () => {
     const gsWorkspaces = await grc.workspaces.getAll();
     expect(gsWorkspaces.workspaces).to.equal('');
+  });
+});
+
+describe('Namespace', () => {
+  it('has no namespaces', async () => {
+    const gsNamespaces = await grc.namespaces.getAll();
+    expect(gsNamespaces.namespaces).to.equal('');
+  });
+
+  it('creates one namespace', async () => {
+    const result = await grc.namespaces.create(nameSpace, nameSpaceUri);
+    expect(result).to.equal(nameSpace);
+  });
+
+  it('has one namespace', async () => {
+    const gsNameSpaces = await grc.namespaces.getAll();
+    expect(gsNameSpaces.namespaces.namespace.length).to.equal(1);
+    expect(gsNameSpaces.namespaces.namespace[0].name).to.equal(nameSpace);
+  });
+
+  it('query dedicated namespace', async () => {
+    const gsNameSpace = await grc.namespaces.get(nameSpace);
+    expect(gsNameSpace.namespace.prefix).to.equal(nameSpace);
+    expect(gsNameSpace.namespace.uri).to.equal(nameSpaceUri);
+  });
+
+  it('delete namespace', async () => {
+    const result = await grc.namespaces.delete(nameSpace);
+    expect(result).to.be.true;
+  });
+
+  it('has no namespace', async () => {
+    const gsNameSpaces = await grc.namespaces.getAll();
+    expect(gsNameSpaces.namespaces).to.equal('');
   });
 });
 

@@ -6,6 +6,7 @@ import DatastoreClient from './src/datastore.js';
 import ImageMosaicClient from './src/imagemosaic.js';
 import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
+import NamespaceClient from './src/namespace.js';
 
 /**
  * Client for GeoServer REST API.
@@ -33,6 +34,8 @@ export default class GeoServerRestClient {
     this.styles = new StyleClient(this.url, this.user, this.password);
     /** @member {WorkspaceClient} workspaces GeoServer REST client instance for workspaces */
     this.workspaces = new WorkspaceClient(this.url, this.user, this.password);
+    /** @member {NamespaceClient} namespaces GeoServer REST client instance for namespaces */
+    this.namespaces = new NamespaceClient(this.url, this.user, this.password);
     /** @member {DatastoreClient} datastores GeoServer REST client instance for data stores */
     this.datastores = new DatastoreClient(this.url, this.user, this.password);
     /** @member {ImageMosaicClient} imagemosaics GeoServer REST client instance for image mosaics */
@@ -45,7 +48,7 @@ export default class GeoServerRestClient {
 
   /**
    * Get the GeoServer version.
-   * 
+   *
    * @returns {String|Boolean} The version of GeoServer or 'false'
    */
   async getVersion () {
@@ -67,7 +70,7 @@ export default class GeoServerRestClient {
 
   /**
    * Checks if the configured GeoServer REST connection exists.
-   * 
+   *
    * @returns {Boolean} If the connection exists
    */
   async exists () {
