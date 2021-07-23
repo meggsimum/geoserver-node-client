@@ -228,6 +228,7 @@ s  */
    * Creates a PostGIS based data store.
    *
    * @param {String} workspace The WS to create the data store in
+   * @param {String} namespaceUri The namespace URI of the workspace
    * @param {String} dataStore The data store name to be created
    * @param {String} pgHost The PostGIS DB host
    * @param {String} pgPort The PostGIS DB port
@@ -239,12 +240,15 @@ s  */
    *
    * @returns {Boolean} If the store could be created
    */
-  async createPostgisStore (workspace, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk) {
+  async createPostgisStore (workspace, namespaceUri, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk) {
     const body = {
       dataStore: {
         name: dataStore,
         type: 'PostGIS',
         enabled: true,
+        workspace: {
+          name: workspace
+        },
         connectionParameters: {
           entry: [
             {
@@ -273,7 +277,7 @@ s  */
             },
             {
               '@key': 'namespace',
-              $: workspace
+              $: namespaceUri
             },
             {
               '@key': 'user',
