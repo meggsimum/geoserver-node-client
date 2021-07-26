@@ -18,6 +18,23 @@ grc.getVersion().then(versionInfo => {
   console.log('GeoServer REST version info', prettyJson(versionInfo));
 });
 
+// NAMESPACES
+
+// const nsPrefix = 'example-namespace';
+// const nsUri = 'http://www.example.com'
+// grc.namespaces.create(nsPrefix, nsUri).then(retVal => {
+//   console.log('Created GeoServer NS', prettyJson(retVal));
+// });
+// grc.namespaces.getAll().then(gsNamespaces => {
+//   console.log('GeoServer All NS', prettyJson(gsNamespaces));
+// });
+// grc.namespaces.get(nsPrefix).then(gsNamespaces => {
+//   console.log('GeoServer NS', prettyJson(gsNamespaces));
+// });
+// grc.namespaces.delete(nsPrefix).then(gsNamespaces => {
+//   console.log('Deleted GeoServer NS', prettyJson(gsNamespaces));
+// });
+
 // WORKSPACES
 
 // grc.workspaces.getAll().then(gsWorkspaces => {
