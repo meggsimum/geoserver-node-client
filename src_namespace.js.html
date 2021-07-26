@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: src/security.js</title>
+    <title>JSDoc: Source: src/namespace.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: src/security.js</h1>
+    <h1 class="page-title">Source: src/namespace.js</h1>
 
     
 
@@ -29,13 +29,13 @@
             <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
 
 /**
- * Client for GeoServer security.
+ * Client for GeoServer namespace
  *
- * @module SecurityClient
+ * @module NamespaceClient
  */
-export default class SecurityClient {
+export default class NamespaceClient {
   /**
-   * Creates a GeoServer REST SecurityClient instance.
+   * Creates a GeoServer REST NamespaceClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} user The user for the GeoServer REST API
@@ -47,52 +47,50 @@ export default class SecurityClient {
     this.password = password;
   }
 
-  // TODO: I could not get it working, got Code '406'
   /**
-   * Returns all users registered in GeoServer.
+   * Returns all namespaces.
+   *
+   * @returns {Object|Boolean} An object describing the namespace or 'false'
    */
-  async getAllUsers () {
+  async getAll () {
     try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/users.json', {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'namespaces.json', {
         credentials: 'include',
         method: 'GET',
         headers: {
           Authorization: 'Basic ' + auth
         }
       });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
+      const json = await response.json();
+      return json;
     } catch (error) {
       return false;
     }
   }
 
   /**
-   * Creates a new user.
+   * Creates a new namespace.
    *
-   * @param {String} username The name of the user to be created
-   * @param {String} password The password of the user to be created
+   * @param {String} prefix Prefix of the new namespace
+   * @param {String} uri Uri of the new namespace
    *
-   * @returns {Boolean} If the user could be created
+   * @returns {String|Boolean} The name of the created namespace or 'false'
    */
-  async createUser (username, password) {
-    const body = {
-      user: {
-        userName: username,
-        password: password,
-        enabled: true
-      }
-    };
-
+  async create (prefix, uri) {
     try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/users.json', {
+      const body = {
+        namespace: {
+          prefix: prefix,
+          uri: uri
+        }
+      };
+
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+
+      const response = await fetch(this.url + 'namespaces', {
         credentials: 'include',
         method: 'POST',
         headers: {
@@ -103,11 +101,9 @@ export default class SecurityClient {
       });
 
       if (response.status === 201) {
-        return true;
-      } else if (response.status === 404) {
-        console.warn(`Received HTTP 404 - the user ${username} might already exist.`);
+        const responseText = await response.text();
+        return responseText;
       } else {
-        console.warn(await response.text());
         return false;
       }
     } catch (error) {
@@ -116,39 +112,25 @@ export default class SecurityClient {
   }
 
   /**
-   * Updates an existing user. User name is only taken for identification and
-   * cannot be changed with this API call.
+   * Returns a namespace.
    *
-   * @param {String} username The name of the user to be created
-   * @param {String} password The password of the user to be created
-   * @param {Boolean} enabled Enable / disable the user
-   *
-   * @returns {Boolean} If user could be updated
+   * @param {String} name Name of the namespace
+   * @returns {Object|Boolean} An object describing the namespace or 'false'
    */
-  async updateUser (username, password, enabled) {
-    const body = {
-      user: {
-        password: password,
-        enabled: enabled
-      }
-    };
-
+  async get (name) {
     try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/user/' + username, {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'namespaces/' + name + '.json', {
         credentials: 'include',
-        method: 'POST',
+        method: 'GET',
         headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
+          Authorization: 'Basic ' + auth
+        }
       });
-
       if (response.status === 200) {
-        return true;
+        return await response.json();
       } else {
-        console.warn(await response.text());
         return false;
       }
     } catch (error) {
@@ -157,29 +139,28 @@ export default class SecurityClient {
   }
 
   /**
-   * Associates the given role to the user.
+   * Deletes a namespace.
    *
-   * @param {String} username The name of the user to add the role to
-   * @param {String} role The role to associate
+   * @param {String} name Name of the namespace to delete
    *
-   * @returns {Boolean} If the role could be associated
+   * @returns {Boolean} If deletion was successful
    */
-  async associateUserRole (username, role) {
+  async delete (name) {
     try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      console.log(`${this.url}security/roles/role/${role}/user/${username}`);
-      const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
+      const auth =
+        Buffer.from(this.user + ':' + this.password).toString('base64');
+      const response = await fetch(this.url + 'namespaces/' + name, {
         credentials: 'include',
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           Authorization: 'Basic ' + auth
         }
       });
 
+      // TODO map other HTTP status
       if (response.status === 200) {
         return true;
       } else {
-        console.warn(await response.text());
         return false;
       }
     } catch (error) {

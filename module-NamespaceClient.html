@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: module:WorkspaceClient</title>
+    <title>JSDoc: Class: module:NamespaceClient</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: module:WorkspaceClient</h1>
+    <h1 class="page-title">Class: module:NamespaceClient</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>module:WorkspaceClient<span class="signature">(url, user, password)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>module:NamespaceClient<span class="signature">(url, user, password)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="module:WorkspaceClient"><span class="type-signature"></span>new module:WorkspaceClient<span class="signature">(url, user, password)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="module:NamespaceClient"><span class="type-signature"></span>new module:NamespaceClient<span class="signature">(url, user, password)</span><span class="type-signature"></span></h4>
     
 
     
@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    Creates a GeoServer REST WorkspaceClient instance.
+    Creates a GeoServer REST NamespaceClient instance.
 </div>
 
 
@@ -188,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_workspace.js.html">src/workspace.js</a>, <a href="src_workspace.js.html#line16">line 16</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -244,7 +244,7 @@
     
 
     
-    <h4 class="name" id="create"><span class="type-signature">(async) </span>create<span class="signature">(name)</span><span class="type-signature"> &rarr; {String|Boolean}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">(async) </span>create<span class="signature">(prefix, uri)</span><span class="type-signature"> &rarr; {String|Boolean}</span></h4>
     
 
     
@@ -252,7 +252,7 @@
 
 
 <div class="description">
-    Creates a new workspace.
+    Creates a new namespace.
 </div>
 
 
@@ -288,7 +288,7 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>prefix</code></td>
             
 
             <td class="type">
@@ -304,7 +304,30 @@
 
             
 
-            <td class="description last">Name of the new workspace</td>
+            <td class="description last">Prefix of the new namespace</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>uri</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Uri of the new namespace</td>
         </tr>
 
     
@@ -345,7 +368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_workspace.js.html">src/workspace.js</a>, <a href="src_workspace.js.html#line79">line 79</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -374,7 +397,7 @@
 
         
 <div class="param-desc">
-    The name of the created workspace or 'false'
+    The name of the created namespace or 'false'
 </div>
 
 
@@ -406,7 +429,7 @@
     
 
     
-    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(name, recurse)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(name)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -414,7 +437,7 @@
 
 
 <div class="description">
-    Deletes a workspace.
+    Deletes a namespace.
 </div>
 
 
@@ -466,30 +489,7 @@
 
             
 
-            <td class="description last">Name of the workspace to delete</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>recurse</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Flag to enable recursive deletion</td>
+            <td class="description last">Name of the namespace to delete</td>
         </tr>
 
     
@@ -530,7 +530,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_workspace.js.html">src/workspace.js</a>, <a href="src_workspace.js.html#line119">line 119</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line120">line 120</a>
     </li></ul></dd>
     
 
@@ -559,7 +559,7 @@
 
         
 <div class="param-desc">
-    If Deletion was successful
+    If deletion was successful
 </div>
 
 
@@ -596,7 +596,7 @@
 
 
 <div class="description">
-    Returns a workspace.
+    Returns a namespace.
 </div>
 
 
@@ -648,7 +648,7 @@
 
             
 
-            <td class="description last">Name of the workspace</td>
+            <td class="description last">Name of the namespace</td>
         </tr>
 
     
@@ -689,7 +689,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_workspace.js.html">src/workspace.js</a>, <a href="src_workspace.js.html#line51">line 51</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -718,7 +718,7 @@
 
         
 <div class="param-desc">
-    An object describing the workspaces or 'false'
+    An object describing the namespace or 'false'
 </div>
 
 
@@ -758,7 +758,7 @@
 
 
 <div class="description">
-    Returns all workspaces.
+    Returns all namespaces.
 </div>
 
 
@@ -802,7 +802,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_workspace.js.html">src/workspace.js</a>, <a href="src_workspace.js.html#line27">line 27</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -831,7 +831,7 @@
 
         
 <div class="param-desc">
-    An Object describing the workspaces or 'false'
+    An object describing the namespace or 'false'
 </div>
 
 
