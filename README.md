@@ -1,5 +1,8 @@
 # GeoServer Node Client
 
+[![npm version](https://badge.fury.io/js/geoserver-node-client.svg)](https://www.npmjs.com/package/geoserver-node-client)
+![](https://github.com/meggsimum/geoserver-node-client/actions/workflows/ci-geoserver-node-client.yml/badge.svg)
+
 Node.js / JavaScript Client for the [GeoServer REST API](https://docs.geoserver.org/stable/en/user/rest/).
 
 **CAUTION: This is highly bleeding edge, heavily under development and therefore breaking changes can be made at every time!**
