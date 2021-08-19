@@ -369,10 +369,11 @@ export default class LayerClient {
    * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
    * @param {Boolean} [nearestMatchEnabled] Enable nearest match
    * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
+   * @param {String} [acceptableInterval] Acceptable interval for nearest match, e.g.'PT30M'
    *
    * @returns If time dimension could be enabled
    */
-  async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled) {
+  async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
     try {
       const body = {
         coverage: {
@@ -389,7 +390,8 @@ export default class LayerClient {
                     strategy: defaultValue
                   },
                   nearestMatchEnabled: nearestMatchEnabled,
-                  rawNearestMatchEnabled: rawNearestMatchEnabled
+                  rawNearestMatchEnabled: rawNearestMatchEnabled,
+                  acceptableInterval: acceptableInterval
                 }
               }
             ]
