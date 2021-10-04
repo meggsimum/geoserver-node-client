@@ -404,7 +404,7 @@ s  */
    *
    * @returns {Boolean} If store could be created
    */
-  async createWfsStore (workspace, dataStore, wfsCapabilitiesUrl, namespaceUrl) {
+  async createWfsStore (workspace, dataStore, wfsCapabilitiesUrl, namespaceUrl, useHttpConnectionPooling) {
     const body = {
       dataStore: {
         name: dataStore,
@@ -418,6 +418,10 @@ s  */
             {
               '@key': 'namespace',
               $: namespaceUrl
+            },
+            {
+              '@key': 'WFSDataStoreFactory:USE_HTTP_CONNECTION_POOLING',
+              $: useHttpConnectionPooling !== false ? 'true' : 'false'
             }
           ]
         }
