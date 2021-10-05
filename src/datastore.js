@@ -401,6 +401,7 @@ s  */
    * @param {String} dataStore The data store name
    * @param {String} wfsCapabilitiesUrl WFS capabilities URL
    * @param {String} namespaceUrl URL of the GeoServer namespace
+   * @param {Boolean} [useHttpConnectionPooling=true] use HTTP connection pooling for WFS connection
    *
    * @returns {Boolean} If store could be created
    */
