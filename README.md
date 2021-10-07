@@ -55,7 +55,7 @@ npm run test
 
 The release to GitHub and npm is done via [release-it](https://github.com/release-it/release-it). This is the workflow for releasing:
 
-1. Make sure a `GITHUB_TOKEN` is available as environment varible. See [here](https://github.com/release-it/release-it/blob/master/docs/github-releases.md) for more information.
+1. Make sure a `GITHUB_TOKEN` is available as environment variable. See [here](https://github.com/release-it/release-it/blob/master/docs/github-releases.md) for more information.
 
 ```shell
 export GITHUB_TOKEN=ADD-YOUR-TOKEN-HERE
