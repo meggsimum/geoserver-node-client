@@ -435,6 +435,8 @@ describe('style', () => {
     const isDefaultStyle = true;
     const result = await grc.styles.assignStyleToLayer(qualifiedName, styleName, workspaceStyle, isDefaultStyle);
     expect(result).to.be.true;
+
+    // TODO: test option that default style is not provided
   });
 
   it('can get style information', async () => {

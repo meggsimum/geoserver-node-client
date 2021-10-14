@@ -169,6 +169,10 @@ export default class StyleClient {
    * @returns {Boolean} If the style could be assigned
    */
   async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
+    // TODO: add default value
+    // TODO: ensure default value is true or false
+    // TODO: consider removing `?default` if no value provided
+
     try {
       const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
 
