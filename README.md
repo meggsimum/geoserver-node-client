@@ -15,8 +15,9 @@ Detailed API-Docs can be found [here](https://meggsimum.github.io/geoserver-node
 
 Compatible with [GeoServer](https://geoserver.org)
 
+  - v2.20.x
   - v2.19.x
-  - v2.18.x
+  - v2.18.x (no more maintained and officially deprecated)
   - v2.17.x (no more maintained and officially deprecated)
 
 ### Setup
