@@ -8,6 +8,10 @@ import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
 
+// TODO: create generic error class for this
+//       or use an existing one
+//       or use function like "checkResponse()" that throws error if not okay
+
 /**
  * Client for GeoServer REST API.
  * Has minimal basic functionality and offers REST client instances for
@@ -49,23 +53,26 @@ export default class GeoServerRestClient {
   /**
    * Get the GeoServer version.
    *
+   * @throws Will throw an error if URL could not be requested
+   *
    * @returns {String|Boolean} The version of GeoServer or 'false'
    */
   async getVersion () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'about/version.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      return await response.json();
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'about/version.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error requesting url: ${url}`);
     }
+    return await response.json();
   }
 
   /**
@@ -74,15 +81,7 @@ export default class GeoServerRestClient {
    * @returns {Boolean} If the connection exists
    */
   async exists () {
-    try {
-      const versionInfo = await this.getVersion();
-      if (versionInfo) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      return false;
-    }
+    const versionInfo = await this.getVersion();
+    return !!versionInfo
   }
 }

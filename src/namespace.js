@@ -22,24 +22,24 @@ export default class NamespaceClient {
   /**
    * Returns all namespaces.
    *
+   * @throws Error if request fails
+   *
    * @returns {Object|Boolean} An object describing the namespace or 'false'
    */
   async getAll () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'namespaces.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'namespaces.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Error requesting url');
     }
+    return await response.json();
   }
 
   /**
@@ -48,66 +48,63 @@ export default class NamespaceClient {
    * @param {String} prefix Prefix of the new namespace
    * @param {String} uri Uri of the new namespace
    *
-   * @returns {String|Boolean} The name of the created namespace or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The name of the created namespace
    */
   async create (prefix, uri) {
-    try {
-      const body = {
-        namespace: {
-          prefix: prefix,
-          uri: uri
-        }
-      };
-
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-
-      const response = await fetch(this.url + 'namespaces', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 201) {
-        const responseText = await response.text();
-        return responseText;
-      } else {
-        return false;
+    const body = {
+      namespace: {
+        prefix: prefix,
+        uri: uri
       }
-    } catch (error) {
-      return false;
+    };
+
+    const auth =
+    Buffer.from(this.user + ':' + this.password).toString('base64');
+
+    const response = await fetch(this.url + 'namespaces', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      // offical docs seem to be outdated, that's why we return a generic error
+      // https://docs.geoserver.org/latest/en/api/#1.0.0/namespaces.yaml
+      throw new Error('Could not create namespace');
     }
+
+    return await response.text();
   }
 
   /**
    * Returns a namespace.
    *
    * @param {String} name Name of the namespace
-   * @returns {Object|Boolean} An object describing the namespace or 'false'
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object describing the namespace
    */
   async get (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'namespaces/' + name + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        return false;
+    const auth =
+    Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'namespaces/' + name + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      throw new Error('Could not get namespace');
     }
+    return await response.json();
   }
 
   /**
@@ -115,28 +112,34 @@ export default class NamespaceClient {
    *
    * @param {String} name Name of the namespace to delete
    *
+   * @throws Error if request fails
+   *
    * @returns {Boolean} If deletion was successful
    */
   async delete (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'namespaces/' + name, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      // TODO map other HTTP status
-      if (response.status === 200) {
-        return true;
-      } else {
-        return false;
+    const auth =
+    Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'namespaces/' + name, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    // error messages taken from
+    // https://docs.geoserver.org/latest/en/api/#1.0.0/namespaces.yaml
+    switch (response.status) {
+      case 200:
+        return true;
+      case 403:
+        throw new Error('Namespace or related Workspace is not empty (and recurse not true)');
+      case 404:
+        throw new Error('Namespace doesn’t exist');
+      case 405:
+        throw new Error('Can’t delete default namespace');
+      default:
+        throw new Error('Response not recognised')
     }
   }
 }
