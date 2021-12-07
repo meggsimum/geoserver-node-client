@@ -9,6 +9,8 @@ export default class WorkspaceClient {
   /**
    * Creates a GeoServer REST WorkspaceClient instance.
    *
+   * WARNING: For most cases the 'NameSpaceClient' seems to fit better.
+   *
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
@@ -22,51 +24,54 @@ export default class WorkspaceClient {
   /**
    * Returns all workspaces.
    *
-   * @returns {Object|Boolean} An Object describing the workspaces or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An Object describing the workspaces
    */
   async getAll () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Error requesting url');
     }
+    return await response.json();
   }
 
   /**
    * Returns a workspace.
    *
    * @param {String} name Name of the workspace
-   * @returns {Object|Boolean} An object describing the workspaces or 'false'
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object describing the workspaces
    */
   async get (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + name + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces/' + name + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      switch (response.status) {
+        case 404:
+          throw new Error('workspace does not exist');
+        default:
+          throw new Error('Response not recognised')
+      }
     }
+    return await response.json();
   }
 
   /**
@@ -74,38 +79,40 @@ export default class WorkspaceClient {
    *
    * @param {String} name Name of the new workspace
    *
-   * @returns {String|Boolean} The name of the created workspace or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The name of the created workspace
    */
   async create (name) {
-    try {
-      const body = {
-        workspace: {
-          name: name
-        }
-      };
-
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-
-      const response = await fetch(this.url + 'workspaces', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 201) {
-        const responseText = await response.text();
-        return responseText;
-      } else {
-        return false;
+    const body = {
+      workspace: {
+        name: name
       }
-    } catch (error) {
-      return false;
+    };
+
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+
+    const response = await fetch(this.url + 'workspaces', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      switch (response.status) {
+        case 409:
+          throw new Error('Unable to add workspace as it already exists');
+        default:
+          throw new Error('Response not recognised')
+      }
     }
+
+    return await response.text();
   }
 
   /**
@@ -114,28 +121,33 @@ export default class WorkspaceClient {
    * @param {String} name Name of the workspace to delete
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
-   * @returns {Boolean} If Deletion was successful
+   * @throws Error if request fails
+   *
+   * @returns {Boolean} If deletion was successful
    */
   async delete (name, recurse) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      // TODO map other HTTP status
-      if (response.status === 200) {
-        return true;
-      } else {
-        return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      switch (response.status) {
+        case 400:
+          // the docs say code 403, but apparently it is code 400
+          // https://docs.geoserver.org/latest/en/api/#1.0.0/workspaces.yaml
+          throw new Error('Workspace or related Namespace is not empty (and recurse not true)');
+        case 404:
+          throw new Error('Workspace doesn’t exist');
+        default:
+          throw new Error('Response not recognised')
+      }
     }
+    return true;
   }
 }
