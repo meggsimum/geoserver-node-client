@@ -61,7 +61,7 @@ export default class NamespaceClient {
     };
 
     const auth =
-    Buffer.from(this.user + ':' + this.password).toString('base64');
+      Buffer.from(this.user + ':' + this.password).toString('base64');
 
     const response = await fetch(this.url + 'namespaces', {
       credentials: 'include',
@@ -93,7 +93,7 @@ export default class NamespaceClient {
    */
   async get (name) {
     const auth =
-    Buffer.from(this.user + ':' + this.password).toString('base64');
+      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces/' + name + '.json', {
       credentials: 'include',
       method: 'GET',
