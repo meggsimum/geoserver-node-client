@@ -7,6 +7,7 @@ import ImageMosaicClient from './src/imagemosaic.js';
 import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
+import { GeoServerResponseError } from './src/errors.js';
 
 /**
  * Client for GeoServer REST API.
@@ -66,7 +67,7 @@ export default class GeoServerRestClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url');
+      throw new GeoServerResponseError();
     }
     return await response.json();
   }

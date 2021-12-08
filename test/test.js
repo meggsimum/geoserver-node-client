@@ -346,7 +346,6 @@ describe('Layer', () => {
 
   it('can get a layer by qualified name', async () => {
     const nonExistentLayer = 'non-existent-layer';
-    // TODO: check error message
     const fun = grc.layers.get(workSpace + ':' + nonExistentLayer);
     expect(fun).to.eventually.throw();
 

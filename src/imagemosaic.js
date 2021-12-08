@@ -45,7 +45,7 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
 
     return response.json();
@@ -78,7 +78,7 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
 
     return response.json();
@@ -111,7 +111,7 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
 
     return true;
@@ -145,7 +145,7 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
 
     return true;

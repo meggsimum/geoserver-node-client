@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
+import { GeoServerResponseError } from './errors';
 
 /**
  * Client for GeoServer data stores
@@ -86,7 +87,7 @@ export default class DatastoreClient {
       }
     });
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return await response.json();
   }
@@ -168,7 +169,7 @@ s  */
         case 404:
           throw new Error('No ' + storeType + ' with name "' + storeName + '" found');
         default:
-          throw new Error('Error requesting url:', await response.text());
+          throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
       }
     }
     return await response.json();
@@ -212,7 +213,7 @@ s  */
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url');
+      throw new GeoServerResponseError();
     }
     const responseText = await response.text();
     // TODO: enforce JSON response or parse XML
@@ -304,7 +305,7 @@ s  */
 
     // TODO: not tested yet
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
 
     return true;
@@ -342,7 +343,7 @@ s  */
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
 
     return await response.text();
@@ -382,7 +383,7 @@ s  */
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -438,7 +439,7 @@ s  */
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -471,7 +472,7 @@ s  */
     if (!response.ok) {
       // TODO: could not find status codes in the docs or via testing
       //       https://docs.geoserver.org/latest/en/api/#1.0.0/datastores.yaml
-      throw new Error('Error requesting url');
+      throw new GeoServerResponseError();
     }
     return true;
   }
@@ -505,9 +506,9 @@ s  */
     if (!response.ok) {
       switch (response.status) {
         case 401:
-          throw new Error('Error requesting url:', response.text());
+          throw new GeoServerResponseError('Requesting GeoServer failed:', response.text());
         default:
-          throw new Error('Error requesting url:', response.text());
+          throw new GeoServerResponseError('Requesting GeoServer failed:', response.text());
       }
     }
     return true;
@@ -558,7 +559,7 @@ s  */
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }

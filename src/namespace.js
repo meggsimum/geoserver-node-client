@@ -37,7 +37,7 @@ export default class NamespaceClient {
       }
     });
     if (!response.ok) {
-      throw new Error('Error requesting url');
+      throw new GeoServerResponseError();
     }
     return await response.json();
   }

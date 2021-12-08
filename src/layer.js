@@ -40,7 +40,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return await response.json();
   }
@@ -81,7 +81,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -104,7 +104,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return await response.json();
   }
@@ -148,7 +148,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -203,7 +203,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -248,7 +248,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -293,7 +293,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -321,7 +321,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -382,7 +382,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -444,7 +444,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
@@ -472,8 +472,8 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url');
-      // throw new Error('Error requesting url:', await response.text());
+      throw new GeoServerResponseError();
+      // throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
     }
     return true;
   }
