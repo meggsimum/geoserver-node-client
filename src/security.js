@@ -19,30 +19,27 @@ export default class SecurityClient {
     this.password = password;
   }
 
-  // TODO: I could not get it working, got Code '406'
   /**
    * Returns all users registered in GeoServer.
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with all users
    */
   async getAllUsers () {
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/users.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'security/usergroup/users.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      throw new Error('Error requesting url');
     }
+    return await response.json();
   }
 
   /**
@@ -50,6 +47,8 @@ export default class SecurityClient {
    *
    * @param {String} username The name of the user to be created
    * @param {String} password The password of the user to be created
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If the user could be created
    */
@@ -62,29 +61,27 @@ export default class SecurityClient {
       }
     };
 
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/users.json', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'security/usergroup/users.json', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
-      if (response.status === 201) {
-        return true;
-      } else if (response.status === 404) {
-        console.warn(`Received HTTP 404 - the user ${username} might already exist.`);
-      } else {
-        console.warn(await response.text());
-        return false;
+    if (!response.ok) {
+      switch (response.status) {
+        case 404:
+          throw Error(`User ${username} might already exists.`);
+        default:
+          throw new Error('Response not recognised')
       }
-    } catch (error) {
-      return false;
     }
+
+    return true;
   }
 
   /**
@@ -94,6 +91,8 @@ export default class SecurityClient {
    * @param {String} username The name of the user to be created
    * @param {String} password The password of the user to be created
    * @param {Boolean} enabled Enable / disable the user
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If user could be updated
    */
@@ -105,27 +104,21 @@ export default class SecurityClient {
       }
     };
 
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/user/' + username, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'security/usergroup/user/' + username, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      throw new Error(`Provided username does not exist: ${username}`);
     }
+    return true;
   }
 
   /**
@@ -134,28 +127,23 @@ export default class SecurityClient {
    * @param {String} username The name of the user to add the role to
    * @param {String} role The role to associate
    *
+   * @throws Error if request fails
+   *
    * @returns {Boolean} If the role could be associated
    */
   async associateUserRole (username, role) {
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      console.log(`${this.url}security/roles/role/${role}/user/${username}`);
-      const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      throw new Error(`Provided role does not exist: ${role}`);
     }
+    return true;
   }
 }
