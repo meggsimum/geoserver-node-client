@@ -26,10 +26,11 @@ export default class ImageMosaicClient {
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {*} coverage Name of image mosaic
    *
-   * @returns {Object|Boolean} An object with the granules or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with the granules
    */
   async getGranules (workspace, coverageStore, coverage) {
-    try {
       const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
       const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
@@ -43,15 +44,11 @@ export default class ImageMosaicClient {
         }
       });
 
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
+      if (!response.ok) {
+        throw new Error('Error requesting url:', await response.text());
       }
-    } catch (error) {
-      return false;
-    }
+
+      return response.json();
   }
 
   /**
@@ -61,10 +58,11 @@ export default class ImageMosaicClient {
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} filePath Server path of folder to harvest
    *
-   * @returns {Object|Boolean} An object with the granules or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with the granules
    */
   async harvestGranules (workspace, coverageStore, filePath) {
-    try {
       const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
       const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
@@ -79,15 +77,11 @@ export default class ImageMosaicClient {
         body: filePath
       });
 
-      if (response.status === 200) {
-        return await response.text();
-      } else {
-        console.warn(await response.text());
-        return false;
+      if (!response.ok) {
+        throw new Error('Error requesting url:', await response.text());
       }
-    } catch (error) {
-      return false;
-    }
+
+      return response.json();
   }
 
   /**
@@ -97,10 +91,11 @@ export default class ImageMosaicClient {
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} filePath Server file path of new granule
    *
+   * @throws Error if request fails
+   *
    * @returns {Boolean} If granule could be added
    */
   async addGranuleByServerFile (workspace, coverageStore, filePath) {
-    try {
       const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
       const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
@@ -115,29 +110,26 @@ export default class ImageMosaicClient {
         body: filePath
       });
 
-      if (response.status === 202) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
+      if (!response.ok) {
+        throw new Error('Error requesting url:', await response.text());
       }
-    } catch (error) {
-      return false;
-    }
+
+      return true;
   }
 
   /**
    * Deletes a single granule of an image mosaic.
    *
-   * @param {*} workspace Workspace of image mosaic
-   * @param {*} coverageStore CoverageStore of image mosaic
-   * @param {*} coverage Name of image mosaic
-   * @param {*} covFileLocation Location of coverage file
+   * @param {String} workspace Workspace of image mosaic
+   * @param {String} coverageStore CoverageStore of image mosaic
+   * @param {String} coverage Name of image mosaic
+   * @param {String} covFileLocation Location of coverage file
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If granule could be deleted
    */
   async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {
-    try {
       const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
       let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
@@ -152,14 +144,10 @@ export default class ImageMosaicClient {
         }
       });
 
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
+      if (!response.ok) {
+        throw new Error('Error requesting url:', await response.text());
       }
-    } catch (error) {
-      return false;
-    }
+
+      return true;
   }
 }
