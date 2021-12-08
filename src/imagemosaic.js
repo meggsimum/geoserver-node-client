@@ -31,24 +31,24 @@ export default class ImageMosaicClient {
    * @returns {Object} An object with the granules
    */
   async getGranules (workspace, coverageStore, coverage) {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/coverages/' + coverage + '/index/granules.json';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-type': 'text/plain'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Error requesting url:', await response.text());
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-type': 'text/plain'
       }
+    });
 
-      return response.json();
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
+    }
+
+    return response.json();
   }
 
   /**
@@ -63,25 +63,25 @@ export default class ImageMosaicClient {
    * @returns {Object} An object with the granules
    */
   async harvestGranules (workspace, coverageStore, filePath) {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'text/plain'
-        },
-        body: filePath
-      });
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'text/plain'
+      },
+      body: filePath
+    });
 
-      if (!response.ok) {
-        throw new Error('Error requesting url:', await response.text());
-      }
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
+    }
 
-      return response.json();
+    return response.json();
   }
 
   /**
@@ -96,25 +96,25 @@ export default class ImageMosaicClient {
    * @returns {Boolean} If granule could be added
    */
   async addGranuleByServerFile (workspace, coverageStore, filePath) {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-type': 'text/plain'
-        },
-        body: filePath
-      });
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-type': 'text/plain'
+      },
+      body: filePath
+    });
 
-      if (!response.ok) {
-        throw new Error('Error requesting url:', await response.text());
-      }
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
+    }
 
-      return true;
+    return true;
   }
 
   /**
@@ -130,24 +130,24 @@ export default class ImageMosaicClient {
    * @returns {Boolean} If granule could be deleted
    */
   async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
-      url += '?filter=location=\'' + covFileLocation + '\'';
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
+    url += '?filter=location=\'' + covFileLocation + '\'';
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-type': 'text/plain'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Error requesting url:', await response.text());
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-type': 'text/plain'
       }
+    });
 
-      return true;
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
+    }
+
+    return true;
   }
 }

@@ -53,7 +53,7 @@ export default class GeoServerRestClient {
   /**
    * Get the GeoServer version.
    *
-   * @throws Will throw an error if URL could not be requested
+   * @throws Error if request fails
    *
    * @returns {String|Boolean} The version of GeoServer or 'false'
    */
@@ -70,7 +70,7 @@ export default class GeoServerRestClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Error requesting url: ${url}`);
+      throw new Error('Error requesting url');
     }
     return await response.json();
   }
