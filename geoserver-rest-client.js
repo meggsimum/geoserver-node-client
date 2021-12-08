@@ -8,7 +8,6 @@ import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
 
-
 /**
  * Client for GeoServer REST API.
  * Has minimal basic functionality and offers REST client instances for

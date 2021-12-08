@@ -42,7 +42,7 @@ export default class LayerClient {
     if (!response.ok) {
       throw new Error('Error requesting url:', await response.text());
     }
-    return true;
+    return await response.json();
   }
 
   /**
@@ -472,7 +472,8 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new Error('Error requesting url:', await response.text());
+      throw new Error('Error requesting url');
+      // throw new Error('Error requesting url:', await response.text());
     }
     return true;
   }
