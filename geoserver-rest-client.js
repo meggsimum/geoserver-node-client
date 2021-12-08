@@ -7,7 +7,7 @@ import ImageMosaicClient from './src/imagemosaic.js';
 import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
-import { GeoServerResponseError } from './src/errors.js';
+import { GeoServerResponseError } from './src/util/geoserver.js';
 
 /**
  * Client for GeoServer REST API.

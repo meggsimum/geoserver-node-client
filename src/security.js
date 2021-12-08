@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer security.
@@ -38,7 +38,8 @@ export default class SecurityClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -74,11 +75,12 @@ export default class SecurityClient {
     });
 
     if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 404:
-          throw Error(`User ${username} might already exists.`);
+          throw new GeoServerResponseError(`User ${username} might already exists.`, geoServerResponse);
         default:
-          throw new Error('Response not recognised')
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
 
@@ -117,7 +119,8 @@ export default class SecurityClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Provided username does not exist: ${username}`);
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }
@@ -143,7 +146,8 @@ export default class SecurityClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Provided role does not exist: ${role}`);
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }

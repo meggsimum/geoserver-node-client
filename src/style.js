@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
-import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer styles
@@ -40,7 +40,8 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -66,7 +67,8 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -136,7 +138,8 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }
@@ -169,7 +172,8 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }
@@ -204,7 +208,8 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }

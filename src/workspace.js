@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer workspaces
@@ -40,7 +40,8 @@ export default class WorkspaceClient {
       }
     });
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -65,11 +66,12 @@ export default class WorkspaceClient {
       }
     });
     if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 404:
-          throw new Error('workspace does not exist');
+          throw new GeoServerResponseError('workspace does not exist', geoServerResponse);
         default:
-          throw new Error('Response not recognised')
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
     return await response.json();
@@ -105,11 +107,12 @@ export default class WorkspaceClient {
     });
 
     if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 409:
-          throw new Error('Unable to add workspace as it already exists');
+          throw new GeoServerResponseError('Unable to add workspace as it already exists', geoServerResponse);
         default:
-          throw new Error('Response not recognised')
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
 
@@ -138,15 +141,18 @@ export default class WorkspaceClient {
     });
 
     if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 400:
           // the docs say code 403, but apparently it is code 400
           // https://docs.geoserver.org/latest/en/api/#1.0.0/workspaces.yaml
-          throw new Error('Workspace or related Namespace is not empty (and recurse not true)');
+          throw new GeoServerResponseError(
+            'Workspace or related Namespace is not empty (and recurse not true)',
+            geoServerResponse);
         case 404:
-          throw new Error('Workspace doesn’t exist');
+          throw new GeoServerResponseError('Workspace doesn’t exist', geoServerResponse);
         default:
-          throw new Error('Response not recognised')
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
     return true;

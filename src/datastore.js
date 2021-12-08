@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
-import { GeoServerResponseError } from './errors.js';
-import { getGeoServerResponseText } from './util.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer data stores
@@ -168,10 +167,11 @@ s  */
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
-
-      switch (response.json) {
+      switch (response.status) {
         case 404:
-          throw new GeoServerResponseError('No ' + storeType + ' with name "' + storeName + '" found', geoServerResponse);
+          throw new GeoServerResponseError(
+            `No ${storeType} with name "${storeName}" found`,
+            geoServerResponse);
         default:
           throw new GeoServerResponseError(null, geoServerResponse);
       }

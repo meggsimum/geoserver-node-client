@@ -1,4 +1,21 @@
-/** Collection of custom Error types */
+/**
+ * Utility functions and classes
+ */
+
+/**
+ * Return the GeoServer response text if available.
+ *
+ * @param {Response} response The response of the GeoServer
+ *
+ * @returns {String} The response text if available
+ */
+async function getGeoServerResponseText (response) {
+  try {
+    return await response.text()
+  } catch {
+    // return nothing
+  }
+}
 
 /**
  * Generic GeoServer error
@@ -19,5 +36,6 @@ class GeoServerResponseError extends Error {
 }
 
 export {
+  getGeoServerResponseText,
   GeoServerResponseError
 }

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer image mosaics
@@ -46,7 +46,8 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return response.json();
@@ -79,7 +80,8 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return response.json();
@@ -112,7 +114,8 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return true;
@@ -146,7 +149,8 @@ export default class ImageMosaicClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return true;

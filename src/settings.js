@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer settings.
@@ -38,7 +38,8 @@ export default class SettingsClient {
       }
     });
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -105,7 +106,8 @@ export default class SettingsClient {
       }
     });
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -158,8 +160,8 @@ export default class SettingsClient {
       body: JSON.stringify(body)
     });
     if (!response.ok) {
-      const responseText = await response.text();
-      throw new Error(`Error during request: ${responseText}`);
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }

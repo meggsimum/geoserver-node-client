@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer namespace
@@ -38,7 +38,8 @@ export default class NamespaceClient {
       }
     });
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -75,9 +76,8 @@ export default class NamespaceClient {
     });
 
     if (!response.ok) {
-      // offical docs seem to be outdated, that's why we return a generic error
-      // https://docs.geoserver.org/latest/en/api/#1.0.0/namespaces.yaml
-      throw new Error('Could not create namespace');
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return await response.text();
@@ -103,7 +103,8 @@ export default class NamespaceClient {
       }
     });
     if (!response.ok) {
-      throw new Error('Could not get namespace');
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -128,19 +129,24 @@ export default class NamespaceClient {
       }
     });
 
-    // error messages taken from
-    // https://docs.geoserver.org/latest/en/api/#1.0.0/namespaces.yaml
-    switch (response.status) {
-      case 200:
-        return true;
-      case 403:
-        throw new Error('Namespace or related Workspace is not empty (and recurse not true)');
-      case 404:
-        throw new Error('Namespace doesn’t exist');
-      case 405:
-        throw new Error('Can’t delete default namespace');
-      default:
-        throw new Error('Response not recognised')
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 200:
+          return true;
+        case 403:
+          throw new GeoServerResponseError(
+            'Namespace or related Workspace is not empty (and recurse not true)',
+            geoServerResponse);
+        case 404:
+          throw new GeoServerResponseError('Namespace doesn’t exist', geoServerResponse);
+        case 405:
+          throw new GeoServerResponseError('Can’t delete default namespace', geoServerResponse);
+        default:
+          throw new GeoServerResponseError('Response not recognised', geoServerResponse)
+      }
     }
+
+    return true;
   }
 }
