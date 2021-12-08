@@ -185,6 +185,8 @@ s  */
    * @param {String} layerTitle The published title of the new layer
    * @param {String} filePath The path to the GeoTIFF file on the server
    *
+   * @throws Error if request fails
+   *
    * @returns {String} The successful response text
    */
   async createGeotiffFromFile (workspace, coverageStore, layerName, layerTitle, filePath) {
@@ -230,6 +232,8 @@ s  */
    * @param {String} pgSchema The PostGIS DB schema
    * @param {String} pgDb The PostGIS DB name
    * @param {String} [exposePk] expose primary key, defaults to false
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If the store could be created
    */
@@ -319,6 +323,8 @@ s  */
    * @param {String} dataStore The data store name
    * @param {String} zipArchivePath Aboslute path to zip archive with the 3 properties files
    *
+   * @throws Error if request fails
+   *
    * @returns {String} The response text
    */
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
@@ -348,6 +354,8 @@ s  */
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
    * @param {String} wmsCapabilitiesUrl Base WMS capabilities URL
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If store could be created
    */
@@ -387,6 +395,8 @@ s  */
    * @param {String} wfsCapabilitiesUrl WFS capabilities URL
    * @param {String} namespaceUrl URL of the GeoServer namespace
    * @param {Boolean} [useHttpConnectionPooling=true] use HTTP connection pooling for WFS connection
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If store could be created
    */
@@ -440,6 +450,8 @@ s  */
    * @param {String} coverageStore Name of data store to delete
    * @param {String} recurse Flag to enable recursive deletion
    *
+   * @throws Error if request fails
+   *
    * @returns {Boolean} If the datastore could be deleted
    */
   async deleteDataStore (workspace, dataStore, recurse) {
@@ -470,6 +482,8 @@ s  */
    * @param {String} workspace The workspace where the CoverageStore is in
    * @param {String} coverageStore Name of CoverageStore to delete
    * @param {String} recurse Flag to enable recursive deletion
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If the datastore could be deleted
    */
@@ -505,6 +519,8 @@ s  */
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
    * @param {String} gpkgPath Relative path to GeoPackage file within geoserver_data dir
+   *
+   * @throws Error if request fails
    *
    * @returns {Boolean} If store could be created
    */
