@@ -68,30 +68,27 @@ export default class DatastoreClient {
    * @private
    * Get information about various store types in a workspace.
    *
-   * @param {String} workspace
-   * @param {String} storeType
+   * @param {String} workspace The workspace name
+   * @param {String} storeType The type of store
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object containing store details
    */
   async getStores (workspace, storeType) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-      console.warn(await response.text());
-      return false;
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
     }
+    return await response.json();
   }
 
   /**
@@ -100,7 +97,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search DataStore in
    * @param {String} dataStore DataStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getDataStore (workspace, dataStore) {
     return this.getStore(workspace, dataStore, 'datastores');
@@ -112,7 +109,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search CoverageStore in
    * @param {String} covStore CoverageStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getCoverageStore (workspace, covStore) {
     return this.getStore(workspace, covStore, 'coveragestores');
@@ -124,7 +121,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search WmsStore in
    * @param {String} wmsStore WmsStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmsStore (workspace, wmsStore) {
     return this.getStore(workspace, wmsStore, 'wmsstores');
@@ -136,7 +133,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search WmtsStore in
    * @param {String} wmtsStore WmtsStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
 s  */
   async getWmtsStore (workspace, wmtsStore) {
     return this.getStore(workspace, wmtsStore, 'wmtsstores');
@@ -144,36 +141,37 @@ s  */
 
   /**
    * @private
-   * @param {String} workspace
-   * @param {String} storeName
-   * @param {String} storeType
+   * Get GeoServer store by type
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @param {String} workspace The name of the workspace
+   * @param {String} storeName The name of the store
+   * @param {String} storeType The type of the store
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object containing store details
    */
   async getStore (workspace, storeName, storeType) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else if (response.status === 404) {
-        console.warn('No ' + storeType + ' with name "' + storeName + '" found');
-        return false;
-      } else {
-        console.warn(await response.text());
-        return false;
+    const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      switch (response.json) {
+        case 404:
+          throw new Error('No ' + storeType + ' with name "' + storeName + '" found');
+        default:
+          throw new Error('Error requesting url:', await response.text());
+      }
     }
+    return await response.json();
   }
 
   /**
@@ -187,41 +185,36 @@ s  */
    * @param {String} layerTitle The published title of the new layer
    * @param {String} filePath The path to the GeoTIFF file on the server
    *
-   * @returns {String|Boolean} The successful response text or 'false'
+   * @returns {String} The successful response text
    */
   async createGeotiffFromFile (workspace, coverageStore, layerName, layerTitle, filePath) {
-    try {
-      const lyrTitle = layerTitle || layerName;
-      const stats = fs.statSync(filePath);
-      const fileSizeInBytes = stats.size;
-      const readStream = fs.createReadStream(filePath);
+    const lyrTitle = layerTitle || layerName;
+    const stats = fs.statSync(filePath);
+    const fileSizeInBytes = stats.size;
+    const readStream = fs.createReadStream(filePath);
 
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/file.geotiff';
-      url += '?filename=' + lyrTitle + '&coverageName=' + layerName;
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'image/tiff',
-          'Content-length': fileSizeInBytes
-        },
-        body: readStream
-      });
+    url += '?filename=' + lyrTitle + '&coverageName=' + layerName;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'image/tiff',
+        'Content-length': fileSizeInBytes
+      },
+      body: readStream
+    });
 
-      if (response.status === 201) {
-        const responseText = await response.text();
-        // TODO enforce JSON response or parse XML
-        return responseText;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      throw new Error('Error requesting url');
     }
+    const responseText = await response.text();
+    // TODO: enforce JSON response or parse XML
+    return responseText;
   }
 
   /**
@@ -305,12 +298,12 @@ s  */
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    // TODO: not tested yet
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
     }
+
+    return true;
   }
 
   /**
@@ -326,33 +319,27 @@ s  */
    * @param {String} dataStore The data store name
    * @param {String} zipArchivePath Aboslute path to zip archive with the 3 properties files
    *
-   * @returns {String|Boolen} The response text or 'false'
+   * @returns {String} The response text
    */
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
-    try {
-      const readStream = fs.createReadStream(zipArchivePath);
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/zip'
-        },
-        body: readStream
-      });
+    const readStream = fs.createReadStream(zipArchivePath);
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/zip'
+      },
+      body: readStream
+    });
 
-      if (response.status === 201) {
-        return await response.text();
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
     }
+
+    return await response.text();
   };
 
   /**
@@ -386,12 +373,10 @@ s  */
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
     }
+    return true;
   }
 
   /**
@@ -442,12 +427,10 @@ s  */
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
     }
+    return true;
   }
 
   /**
@@ -460,33 +443,25 @@ s  */
    * @returns {Boolean} If the datastore could be deleted
    */
   async deleteDataStore (workspace, dataStore, recurse) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
-      url += '?recurse=' + recurse;
+    let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
+    url += '?recurse=' + recurse;
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else if (response.status === 401) {
-        console.warn('Deletion failed. There might be dependant objects to ' +
-          'this store. Delete them first or call this with "recurse=false"');
-        console.warn(response.text());
-        return false;
-      } else {
-        return false;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      // TODO: could not find status codes in the docs or via testing
+      //       https://docs.geoserver.org/latest/en/api/#1.0.0/datastores.yaml
+      throw new Error('Error requesting url');
     }
+    return true;
   }
 
   /**
@@ -499,33 +474,29 @@ s  */
    * @returns {Boolean} If the datastore could be deleted
    */
   async deleteCoverageStore (workspace, coverageStore, recurse) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
-      url += '?recurse=' + recurse;
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
+    url += '?recurse=' + recurse;
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else if (response.status === 401) {
-        console.warn('Deletion failed. There might be dependant objects to ' +
-          'this store. Delete them first or call this with "recurse=false"');
-        console.warn(response.text());
-        return false;
-      } else {
-        return false;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    // TODO: could not test it
+    if (!response.ok) {
+      switch (response.status) {
+        case 401:
+          throw new Error('Error requesting url:', response.text());
+        default:
+          throw new Error('Error requesting url:', response.text());
+      }
     }
+    return true;
   }
 
   /**
@@ -570,11 +541,9 @@ s  */
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    if (!response.ok) {
+      throw new Error('Error requesting url:', await response.text());
     }
+    return true;
   }
 }
