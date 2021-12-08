@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
 import { GeoServerResponseError } from './errors.js';
+import { getGeoServerResponseText } from './util.js';
 
 /**
  * Client for GeoServer data stores
@@ -87,7 +88,8 @@ export default class DatastoreClient {
       }
     });
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return await response.json();
   }
@@ -165,11 +167,13 @@ s  */
     });
 
     if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+
       switch (response.json) {
         case 404:
-          throw new Error('No ' + storeType + ' with name "' + storeName + '" found');
+          throw new GeoServerResponseError('No ' + storeType + ' with name "' + storeName + '" found', geoServerResponse);
         default:
-          throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
     return await response.json();
@@ -213,7 +217,8 @@ s  */
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     const responseText = await response.text();
     // TODO: enforce JSON response or parse XML
@@ -305,7 +310,8 @@ s  */
 
     // TODO: not tested yet
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return true;
@@ -343,7 +349,8 @@ s  */
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
 
     return await response.text();
@@ -383,7 +390,8 @@ s  */
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }
@@ -439,7 +447,8 @@ s  */
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }
@@ -472,7 +481,8 @@ s  */
     if (!response.ok) {
       // TODO: could not find status codes in the docs or via testing
       //       https://docs.geoserver.org/latest/en/api/#1.0.0/datastores.yaml
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }
@@ -504,11 +514,13 @@ s  */
 
     // TODO: could not test it
     if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 401:
-          throw new GeoServerResponseError('Requesting GeoServer failed:', response.text());
+          throw new GeoServerResponseError('Deletion failed. There might be dependant objects to ' +
+          'this store. Delete them first or call this with "recurse=false"', geoServerResponse);
         default:
-          throw new GeoServerResponseError('Requesting GeoServer failed:', response.text());
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
     return true;
@@ -559,7 +571,8 @@ s  */
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return true;
   }

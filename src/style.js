@@ -40,7 +40,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
     }
     return await response.json();
   }
@@ -66,7 +66,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
     }
     return await response.json();
   }
@@ -136,7 +136,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
     }
     return true;
   }
@@ -169,7 +169,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
     }
     return true;
   }
@@ -204,7 +204,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:', await response.text());
+      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
     }
     return await response.json();
   }
