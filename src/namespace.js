@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { GeoServerResponseError } from './errors.js';
 
 /**
  * Client for GeoServer namespace

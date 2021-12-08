@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
+import { GeoServerResponseError } from './errors.js';
 
 /**
  * Client for GeoServer styles

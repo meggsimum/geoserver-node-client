@@ -4,12 +4,12 @@
  * Generic GeoServer error
  */
 class GeoServerResponseError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = 'GeoServerResponseError';
-    }
+  constructor (message) {
+    super(message)
+    this.name = 'GeoServerResponseError';
+  }
 }
 
 export {
-    GeoServerResponseError
+  GeoServerResponseError
 }
