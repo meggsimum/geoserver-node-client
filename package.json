@@ -7,7 +7,8 @@
   "scripts": {
     "demo": "node demo/index.js",
     "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
-    "lint": "eslint src/*.js demo/index.js test/test.js",
+    "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
+    "lint-fix": "eslint --fix '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
     "release": "release-it"
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.25.2",
