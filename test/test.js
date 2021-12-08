@@ -344,15 +344,15 @@ describe('Layer', () => {
     expect(result.layers.layer.length).to.equal(3);
   })
 
-  // it('can get a layer by qualified name', async () => {
-  //   const nonExistentLayer = 'non-existent-layer';
-  //   // TODO: check error message
-  //   let result = await grc.layers.get(workSpace + ':' + nonExistentLayer);
-  //   expect(result).to.be.false;
+  it('can get a layer by qualified name', async () => {
+    const nonExistentLayer = 'non-existent-layer';
+    // TODO: check error message
+    const fun = grc.layers.get(workSpace + ':' + nonExistentLayer);
+    expect(fun).to.eventually.throw();
 
-  //   result = await grc.layers.get(workSpace + ':' + wmsLayerName);
-  //   expect(result.layer.name).to.equal(wmsLayerName);
-  // })
+    const result = await grc.layers.get(workSpace + ':' + wmsLayerName);
+    expect(result.layer.name).to.equal(wmsLayerName);
+  })
 
   // TODO: publishFeatureTypeDefaultDataStore
 
@@ -367,17 +367,11 @@ describe('Layer', () => {
     expect(result).to.be.true;
   })
 
-  // TODO: check error message
-  // https://stackoverflow.com/questions/45466040/verify-that-an-exception-is-thrown-using-mocha-chai-and-async-await
-
   it('has function to query coverages', async () => {
     // query a non-existing coverage to check that the function exists
     // TODO test valid response once we have coverages in test setup
-    const fun = async () => { await grc.layers.getCoverage(workSpace, 'testCovStore', 'testCoverage') };
-    expect(fun()).to.eventually.throw();
-
-    // var badFn = function () { throw new TypeError('Illegal salmon!'); };
-    // expect(badFn).to.throw();
+    const fun = grc.layers.getCoverage(workSpace, 'testCovStore', 'testCoverage');
+    expect(fun).to.eventually.throw();
   })
 
   after('delete Workspace', async () => {
