@@ -8,9 +8,6 @@ import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
 
-// TODO: create generic error class for this
-//       or use an existing one
-//       or use function like "checkResponse()" that throws error if not okay
 
 /**
  * Client for GeoServer REST API.
