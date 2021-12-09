@@ -49,11 +49,8 @@ docker run \
 Then, in an other terminal, run:
 
 ```shell
-# the GeoServer version the tests should verfiy
-export GEOSERVER_VERSION=2.20.1
-
-# run the test suite
-npm run test
+# specify the GeoServer version and run the test suite
+GEOSERVER_VERSION=2.20.1 npm run test
 ```
 
 ### Release
