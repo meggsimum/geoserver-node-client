@@ -15,7 +15,7 @@ export default class SettingsClient {
    * @param {String} password The password for the GeoServer REST API
    */
   constructor (url, auth) {
-    this.url = url.endsWith('/') ? url : url + '/';
+    this.url = url;
     this.auth = auth;
   }
 
