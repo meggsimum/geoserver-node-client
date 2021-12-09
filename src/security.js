@@ -14,10 +14,9 @@ export default class SecurityClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor (url, auth) {
     this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+    this.auth = auth;
   }
 
   /**
@@ -28,12 +27,11 @@ export default class SecurityClient {
    * @returns {Object} An object with all users
    */
   async getAllUsers () {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'security/usergroup/users.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -63,12 +61,11 @@ export default class SecurityClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'security/usergroup/users.json', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -107,12 +104,11 @@ export default class SecurityClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'security/usergroup/user/' + username, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -136,12 +132,11 @@ export default class SecurityClient {
    * @returns {Boolean} If the role could be associated
    */
   async associateUserRole (username, role) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 

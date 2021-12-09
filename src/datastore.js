@@ -15,10 +15,9 @@ export default class DatastoreClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor (url, auth) {
     this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+    this.auth = auth;
   }
 
   /**
@@ -77,13 +76,11 @@ export default class DatastoreClient {
    * @returns {Object} An object containing store details
    */
   async getStores (workspace, storeType) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -154,14 +151,12 @@ s  */
    * @returns {Object} An object containing store details
    */
   async getStore (workspace, storeName, storeType) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -200,8 +195,6 @@ s  */
     const fileSizeInBytes = stats.size;
     const readStream = fs.createReadStream(filePath);
 
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/file.geotiff';
     url += '?filename=' + lyrTitle + '&coverageName=' + layerName;
@@ -209,7 +202,7 @@ s  */
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'image/tiff',
         'Content-length': fileSizeInBytes
       },
@@ -295,14 +288,12 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -336,13 +327,13 @@ s  */
    */
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
     const readStream = fs.createReadStream(zipArchivePath);
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/zip'
       },
       body: readStream
@@ -376,14 +367,12 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/wmsstores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -433,14 +422,12 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -465,8 +452,6 @@ s  */
    * @returns {Boolean} If the datastore could be deleted
    */
   async deleteDataStore (workspace, dataStore, recurse) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
     url += '?recurse=' + recurse;
 
@@ -474,7 +459,7 @@ s  */
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -499,8 +484,6 @@ s  */
    * @returns {Boolean} If the datastore could be deleted
    */
   async deleteCoverageStore (workspace, coverageStore, recurse) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
     url += '?recurse=' + recurse;
 
@@ -508,7 +491,7 @@ s  */
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -557,14 +540,12 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)

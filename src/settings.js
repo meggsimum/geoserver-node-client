@@ -14,10 +14,9 @@ export default class SettingsClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor (url, auth) {
     this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+    this.auth = auth;
   }
 
   /**
@@ -28,13 +27,11 @@ export default class SettingsClient {
    * @returns {Object|Boolean} Settings object or 'false'
    */
   async getSettings () {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'settings.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -52,13 +49,11 @@ export default class SettingsClient {
    * @returns {Boolean} Flag indicating if request was successful
    */
   async updateSettings (settings) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'settings', {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(settings)
@@ -96,13 +91,11 @@ export default class SettingsClient {
    * @returns {Object|Boolean} An object with contact information or 'false'
    */
   async getContactInformation () {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'settings/contact', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -148,13 +141,12 @@ export default class SettingsClient {
       contact: contact
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'settings/contact';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)

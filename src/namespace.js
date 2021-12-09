@@ -14,10 +14,9 @@ export default class NamespaceClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor (url, auth) {
     this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+    this.auth = auth;
   }
 
   /**
@@ -28,13 +27,11 @@ export default class NamespaceClient {
    * @returns {Object|Boolean} An object describing the namespace or 'false'
    */
   async getAll () {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -62,14 +59,11 @@ export default class NamespaceClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
-
     const response = await fetch(this.url + 'namespaces', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -93,13 +87,11 @@ export default class NamespaceClient {
    * @returns {Object} An object describing the namespace
    */
   async get (name) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces/' + name + '.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -119,13 +111,11 @@ export default class NamespaceClient {
    * @returns {Boolean} If deletion was successful
    */
   async delete (name) {
-    const auth =
-    Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces/' + name, {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 

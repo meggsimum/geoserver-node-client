@@ -14,10 +14,9 @@ export default class ImageMosaicClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor (url, auth) {
     this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+    this.auth = auth;
   }
 
   /**
@@ -32,15 +31,13 @@ export default class ImageMosaicClient {
    * @returns {Object} An object with the granules
    */
   async getGranules (workspace, coverageStore, coverage) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/coverages/' + coverage + '/index/granules.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-type': 'text/plain'
       }
     });
@@ -65,15 +62,13 @@ export default class ImageMosaicClient {
    * @returns {Object} An object with the granules
    */
   async harvestGranules (workspace, coverageStore, filePath) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'text/plain'
       },
       body: filePath
@@ -99,15 +94,13 @@ export default class ImageMosaicClient {
    * @returns {Boolean} If granule could be added
    */
   async addGranuleByServerFile (workspace, coverageStore, filePath) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-type': 'text/plain'
       },
       body: filePath
@@ -134,8 +127,6 @@ export default class ImageMosaicClient {
    * @returns {Boolean} If granule could be deleted
    */
   async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
     url += '?filter=location=\'' + covFileLocation + '\'';
 
@@ -143,7 +134,7 @@ export default class ImageMosaicClient {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-type': 'text/plain'
       }
     });

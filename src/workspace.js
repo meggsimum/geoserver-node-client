@@ -16,10 +16,9 @@ export default class WorkspaceClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor (url, auth) {
     this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+    this.auth = auth;
   }
 
   /**
@@ -30,13 +29,11 @@ export default class WorkspaceClient {
    * @returns {Object} An Object describing the workspaces
    */
   async getAll () {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -56,13 +53,11 @@ export default class WorkspaceClient {
    * @returns {Object} An object describing the workspaces
    */
   async get (name) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + name + '.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -93,14 +88,11 @@ export default class WorkspaceClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
-
     const response = await fetch(this.url + 'workspaces', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -130,13 +122,11 @@ export default class WorkspaceClient {
    * @returns {Boolean} If deletion was successful
    */
   async delete (name, recurse) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
