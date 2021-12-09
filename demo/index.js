@@ -5,8 +5,7 @@ const user = 'admin';
 const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);
 
-const ws = 'test';
-const recursive = true;
+// const ws = 'test';
 
 function prettyJson (obj) {
   return JSON.stringify(obj, null, 2);
@@ -21,20 +20,20 @@ async function main () {
   try {
     // GENERAL
 
-    // console.log(
-    //   'GeoServer REST exists',
-    //   await grc.exists()
-    // );
+    console.log(
+      'GeoServer REST exists',
+      await grc.exists()
+    );
 
-    // console.log(
-    //   'GeoServer REST version info',
-    //   prettyJson(await grc.getVersion())
-    // );
+    console.log(
+      'GeoServer REST version info',
+      prettyJson(await grc.getVersion())
+    );
 
     // NAMESPACES
 
-    const nsPrefix = 'example-namespace';
-    const nsUri = 'http://www.example.com'
+    // const nsPrefix = 'example-namespace';
+    // const nsUri = 'http://www.example.com'
 
     // console.log(
     //   'Created GeoServer NS',
@@ -68,6 +67,7 @@ async function main () {
     //   prettyJson(await grc.workspaces.create(ws))
     // );
 
+    // const recursive = true;
     // console.log(
     //   'Deleted GeoServer WS',
     //   await grc.workspaces.delete(ws, recursive)
@@ -247,21 +247,28 @@ async function main () {
 
     // IMAGEMOSAIC
 
-    // grc.imagemosaics.getGranules('imagemosaic_test', 'testCovStore', 'testCov').then(retVal => {
-    //   console.log('Get Granules Image Mosaic', retVal);
-    // });
-    // const filePathCoverages = 'file:///opt/raster_data'
-    // grc.imagemosaics.harvestGranules('imagemosaic_test', 'testCovStore', filePathCoverages).then(retVal => {
-    //   console.log('Harveset Granules Image Mosaic', retVal);
-    // });
+    // console.log(
+    //   'Get Granules Image Mosaic',
+    //   prettyJson(await grc.imagemosaics.getGranules('imagemosaic_test', 'testCovStore', 'testCov'))
+    // );
+
+    // const filePathCoverages = 'file:///opt/raster_data';
+    // console.log(
+    //   'Harveset Granules Image Mosaic',
+    //   prettyJson(await grc.imagemosaics.harvestGranules('imagemosaic_test', 'testCovStore', filePathCoverages))
+    // );
+
     // const coverageToAdd = 'file:///opt/raster_data/a.tif'
-    // grc.imagemosaics.addGranuleByServerFile('imagemosaic_test', 'testCovStore', coverageToAdd).then(retVal => {
-    //   console.log('Add Granule by Server File', retVal);
-    // });
+    // console.log(
+    //   'Add Granule by Server File',
+    //   await grc.imagemosaics.addGranuleByServerFile('imagemosaic_test', 'testCovStore', coverageToAdd)
+    // );
+
     // const coverageToDelete = '/opt/raster_data/a.tif';
-    // grc.imagemosaics.deleteSingleGranule('imagemosaic_test', 'testCovStore', 'testCov', coverageToDelete).then(retVal => {
-    //   console.log('Deleting Granule', retVal);
-    // });
+    // console.log(
+    //   'Deleting Granule',
+    //   await grc.imagemosaics.deleteSingleGranule('imagemosaic_test', 'testCovStore', 'testCov', coverageToDelete)
+    // );
   } catch (error) {
     console.log('#### Error message #####');
     console.error(error.message);
