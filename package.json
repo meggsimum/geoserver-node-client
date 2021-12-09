@@ -7,8 +7,7 @@
   "scripts": {
     "demo": "node demo/index.js",
     "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
-    "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
-    "lint-fix": "eslint --fix '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
+    "lint": "eslint src/*.js demo/index.js test/test.js",
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
     "release": "release-it"
