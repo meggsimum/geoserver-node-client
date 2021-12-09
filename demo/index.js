@@ -152,18 +152,26 @@ async function main () {
 
     // LAYERS
 
-    // grc.layers.get('fooWs:barLayer').then(layer => {
-    //   console.log('GeoServer layer by qualified name', prettyJson(layer));
-    // });
-    // grc.layers.getAll().then(allLayers => {
-    //   console.log('All GeoServer layers', prettyJson(allLayers));
-    // });
-    // grc.layers.publishFeatureTypeDefaultDataStore(ws, 'nativeFtName', 'aTestName', 'Test Title', 'EPSG:31468', false).then(retVal => {
-    //   console.log('Created Layer', prettyJson(retVal));
-    // });
-    // grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestName2', 'Test Title 2', 'EPSG:31468', true).then(retVal => {
-    //   console.log('Created Layer', prettyJson(retVal));
-    // });
+    // console.log(
+    //   'GeoServer layer by qualified name',
+    //   prettyJson(await grc.layers.get('fooWs:barLayer'))
+    // );
+
+    // console.log(
+    //   'All GeoServer layers',
+    //   prettyJson(await grc.layers.getAll())
+    // );
+
+    // console.log(
+    //   'Created Layer',
+    //   prettyJson(await grc.layers.publishFeatureTypeDefaultDataStore(ws, 'nativeFtName', 'aTestName', 'Test Title', 'EPSG:31468', false))
+    // );
+
+    // console.log(
+    //   'Created Layer',
+    //   await grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestName2', 'Test Title 2', 'EPSG:31468', true)
+    // );
+
     // const nativeBoundingBox = {
     //   minx: 8.15,
     //   maxx: 8.16,
@@ -174,24 +182,35 @@ async function main () {
     //     $: 'EPSG:4326'
     //   }
     // };
-    // grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestNameBbox', 'Test Title Bbox', 'EPSG:4326', true, null, nativeBoundingBox).then(retVal => {
-    //   console.log('Created FT with explicit native BBOX', prettyJson(retVal));
-    // });
-    // grc.layers.publishWmsLayer(ws, 'testWmsDs', 'OSM-Overlay-WMS', 'aTestName4Wms', 'Test Title WMS', 'EPSG:900913', true).then(retVal => {
-    //   console.log('Created WMS Layer', prettyJson(retVal));
-    // });
-    // grc.layers.publishDbRaster(ws, 'testdataStore', 'nativeRasterName', 'a-db-raster', 'Dummy DB Raster Title', null, true).then(retVal => {
-    //   console.log('Created DB Raster Layer', prettyJson(retVal))
-    // });
-    // grc.layers.deleteFeatureType(ws, 'testdataStore', 'aTestName2', true).then(retVal => {
-    //   console.log('Deleted Layer', prettyJson(retVal))
-    // });
-    // grc.layers.enableTimeCoverage(ws, 'testDs', 'HymptyLayer', 'DISCRETE_INTERVAL', 3600000, 'MAXIMUM').then(retVal => {
-    //   console.log('Enabled time for layer', prettyJson(retVal))
-    // });
-    // grc.layers.getCoverage(ws, 'testCovStore', 'testCoverage').then(cov => {
-    //   console.log(cov.coverage);
-    // });
+    // console.log(
+    //   'Created FT with explicit native BBOX',
+    //   await grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestNameBbox', 'Test Title Bbox', 'EPSG:4326', true, null, nativeBoundingBox)
+    // );
+
+    // console.log(
+    //   'Created WMS Layer',
+    //   await grc.layers.publishWmsLayer(ws, 'testWmsDs', 'OSM-Overlay-WMS', 'aTestName4Wms', 'Test Title WMS', 'EPSG:900913', true)
+    // );
+
+    // console.log(
+    //   'Created DB Raster Layer',
+    //   await grc.layers.publishDbRaster(ws, 'testdataStore', 'nativeRasterName', 'a-db-raster', 'Dummy DB Raster Title', null, true)
+    // );
+
+    // console.log(
+    //   'Deleted Layer',
+    //   await grc.layers.deleteFeatureType(ws, 'testdataStore', 'aTestName2', true)
+    // );
+
+    // console.log(
+    //   'Enabled time for layer',
+    //   await grc.layers.enableTimeCoverage(ws, 'testDs', 'HymptyLayer', 'DISCRETE_INTERVAL', 3600000, 'MAXIMUM')
+    // )
+
+    // console.log(
+    //   'Get Coverage',
+    //   prettyJson(await grc.layers.getCoverage(ws, 'testCovStore', 'testCoverage'))
+    // );
 
     // STYLES
 
