@@ -6,8 +6,13 @@ const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);
 
 const ws = 'test';
-const sldBody = '<?xml version="1.0" encoding="UTF-8"?>\n<StyledLayerDescriptor version="1.0.0" \n xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" \n xmlns="http://www.opengis.net/sld" \n xmlns:ogc="http://www.opengis.net/ogc" \n xmlns:xlink="http://www.w3.org/1999/xlink" \n xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n  <NamedLayer>\n    <Name>default_line</Name>\n    <UserStyle>\n  <Title>Default Line</Title>\n      <Abstract>A sample style that draws a line</Abstract>\n   <FeatureTypeStyle>\n        <Rule>\n          <Name>rule1</Name>\n          <Title>Blue Line</Title>\n          <Abstract>A solid blue line with a 1 pixel width</Abstract>\n          <LineSymbolizer>\n            <Stroke>\n              <CssParameter name="stroke">#0000FF</CssParameter>\n            </Stroke>\n          </LineSymbolizer>\n        </Rule>\n      </FeatureTypeStyle>\n    </UserStyle>\n  </NamedLayer>\n</StyledLayerDescriptor>\n';
 const recursive = true;
+
+function prettyJson (obj) {
+  return JSON.stringify(obj, null, 2);
+}
+
+main();
 
 /**
  * Async function containing all demo request
@@ -214,21 +219,31 @@ async function main () {
 
     // STYLES
 
-    // grc.styles.getDefaults().then(gsWorkspaces => {
-    //   console.log('GeoServer default styles', prettyJson(gsWorkspaces));
-    // });
-    // grc.styles.getInWorkspace(ws).then(gsWorkspaces => {
-    //   console.log('GeoServer styles for WS', prettyJson(gsWorkspaces));
-    // });
-    // grc.styles.getAllWorkspaceStyles().then(allGsWsStyles => {
-    //   console.log('GeoServer all WS styles', prettyJson(allGsWsStyles));
-    // });
-    // grc.styles.getAll().then(allGsStyles => {
-    //   console.log('GeoServer all styles', prettyJson(allGsStyles));
-    // });
-    // grc.styles.publish(ws, 'testStyle3', sldBody).then(retVal => {
-    //   console.log('Publish GeoServer style', retVal);
-    // });
+    // console.log(
+    //   'GeoServer default styles',
+    //   prettyJson(await grc.styles.getDefaults())
+    // );
+
+    // console.log(
+    //   'GeoServer styles for WS',
+    //   prettyJson(await grc.styles.getInWorkspace(ws))
+    // );
+
+    // console.log(
+    //   'GeoServer all WS styles',
+    //   prettyJson(await grc.styles.getAllWorkspaceStyles())
+    // );
+
+    // console.log(
+    //   'GeoServer all styles',
+    //   prettyJson(await grc.styles.getAll())
+    // );
+
+    // const sldBody = '<?xml version="1.0" encoding="UTF-8"?>\n<StyledLayerDescriptor version="1.0.0" \n xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" \n xmlns="http://www.opengis.net/sld" \n xmlns:ogc="http://www.opengis.net/ogc" \n xmlns:xlink="http://www.w3.org/1999/xlink" \n xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n  <NamedLayer>\n    <Name>default_line</Name>\n    <UserStyle>\n  <Title>Default Line</Title>\n      <Abstract>A sample style that draws a line</Abstract>\n   <FeatureTypeStyle>\n        <Rule>\n          <Name>rule1</Name>\n          <Title>Blue Line</Title>\n          <Abstract>A solid blue line with a 1 pixel width</Abstract>\n          <LineSymbolizer>\n            <Stroke>\n              <CssParameter name="stroke">#0000FF</CssParameter>\n            </Stroke>\n          </LineSymbolizer>\n        </Rule>\n      </FeatureTypeStyle>\n    </UserStyle>\n  </NamedLayer>\n</StyledLayerDescriptor>\n';
+    // console.log(
+    //   'Publish GeoServer style',
+    //   await grc.styles.publish(ws, 'testStyle3', sldBody)
+    // );
 
     // IMAGEMOSAIC
 
@@ -257,9 +272,3 @@ async function main () {
     }
   }
 }
-
-function prettyJson (obj) {
-  return JSON.stringify(obj, null, 2);
-}
-
-main();
