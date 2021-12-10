@@ -34,6 +34,22 @@ npm install
 npm run demo
 ```
 
+### Error Handling
+
+A request either succeeds or throws an Error. The thrown error has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exists and can be a simple text, or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used:
+
+```javascript
+  try {
+      // call any function from this library
+      await grc.styles.publish(workspace, styleName, sldBody)
+    } catch (error) {
+      // the standard error message
+      console.error(error.message);
+
+      // the whole Error including stack trace and (if available) the property 'geoServerOutput'
+      console.error(error);
+    }
+```
 
 ### Unit Tests
 

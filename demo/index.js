@@ -270,12 +270,10 @@ async function main () {
     //   await grc.imagemosaics.deleteSingleGranule('imagemosaic_test', 'testCovStore', 'testCov', coverageToDelete)
     // );
   } catch (error) {
-    console.log('#### Error message #####');
+    console.error('#### Error message #####');
     console.error(error.message);
-    if (error.geoServerOutput) {
-      console.log();
-      console.log('#### GeoServer Response #####');
-      console.error(error.geoServerOutput);
-    }
+
+    console.error('#### Whole Error Object #####');
+    console.error(error);
   }
 }
