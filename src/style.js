@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import GeoServerRestClient from '../geoserver-rest-client.js'
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer styles
@@ -187,7 +187,7 @@ export default class StyleClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object about the style
+   * @returns {Object} An object about the style or undefined if it cannot be found
    */
   async getStyleInformation (styleName, workspace) {
     const auth =
@@ -209,7 +209,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      const grc = new GeoServerRestClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.user, this.password);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;

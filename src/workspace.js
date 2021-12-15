@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import GeoServerRestClient from '../geoserver-rest-client.js'
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer workspaces
@@ -67,7 +67,7 @@ export default class WorkspaceClient {
       }
     });
     if (!response.ok) {
-      const grc = new GeoServerRestClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.user, this.password);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;

@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import GeoServerRestClient from '../geoserver-rest-client.js'
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer layers
@@ -29,7 +29,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object with layer information
+   * @returns {Object} An object with layer information or undefined if it cannot be found
    */
   async get (qualifiedName) {
     const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
@@ -42,7 +42,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      const grc = new GeoServerRestClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.user, this.password);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;
@@ -476,7 +476,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object with coverage information
+   * @returns {Object} An object with coverage information or undefined if it cannot be found
    */
   async getCoverage (workspace, coverageStore, name) {
     const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
@@ -490,7 +490,7 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      const grc = new GeoServerRestClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.user, this.password);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;
