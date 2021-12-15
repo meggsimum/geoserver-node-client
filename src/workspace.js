@@ -46,7 +46,6 @@ export default class WorkspaceClient {
     return await response.json();
   }
 
-  // TODO: handle case item does not exist
   /**
    * Returns a workspace.
    *
@@ -67,12 +66,14 @@ export default class WorkspaceClient {
       }
     });
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      switch (response.status) {
-        case 404:
-          throw new GeoServerResponseError('workspace does not exist', geoServerResponse);
-        default:
-          throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new GeoServerRestClient(this.url, this.user, this.password);
+      if (await grc.exists()){
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return ;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
     return await response.json();
