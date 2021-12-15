@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import GeoServerRestClient from '../geoserver-rest-client.js'
 
 /**
  * Client for GeoServer namespace
@@ -103,8 +104,15 @@ export default class NamespaceClient {
       }
     });
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new GeoServerRestClient(this.url, this.user, this.password);
+      if (await grc.exists()){
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return ;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
     return await response.json();
   }

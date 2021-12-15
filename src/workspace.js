@@ -46,6 +46,7 @@ export default class WorkspaceClient {
     return await response.json();
   }
 
+  // TODO: handle case item does not exist
   /**
    * Returns a workspace.
    *
@@ -150,7 +151,7 @@ export default class WorkspaceClient {
             'Workspace or related Namespace is not empty (and recurse not true)',
             geoServerResponse);
         case 404:
-          throw new GeoServerResponseError('Workspace doesn’t exist', geoServerResponse);
+          throw new GeoServerResponseError('Workspace doesn\'t exist', geoServerResponse);
         default:
           throw new GeoServerResponseError(null, geoServerResponse);
       }
