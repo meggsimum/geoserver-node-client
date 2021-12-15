@@ -25,7 +25,7 @@ export default class SettingsClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object|Boolean} Settings object or 'false'
+   * @returns {Object} Settings object
    */
   async getSettings () {
     const auth =
@@ -93,7 +93,7 @@ export default class SettingsClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object|Boolean} An object with contact information or 'false'
+   * @returns {Boolean} An object with contact information
    */
   async getContactInformation () {
     const auth =

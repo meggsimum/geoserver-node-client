@@ -25,7 +25,7 @@ export default class NamespaceClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object|Boolean} An object describing the namespace or 'false'
+   * @returns {Object} An object describing the namespace
    */
   async getAll () {
     const auth =

@@ -26,7 +26,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get DataStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getDataStores (workspace) {
     return this.getStores(workspace, 'datastores');
@@ -37,7 +37,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get CoverageStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getCoverageStores (workspace) {
     return this.getStores(workspace, 'coveragestores');
@@ -48,7 +48,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get WmsStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmsStores (workspace) {
     return this.getStores(workspace, 'wmsstores');
@@ -59,7 +59,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get WmtsStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmtsStores (workspace) {
     return this.getStores(workspace, 'wmtsstores');
