@@ -210,9 +210,9 @@ export default class StyleClient {
 
     if (!response.ok) {
       const grc = new GeoServerRestClient(this.url, this.user, this.password);
-      if (await grc.exists()){
+      if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
-        return ;
+        return;
       } else {
         // There was a general problem with GeoServer
         const geoServerResponse = await getGeoServerResponseText(response);
