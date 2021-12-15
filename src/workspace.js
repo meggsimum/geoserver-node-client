@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import GeoServerRestClient from '../geoserver-rest-client.js'
 
 /**
  * Client for GeoServer workspaces
