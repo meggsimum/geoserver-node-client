@@ -166,42 +166,41 @@ export default class StyleClient {
       paramRecurse = true;
     }
 
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      let endpoint;
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    let endpoint;
 
-      if (workspace) {
-        // delete style inside workspace
-        endpoint = this.url + 'workspaces/' + workspace + '/styles/' + name +
+    if (workspace) {
+      // delete style inside workspace
+      endpoint = this.url + 'workspaces/' + workspace + '/styles/' + name +
                   '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
-      } else {
-        // delete style without workspace
-        endpoint = this.url + 'styles/' + name +
+    } else {
+      // delete style without workspace
+      endpoint = this.url + 'styles/' + name +
                   '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
-      }
-
-      const response = await fetch(endpoint, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.ok) {
-        return true;
-      } else if (response.status === 403) {
-        console.warn('Deletion failed. There might be dependant objects to ' +
-        'this style. Delete them first or call this with "recurse=false"');
-        console.warn(await response.text());
-        return false;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
     }
+
+    const response = await fetch(endpoint, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 403:
+          throw new GeoServerResponseError(
+            'Deletion failed. There might be dependant layers to this style. Delete them first or call this with "recurse=false"',
+            geoServerResponse
+          );
+        default:
+          throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      }
+    }
+
+    return true;
   }
 
   /**

@@ -456,10 +456,10 @@ describe('style', () => {
   })
 
   it('can delete a style', async () => {
-    let recurse = false;
     const purge = false;
-    const withOutRecurse = await grc.styles.delete(workSpace, styleName, recurse, purge)
-    expect(withOutRecurse).to.be.false;
+    let recurse = false;
+    const fun = grc.styles.delete(workSpace, styleName, recurse, purge);
+    expect(fun).to.eventually.throw();
 
     recurse = true;
     const withRecurse = await grc.styles.delete(workSpace, styleName, recurse, purge)
