@@ -455,6 +455,17 @@ describe('style', () => {
     expect(result.length).to.equal(1);
   })
 
+  it('can delete a style', async () => {
+    let recurse = false;
+    const purge = false;
+    const withOutRecurse = await grc.styles.delete(workSpace, styleName, recurse, purge)
+    expect(withOutRecurse).to.be.false;
+
+    recurse = true;
+    const withRecurse = await grc.styles.delete(workSpace, styleName, recurse, purge)
+    expect(withRecurse).to.be.true;
+  });
+
   after('delete Workspace', async () => {
     const recursive = true;
     await grc.workspaces.delete(createdWorkSpace, recursive);

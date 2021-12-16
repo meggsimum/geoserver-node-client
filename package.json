@@ -1,13 +1,14 @@
 {
   "name": "geoserver-node-client",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Node.js client for GeoServer REST API",
   "type": "module",
   "main": "geoserver-rest-client.js",
   "scripts": {
     "demo": "node demo/index.js",
     "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
-    "lint": "eslint src/*.js demo/index.js test/test.js",
+    "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
+    "lint-fix": "eslint --fix '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
     "release": "release-it"

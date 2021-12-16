@@ -71,7 +71,11 @@ GEOSERVER_VERSION=2.20.1 npm run test
 
 ### Release
 
-The release to GitHub and npm is done via [release-it](https://github.com/release-it/release-it). This is the workflow for releasing:
+Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it). 
+
+The GitHub release has to be performed manually based on the tag created by `release-it`.
+
+This is the workflow for releasing:
 
 1. Make sure a `GITHUB_TOKEN` is available as environment variable. See [here](https://github.com/release-it/release-it/blob/master/docs/github-releases.md) for more information.
 
@@ -93,6 +97,9 @@ npm run release
 ```
 
 4. Follow the questions in the commandline.
+  - automatically upgrades the version in `package.json`
+  - makes a release commit and pushes it to GitHub
+  - publishes the new version to npm
 
 ### Who do I talk to? ###
 
