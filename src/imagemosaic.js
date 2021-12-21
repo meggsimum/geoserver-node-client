@@ -89,8 +89,6 @@ export default class ImageMosaicClient {
    * @param {String} filePath Server file path of new granule
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If granule could be added
    */
   async addGranuleByServerFile (workspace, coverageStore, filePath) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
@@ -109,8 +107,6 @@ export default class ImageMosaicClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-
-    return true;
   }
 
   /**
@@ -122,8 +118,6 @@ export default class ImageMosaicClient {
    * @param {String} covFileLocation Location of coverage file
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If granule could be deleted
    */
   async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';

@@ -60,8 +60,6 @@ export default class LayerClient {
    * @param {String} [attributionLink] The attribution link
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If attribution could be updated
    */
   async modifyAttribution (qualifiedName, attributionText, attributionLink) {
     // take existing layer properties as template
@@ -90,7 +88,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -128,8 +125,6 @@ export default class LayerClient {
    * @param {String} [abstract] The abstract of the layer
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If FeatureType could be published.
    */
   async publishFeatureTypeDefaultDataStore (workspace, nativeName, name, title, srs, enabled, abstract) {
     const body = {
@@ -157,7 +152,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -174,8 +168,6 @@ export default class LayerClient {
    * @param {String} [nativeBoundingBox] The native BoundingBox of the FeatureType (has to be set if no data is in store at creation time)
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the FeatureType could be published
    */
   async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled, abstract, nativeBoundingBox) {
     // apply CRS info for native BBOX if not provided
@@ -212,7 +204,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -228,8 +219,6 @@ export default class LayerClient {
    * @param {String} [abstract] The abstract of the layer
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the wms layer could be published
    */
   async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
     const body = {
@@ -257,7 +246,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -273,8 +261,6 @@ export default class LayerClient {
    * @param {String} [abstract] The abstract of the layer
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If raster could be published
    */
   async publishDbRaster (workspace, coverageStore, nativeName, name, title, srs, enabled, abstract) {
     const body = {
@@ -302,7 +288,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -314,8 +299,6 @@ export default class LayerClient {
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the feature type could be deleted
    */
   async deleteFeatureType (workspace, datastore, name, recurse) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '?recurse=' + recurse, {
@@ -329,7 +312,6 @@ export default class LayerClient {
     if (!response.ok) {
       throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
     }
-    return true;
   }
 
   /**
@@ -346,8 +328,6 @@ export default class LayerClient {
    * @param {String} [acceptableInterval] Acceptable interval for nearest match, e.g.'PT30M'
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If time dimension could be enabled
    */
   async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
     const body = {
@@ -357,7 +337,6 @@ export default class LayerClient {
             {
               '@key': 'time',
               dimensionInfo: {
-                enabled: true,
                 presentation: 'DISCRETE_INTERVAL',
                 resolution: resolution,
                 units: 'ISO8601',
@@ -390,7 +369,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -405,11 +383,8 @@ export default class LayerClient {
    * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
    * @param {Boolean} [nearestMatchEnabled] Enable nearest match
    * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
-   * @param {String} [acceptableInterval] Tolerance interval for nearest mach (e.g. 'PT30M'), only has an effect if 'nearestMatchEnabled' is true
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If TIME dimension could be enabled
    */
   async enableTimeFeatureType (workspace, dataStore, name, attribute, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
     const body = {
@@ -419,7 +394,6 @@ export default class LayerClient {
             {
               '@key': 'time',
               dimensionInfo: {
-                enabled: true,
                 attribute: attribute,
                 presentation: presentation,
                 resolution: resolution,
@@ -452,7 +426,6 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**

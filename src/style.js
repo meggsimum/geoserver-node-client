@@ -117,8 +117,6 @@ export default class StyleClient {
    * @param {String} sldBody SLD style (as XML text)
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the style could be published
    */
   async publish (workspace, name, sldBody) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
@@ -135,7 +133,6 @@ export default class StyleClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -145,8 +142,6 @@ export default class StyleClient {
    * @param {String} name The name of the style to delete
    * @param {Boolean} [recurse=false] If references to the specified style in existing layers should be deleted
    * @param {Boolean} [purge=false] Whether the underlying file containing the style should be deleted on disk
-   *
-   * @returns {Boolean} If the style could be deleted
    */
   async delete (workspace, name, recurse, purge) {
     let paramPurge = false;
@@ -192,8 +187,6 @@ export default class StyleClient {
           throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
       }
     }
-
-    return true;
   }
 
   /**
@@ -205,8 +198,6 @@ export default class StyleClient {
    * @param {Boolean} [isDefaultStyle=true] If the style should be the default style of the layer
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the style could be assigned
    */
   async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
     const styleBody = await this.getStyleInformation(styleName, workspaceStyle);
@@ -225,7 +216,6 @@ export default class StyleClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**

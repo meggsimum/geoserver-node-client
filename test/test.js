@@ -1,10 +1,7 @@
 /* global describe:false, it:false, before:false, after:false */
 /* eslint-disable no-unused-expressions */
-import chai, { expect } from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import { expect } from 'chai';
 import GeoServerRestClient from '../geoserver-rest-client.js';
-
-chai.use(chaiAsPromised);
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';
@@ -56,8 +53,7 @@ describe('Settings', () => {
         }
       }
     };
-    const updateOk = await grc.settings.updateSettings(settingsJson);
-    expect(updateOk).to.be.true;
+    await grc.settings.updateSettings(settingsJson);
 
     const settings = await grc.settings.getSettings();
     expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
@@ -65,8 +61,7 @@ describe('Settings', () => {
 
   it('updates proxyBaseUrl', async () => {
     const url = 'http://foobar.de/geoserver';
-    const updateOk = await grc.settings.updateProxyBaseUrl(url);
-    expect(updateOk).to.be.true;
+    await grc.settings.updateProxyBaseUrl(url);
 
     const settings = await grc.settings.getSettings();
     expect(settings.global.settings.proxyBaseUrl).to.equal(url);
@@ -88,8 +83,7 @@ describe('Settings', () => {
     const contactPerson = 'My contact persion';
     const phoneNumber = 1231234234123;
 
-    const result = await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
-    expect(result).to.be.true;
+    await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
 
     const contactResponse = await grc.settings.getContactInformation();
 
@@ -106,8 +100,7 @@ describe('Workspace', () => {
   });
 
   it('creates one workspace', async () => {
-    const result = await grc.workspaces.create(workSpace);
-    expect(result).to.equal(workSpace);
+    await grc.workspaces.create(workSpace);
   });
 
   it('has one workspace', async () => {
@@ -119,12 +112,15 @@ describe('Workspace', () => {
   it('query dedicated workspace', async () => {
     const gsWorkspace = await grc.workspaces.get(workSpace);
     expect(gsWorkspace.workspace.name).to.equal(workSpace);
+
+    expect(
+      await grc.workspaces.get('fantasyWorkspace')
+    ).to.be.undefined;
   });
 
   it('delete workspace', async () => {
     const recursive = true;
-    const result = await grc.workspaces.delete(workSpace, recursive);
-    expect(result).to.be.true;
+    await grc.workspaces.delete(workSpace, recursive);
   });
 
   it('has no workspace', async () => {
@@ -140,8 +136,7 @@ describe('Namespace', () => {
   });
 
   it('creates one namespace', async () => {
-    const result = await grc.namespaces.create(nameSpace, nameSpaceUri);
-    expect(result).to.equal(nameSpace);
+    await grc.namespaces.create(nameSpace, nameSpaceUri);
   });
 
   it('has one namespace', async () => {
@@ -154,11 +149,13 @@ describe('Namespace', () => {
     const gsNameSpace = await grc.namespaces.get(nameSpace);
     expect(gsNameSpace.namespace.prefix).to.equal(nameSpace);
     expect(gsNameSpace.namespace.uri).to.equal(nameSpaceUri);
+    expect(
+      await grc.namespaces.get('fantasyNamespace')
+    ).to.be.undefined;
   });
 
   it('delete namespace', async () => {
-    const result = await grc.namespaces.delete(nameSpace);
-    expect(result).to.be.true;
+    await grc.namespaces.delete(nameSpace);
   });
 
   it('has no namespace', async () => {
@@ -181,45 +178,56 @@ describe('Datastore', () => {
   // TODO: copy test data to GeoServer before
   it('can create GeoTIFF', async () => {
     const geotiff = 'test/sample_data/world.geotiff'
-    const result = await grc.datastores.createGeotiffFromFile(
+    await grc.datastores.createGeotiffFromFile(
       workSpace,
       'my-rasterstore',
       'my-raster-name',
       'My Raster Title',
       geotiff);
-    expect(result).to.not.be.false;
   });
 
   it('can create a WMS Store', async () => {
     // TODO: make sure the WMS actually exists
     const wmsUrl = 'https://ows.terrestris.de/osm/service?';
-    const result = await grc.datastores.createWmsStore(
+    await grc.datastores.createWmsStore(
       workSpace,
       'my-wms-datastore',
       wmsUrl);
-    expect(result).to.not.be.false;
   });
 
   it('can create a WFS Store', async () => {
     // TODO: make sure the WFS actually exists
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
-    const result = await grc.datastores.createWfsStore(
+    await grc.datastores.createWfsStore(
       workSpace,
       'my-wfs-datastore',
       wfsCapsUrl,
       namespaceUrl);
-    expect(result).to.be.true;
   });
 
   // TODO: copy test data to GeoServer
   it('can create a GeoPackage Store', async () => {
     const gpkg = 'test/sample_data/iceland.gpkg'
-    const result = await grc.datastores.createGpkgStore(
+    await grc.datastores.createGpkgStore(
       workSpace,
       'my-gpkg-store',
       gpkg)
-    expect(result).to.be.true;
+  });
+
+  it('returns undefined for not existent stores ', async () => {
+    expect(
+      await grc.datastores.getDataStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
+    expect(
+      await grc.datastores.getCoverageStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
+    expect(
+      await grc.datastores.getWmsStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
+    expect(
+      await grc.datastores.getWmtsStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
   });
 
   it('can retrive the data stores', async () => {
@@ -259,15 +267,14 @@ describe('Layer', () => {
   it('can publish a FeatureType', async () => {
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
-    const dataStoreResult = await grc.datastores.createWfsStore(
+    await grc.datastores.createWfsStore(
       workSpace,
       wfsDataStore,
       wfsCapsUrl,
       namespaceUrl
     );
-    expect(dataStoreResult).to.be.true;
 
-    const result = await grc.layers.publishFeatureType(
+    await grc.layers.publishFeatureType(
       workSpace,
       wfsDataStore,
       'osm_osm-country-borders',
@@ -277,7 +284,6 @@ describe('Layer', () => {
       true,
       'Sample Abstract'
     );
-    expect(result).to.be.true;
   });
 
   it('can publish a FeatureType with explicit native BBOX', async () => {
@@ -289,7 +295,7 @@ describe('Layer', () => {
       maxy: 50.1
     };
 
-    const result = await grc.layers.publishFeatureType(
+    await grc.layers.publishFeatureType(
       workSpace,
       wfsDataStore,
       'osm_osm-country-borders',
@@ -300,20 +306,18 @@ describe('Layer', () => {
       'Sample Abstract native BBOX',
       nativeBoundingBox
     );
-    expect(result).to.be.true;
   });
 
   it('can publish a WMS layer', async () => {
     // TODO: make sure WMS url is still working
     const wmsUrl = 'https://ows.terrestris.de/osm/service?';
     const wmsDataStore = 'my-wms-datastore';
-    const wmsStoreResult = await grc.datastores.createWmsStore(
+    await grc.datastores.createWmsStore(
       workSpace,
       wmsDataStore,
       wmsUrl);
 
-    expect(wmsStoreResult).to.be.true;
-    const result = await grc.layers.publishWmsLayer(
+    await grc.layers.publishWmsLayer(
       workSpace,
       wmsDataStore,
       'OSM-Overlay-WMS',
@@ -323,18 +327,16 @@ describe('Layer', () => {
       true,
       'Sample Abstract'
     );
-    expect(result).to.be.true;
   })
 
   it('can modify the attribution', async () => {
     const attributionText = 'sample attribution';
     const attributionLink = 'http://www.example.com';
 
-    const attributionResult = await grc.layers.modifyAttribution(`${workSpace}:${wmsLayerName}`, attributionText, attributionLink);
+    await grc.layers.modifyAttribution(`${workSpace}:${wmsLayerName}`, attributionText, attributionLink);
 
     const layerProperties = await grc.layers.get(`${workSpace}:${wmsLayerName}`);
 
-    expect(attributionResult).to.be.true;
     expect(layerProperties.layer.attribution.title).to.equal(attributionText);
     expect(layerProperties.layer.attribution.href).to.equal(attributionLink);
   })
@@ -346,8 +348,8 @@ describe('Layer', () => {
 
   it('can get a layer by qualified name', async () => {
     const nonExistentLayer = 'non-existent-layer';
-    const fun = grc.layers.get(workSpace + ':' + nonExistentLayer);
-    expect(fun).to.eventually.throw();
+    const nonExistentResult = await grc.layers.get(workSpace + ':' + nonExistentLayer);
+    expect(nonExistentResult).to.be.undefined;
 
     const result = await grc.layers.get(workSpace + ':' + wmsLayerName);
     expect(result.layer.name).to.equal(wmsLayerName);
@@ -357,20 +359,19 @@ describe('Layer', () => {
 
   it('can delete a feature type', async () => {
     const recursive = true;
-    const result = await grc.layers.deleteFeatureType(
+    await grc.layers.deleteFeatureType(
       workSpace,
       wfsDataStore,
       featureLayerName,
       recursive
     );
-    expect(result).to.be.true;
   })
 
   it('has function to query coverages', async () => {
     // query a non-existing coverage to check that the function exists
-    // TODO test valid response once we have coverages in test setup
-    const fun = grc.layers.getCoverage(workSpace, 'testCovStore', 'testCoverage');
-    expect(fun).to.eventually.throw();
+    // TODO: test valid response once we have coverages in test setup
+    const result = await grc.layers.getCoverage(workSpace, 'testCovStore', 'testCoverage');
+    expect(result).to.be.undefined;
   })
 
   after('delete Workspace', async () => {
@@ -397,12 +398,11 @@ describe('style', () => {
   it('can publish a style', async () => {
     const sldBody = '<?xml version="1.0" encoding="UTF-8"?>\n<StyledLayerDescriptor version="1.0.0" \n xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" \n xmlns="http://www.opengis.net/sld" \n xmlns:ogc="http://www.opengis.net/ogc" \n xmlns:xlink="http://www.w3.org/1999/xlink" \n xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n  <NamedLayer>\n    <Name>default_line</Name>\n    <UserStyle>\n  <Title>Default Line</Title>\n      <Abstract>A sample style that draws a line</Abstract>\n   <FeatureTypeStyle>\n        <Rule>\n          <Name>rule1</Name>\n          <Title>Blue Line</Title>\n          <Abstract>A solid blue line with a 1 pixel width</Abstract>\n          <LineSymbolizer>\n            <Stroke>\n              <CssParameter name="stroke">#0000FF</CssParameter>\n            </Stroke>\n          </LineSymbolizer>\n        </Rule>\n      </FeatureTypeStyle>\n    </UserStyle>\n  </NamedLayer>\n</StyledLayerDescriptor>\n';
 
-    const result = await grc.styles.publish(
+    await grc.styles.publish(
       workSpace,
       styleName,
       sldBody
     );
-    expect(result).to.be.true;
   })
 
   it('can get all styles', async () => {
@@ -414,15 +414,14 @@ describe('style', () => {
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
 
-    const dataStoreResult = await grc.datastores.createWfsStore(
+    await grc.datastores.createWfsStore(
       workSpace,
       wfsDataStore,
       wfsCapsUrl,
       namespaceUrl
     );
-    expect(dataStoreResult).to.be.true;
 
-    const layerResult = await grc.layers.publishFeatureType(
+    await grc.layers.publishFeatureType(
       workSpace,
       wfsDataStore,
       'osm_osm-country-borders',
@@ -431,18 +430,19 @@ describe('style', () => {
       'EPSG:4326',
       true
     );
-    expect(layerResult).to.be.true;
 
     const qualifiedName = workSpace + ':' + featureLayerName;
     const workspaceStyle = workSpace;
     const isDefaultStyle = true;
-    const result = await grc.styles.assignStyleToLayer(qualifiedName, styleName, workspaceStyle, isDefaultStyle);
-    expect(result).to.be.true;
+    await grc.styles.assignStyleToLayer(qualifiedName, styleName, workspaceStyle, isDefaultStyle);
   });
 
   it('can get style information', async () => {
     const result = await grc.styles.getStyleInformation(styleName, workSpace);
     expect(result.style.name).to.equal(styleName);
+    expect(
+      await grc.styles.getStyleInformation('fantasyStlye', workSpace)
+    ).to.be.undefined;
   })
 
   it('can get styles in specific workspace', async () => {
@@ -458,12 +458,14 @@ describe('style', () => {
   it('can delete a style', async () => {
     const purge = false;
     let recurse = false;
-    const fun = grc.styles.delete(workSpace, styleName, recurse, purge);
-    expect(fun).to.eventually.throw();
+    try {
+      await grc.styles.delete(workSpace, styleName, recurse, purge);
+    } catch (error) {
+      expect(error.name).to.equal('GeoServerResponseError');
+    }
 
     recurse = true;
-    const withRecurse = await grc.styles.delete(workSpace, styleName, recurse, purge)
-    expect(withRecurse).to.be.true;
+    await grc.styles.delete(workSpace, styleName, recurse, purge)
   });
 
   after('delete Workspace', async () => {
@@ -483,19 +485,16 @@ describe('Security', () => {
   });
 
   it('can create a user', async () => {
-    const result = await grc.security.createUser(dummyUser, dummyPassword);
-    expect(result).to.be.true;
+    await grc.security.createUser(dummyUser, dummyPassword);
   })
 
   it('can associate a user role', async () => {
-    const result = await grc.security.associateUserRole(dummyUser, 'ADMIN');
-    expect(result).to.be.true;
+    await grc.security.associateUserRole(dummyUser, 'ADMIN');
   })
 
   it('can update a user', async () => {
     const enabled = false;
-    const result = await grc.security.updateUser(dummyUser, dummyPassword, enabled);
-    expect(result).to.be.true;
+    await grc.security.updateUser(dummyUser, dummyPassword, enabled);
   })
 
   after(async () => {

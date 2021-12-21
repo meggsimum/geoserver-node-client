@@ -120,8 +120,6 @@ export default class WorkspaceClient {
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If deletion was successful
    */
   async delete (name, recurse) {
     const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
@@ -147,6 +145,5 @@ export default class WorkspaceClient {
           throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return true;
   }
 }

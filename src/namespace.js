@@ -114,8 +114,6 @@ export default class NamespaceClient {
    * @param {String} name Name of the namespace to delete
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If deletion was successful
    */
   async delete (name) {
     const response = await fetch(this.url + 'namespaces/' + name, {
@@ -141,7 +139,5 @@ export default class NamespaceClient {
           throw new GeoServerResponseError('Response not recognised', geoServerResponse)
       }
     }
-
-    return true;
   }
 }

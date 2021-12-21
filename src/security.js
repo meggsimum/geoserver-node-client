@@ -48,8 +48,6 @@ export default class SecurityClient {
    * @param {String} password The password of the user to be created
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the user could be created
    */
   async createUser (username, password) {
     const body = {
@@ -79,8 +77,6 @@ export default class SecurityClient {
           throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-
-    return true;
   }
 
   /**
@@ -92,8 +88,6 @@ export default class SecurityClient {
    * @param {Boolean} enabled Enable / disable the user
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If user could be updated
    */
   async updateUser (username, password, enabled) {
     const body = {
@@ -117,7 +111,6 @@ export default class SecurityClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -127,8 +120,6 @@ export default class SecurityClient {
    * @param {String} role The role to associate
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the role could be associated
    */
   async associateUserRole (username, role) {
     const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
@@ -143,6 +134,5 @@ export default class SecurityClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 }
