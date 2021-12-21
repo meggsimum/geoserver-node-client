@@ -48,8 +48,6 @@ export default class SettingsClient {
    * Update the global GeoServer settings.
    *
    * @param {Object} settings The adapted GeoServer settings object
-   *
-   * @returns {Boolean} Flag indicating if request was successful
    */
   async updateSettings (settings) {
     const auth =
@@ -64,15 +62,16 @@ export default class SettingsClient {
       body: JSON.stringify(settings)
     });
 
-    return response.ok;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
   }
 
   /**
    * Update the global proxyBaseUrl setting.
    *
    * @param {String} proxyBaseUrl The proxy base URL
-   *
-   * @returns {Boolean} Flag indicating if request was successful
    */
   async updateProxyBaseUrl (proxyBaseUrl) {
     const settingsJson = await this.getSettings();
@@ -85,7 +84,7 @@ export default class SettingsClient {
     // add proxyBaseUrl to settings
     settingsJson.global.settings.proxyBaseUrl = proxyBaseUrl;
 
-    return await this.updateSettings(settingsJson);
+    await this.updateSettings(settingsJson);
   }
 
   /**
@@ -93,7 +92,7 @@ export default class SettingsClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Boolean} An object with contact information
+   * @returns {Object} An object with contact information
    */
   async getContactInformation () {
     const auth =
@@ -128,8 +127,6 @@ export default class SettingsClient {
    * @param {String} [phoneNumber] The contact's phone number
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If contact information could be updated.
    */
   async updateContactInformation (address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
     const contact = {
@@ -163,6 +160,5 @@ export default class SettingsClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 }

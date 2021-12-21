@@ -129,8 +129,6 @@ export default class WorkspaceClient {
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If deletion was successful
    */
   async delete (name, recurse) {
     const auth =
@@ -158,6 +156,5 @@ export default class WorkspaceClient {
           throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return true;
   }
 }

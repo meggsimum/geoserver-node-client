@@ -242,8 +242,6 @@ export default class DatastoreClient {
    * @param {String} [exposePk] expose primary key, defaults to false
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the store could be created
    */
   async createPostgisStore (workspace, namespaceUri, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk) {
     const body = {
@@ -315,8 +313,6 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-
-    return true;
   }
 
   /**
@@ -366,8 +362,6 @@ export default class DatastoreClient {
    * @param {String} wmsCapabilitiesUrl Base WMS capabilities URL
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If store could be created
    */
   async createWmsStore (workspace, dataStore, wmsCapabilitiesUrl) {
     const body = {
@@ -395,7 +389,6 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -408,8 +401,6 @@ export default class DatastoreClient {
    * @param {Boolean} [useHttpConnectionPooling=true] use HTTP connection pooling for WFS connection
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If store could be created
    */
   async createWfsStore (workspace, dataStore, wfsCapabilitiesUrl, namespaceUrl, useHttpConnectionPooling) {
     const body = {
@@ -452,7 +443,6 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -463,8 +453,6 @@ export default class DatastoreClient {
    * @param {String} recurse Flag to enable recursive deletion
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the datastore could be deleted
    */
   async deleteDataStore (workspace, dataStore, recurse) {
     const auth =
@@ -486,7 +474,6 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 
   /**
@@ -497,8 +484,6 @@ export default class DatastoreClient {
    * @param {String} recurse Flag to enable recursive deletion
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If the datastore could be deleted
    */
   async deleteCoverageStore (workspace, coverageStore, recurse) {
     const auth =
@@ -525,7 +510,6 @@ export default class DatastoreClient {
           throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return true;
   }
 
   /**
@@ -536,8 +520,6 @@ export default class DatastoreClient {
    * @param {String} gpkgPath Relative path to GeoPackage file within geoserver_data dir
    *
    * @throws Error if request fails
-   *
-   * @returns {Boolean} If store could be created
    */
   async createGpkgStore (workspace, dataStore, gpkgPath) {
     const body = {
@@ -576,6 +558,5 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return true;
   }
 }
