@@ -162,7 +162,7 @@ export default class DatastoreClient {
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;

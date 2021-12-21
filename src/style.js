@@ -177,6 +177,7 @@ export default class StyleClient {
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
+      console.log(response.status);
       switch (response.status) {
         case 403:
           throw new GeoServerResponseError(
@@ -184,7 +185,7 @@ export default class StyleClient {
             geoServerResponse
           );
         default:
-          throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
   }
@@ -245,7 +246,7 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;

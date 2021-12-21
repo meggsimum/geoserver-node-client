@@ -26,14 +26,12 @@ export default class AboutClient {
    * @returns {Object} The version of GeoServer
    */
   async getVersion () {
-    const auth =
-            Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'about/version.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
