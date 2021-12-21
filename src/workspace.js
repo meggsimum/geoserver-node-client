@@ -14,10 +14,9 @@ export default class WorkspaceClient {
    * WARNING: For most cases the 'NameSpaceClient' seems to fit better.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+   constructor (url, auth) {
     this.url = url;
     this.auth = auth;
   }
