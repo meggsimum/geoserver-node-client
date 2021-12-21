@@ -199,7 +199,7 @@ export default class StyleClient {
    * @throws Error if request fails
    */
   async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
-    const styleBody = await this.getStyleInformation(styleName, workspaceStyle);
+    const styleBody = await this.getStyleInformation(workspaceStyle, styleName);
 
     const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
       credentials: 'include',
@@ -220,14 +220,14 @@ export default class StyleClient {
   /**
    * Get information about a style.
    *
+   * @param {String} workspace The name of the workspace, can be undefinded
    * @param {String} styleName The name of the style
-   * @param {String} [workspace] The name of the workspace
    *
    * @throws Error if request fails
    *
    * @returns {Object} An object about the style or undefined if it cannot be found
    */
-  async getStyleInformation (styleName, workspace) {
+  async getStyleInformation (workspace, styleName) {
     let url;
     if (workspace) {
       url = this.url + 'workspaces/' + workspace + '/styles/' + styleName + '.json';

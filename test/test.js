@@ -438,10 +438,10 @@ describe('style', () => {
   });
 
   it('can get style information', async () => {
-    const result = await grc.styles.getStyleInformation(styleName, workSpace);
+    const result = await grc.styles.getStyleInformation(workSpace, styleName);
     expect(result.style.name).to.equal(styleName);
     expect(
-      await grc.styles.getStyleInformation('fantasyStlye', workSpace)
+      await grc.styles.getStyleInformation(workSpace, 'fantasyStyle')
     ).to.be.undefined;
   })
 
