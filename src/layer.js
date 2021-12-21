@@ -20,7 +20,7 @@ export default class LayerClient {
   }
 
   /**
-   * Returns a GeoServer layer by the given full qualified layer name,
+   * Returns a GeoServer layer by the given workspace and layer name,
    * e.g. "myWs:myLayer".
    *
    * @param {String} workspace The name of the workspace, can be undefined

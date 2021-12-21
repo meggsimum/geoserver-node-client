@@ -158,7 +158,7 @@ async function main () {
     // LAYERS
 
     // console.log(
-    //   'GeoServer layer by qualified name',
+    //   'GeoServer layer by workspace and name',
     //   prettyJson(await grc.layers.get('fooWs','barLayer'))
     // );
 

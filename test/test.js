@@ -346,7 +346,7 @@ describe('Layer', () => {
     expect(result.layers.layer.length).to.equal(3);
   })
 
-  it('can get a layer by qualified name', async () => {
+  it('can get a layer by name and workspace', async () => {
     const nonExistentLayer = 'non-existent-layer';
     const nonExistentResult = await grc.layers.get(workSpace, nonExistentLayer);
     expect(nonExistentResult).to.be.undefined;
@@ -431,10 +431,9 @@ describe('style', () => {
       true
     );
 
-    const qualifiedName = workSpace + ':' + featureLayerName;
     const workspaceStyle = workSpace;
     const isDefaultStyle = true;
-    await grc.styles.assignStyleToLayer(qualifiedName, styleName, workspaceStyle, isDefaultStyle);
+    await grc.styles.assignStyleToLayer(workSpace, featureLayerName, styleName, workspaceStyle, isDefaultStyle);
   });
 
   it('can get style information', async () => {
