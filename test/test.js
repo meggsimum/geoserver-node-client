@@ -18,7 +18,6 @@ const geoServerVersion = process.env.GEOSERVER_VERSION;
 describe('Basic GeoServer', () => {
   it('should exist', async () => {
     const result = await grc.about.exists();
-    console.log(result);
     expect(result).to.be.true;
   });
 
@@ -457,8 +456,6 @@ describe('style', () => {
   })
 
   it('can delete a style', async () => {
-    console.log(await grc.styles.getAllWorkspaceStyles());
-
     const purge = false;
     let recurse = false;
     try {
@@ -467,12 +464,8 @@ describe('style', () => {
       expect(error.name).to.equal('GeoServerResponseError');
     }
 
-    console.log(await grc.styles.getAllWorkspaceStyles());
-
     recurse = true;
     await grc.styles.delete(workSpace, styleName, recurse, purge)
-
-    console.log(await grc.styles.getAllWorkspaceStyles());
   });
 
   after('delete Workspace', async () => {
