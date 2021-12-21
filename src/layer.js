@@ -368,7 +368,6 @@ export default class LayerClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + name + '.json';
-    console.log(url);
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
