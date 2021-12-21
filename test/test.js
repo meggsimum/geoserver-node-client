@@ -18,7 +18,6 @@ const geoServerVersion = process.env.GEOSERVER_VERSION;
 describe('Basic GeoServer', () => {
   it('should exist', async () => {
     const result = await grc.about.exists();
-    console.log(result);
     expect(result).to.be.true;
   });
 
@@ -334,9 +333,9 @@ describe('Layer', () => {
     const attributionText = 'sample attribution';
     const attributionLink = 'http://www.example.com';
 
-    await grc.layers.modifyAttribution(`${workSpace}:${wmsLayerName}`, attributionText, attributionLink);
+    await grc.layers.modifyAttribution(workSpace, wmsLayerName, attributionText, attributionLink);
 
-    const layerProperties = await grc.layers.get(`${workSpace}:${wmsLayerName}`);
+    const layerProperties = await grc.layers.get(workSpace, wmsLayerName);
 
     expect(layerProperties.layer.attribution.title).to.equal(attributionText);
     expect(layerProperties.layer.attribution.href).to.equal(attributionLink);
@@ -349,10 +348,10 @@ describe('Layer', () => {
 
   it('can get a layer by qualified name', async () => {
     const nonExistentLayer = 'non-existent-layer';
-    const nonExistentResult = await grc.layers.get(workSpace + ':' + nonExistentLayer);
+    const nonExistentResult = await grc.layers.get(workSpace, nonExistentLayer);
     expect(nonExistentResult).to.be.undefined;
 
-    const result = await grc.layers.get(workSpace + ':' + wmsLayerName);
+    const result = await grc.layers.get(workSpace, wmsLayerName);
     expect(result.layer.name).to.equal(wmsLayerName);
   })
 
@@ -457,8 +456,6 @@ describe('style', () => {
   })
 
   it('can delete a style', async () => {
-    console.log(await grc.styles.getAllWorkspaceStyles());
-
     const purge = false;
     let recurse = false;
     try {
@@ -467,12 +464,8 @@ describe('style', () => {
       expect(error.name).to.equal('GeoServerResponseError');
     }
 
-    console.log(await grc.styles.getAllWorkspaceStyles());
-
     recurse = true;
     await grc.styles.delete(workSpace, styleName, recurse, purge)
-
-    console.log(await grc.styles.getAllWorkspaceStyles());
   });
 
   after('delete Workspace', async () => {
