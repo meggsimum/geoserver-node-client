@@ -140,8 +140,6 @@ export default class NamespaceClient {
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
-        case 200:
-          return true;
         case 403:
           throw new GeoServerResponseError(
             'Namespace or related Workspace is not empty (and recurse not true)',
