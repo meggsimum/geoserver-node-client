@@ -112,6 +112,10 @@ describe('Workspace', () => {
   it('query dedicated workspace', async () => {
     const gsWorkspace = await grc.workspaces.get(workSpace);
     expect(gsWorkspace.workspace.name).to.equal(workSpace);
+
+    expect(
+      await grc.workspaces.get('fantasyWorkspace')
+    ).to.be.undefined;
   });
 
   it('delete workspace', async () => {
@@ -145,6 +149,9 @@ describe('Namespace', () => {
     const gsNameSpace = await grc.namespaces.get(nameSpace);
     expect(gsNameSpace.namespace.prefix).to.equal(nameSpace);
     expect(gsNameSpace.namespace.uri).to.equal(nameSpaceUri);
+    expect(
+      await grc.namespaces.get('fantasyNamespace')
+    ).to.be.undefined;
   });
 
   it('delete namespace', async () => {
@@ -206,6 +213,21 @@ describe('Datastore', () => {
       workSpace,
       'my-gpkg-store',
       gpkg)
+  });
+
+  it('returns undefined for not existent stores ', async () => {
+    expect(
+      await grc.datastores.getDataStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
+    expect(
+      await grc.datastores.getCoverageStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
+    expect(
+      await grc.datastores.getWmsStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
+    expect(
+      await grc.datastores.getWmtsStore(workSpace, 'fantasyStore')
+    ).to.be.undefined;
   });
 
   it('can retrive the data stores', async () => {
@@ -418,6 +440,9 @@ describe('style', () => {
   it('can get style information', async () => {
     const result = await grc.styles.getStyleInformation(styleName, workSpace);
     expect(result.style.name).to.equal(styleName);
+    expect(
+      await grc.styles.getStyleInformation('fantasyStlye', workSpace)
+    ).to.be.undefined;
   })
 
   it('can get styles in specific workspace', async () => {
