@@ -154,7 +154,6 @@ export default class StyleClient {
       paramRecurse = true;
     }
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     let endpoint;
 
     if (workspace) {
@@ -171,13 +170,12 @@ export default class StyleClient {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
-      console.log(response.status);
       switch (response.status) {
         case 403:
           throw new GeoServerResponseError(

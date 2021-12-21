@@ -481,31 +481,31 @@ describe('style', () => {
   });
 });
 
-// describe('Security', () => {
-//   let createdWorkSpace;
+describe('Security', () => {
+  let createdWorkSpace;
 
-//   const dummyUser = 'dummyUser';
-//   const dummyPassword = 'dummyPassword';
+  const dummyUser = 'dummyUser';
+  const dummyPassword = 'dummyPassword';
 
-//   before('create workspace', async () => {
-//     createdWorkSpace = await grc.workspaces.create(workSpace);
-//   });
+  before('create workspace', async () => {
+    createdWorkSpace = await grc.workspaces.create(workSpace);
+  });
 
-//   it('can create a user', async () => {
-//     await grc.security.createUser(dummyUser, dummyPassword);
-//   })
+  it('can create a user', async () => {
+    await grc.security.createUser(dummyUser, dummyPassword);
+  })
 
-//   it('can associate a user role', async () => {
-//     await grc.security.associateUserRole(dummyUser, 'ADMIN');
-//   })
+  it('can associate a user role', async () => {
+    await grc.security.associateUserRole(dummyUser, 'ADMIN');
+  })
 
-//   it('can update a user', async () => {
-//     const enabled = false;
-//     await grc.security.updateUser(dummyUser, dummyPassword, enabled);
-//   })
+  it('can update a user', async () => {
+    const enabled = false;
+    await grc.security.updateUser(dummyUser, dummyPassword, enabled);
+  })
 
-//   after(async () => {
-//     const recursive = true;
-//     await grc.workspaces.delete(createdWorkSpace, recursive);
-//   });
-// });
+  after(async () => {
+    const recursive = true;
+    await grc.workspaces.delete(createdWorkSpace, recursive);
+  });
+});
