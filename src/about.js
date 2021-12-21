@@ -8,12 +8,12 @@ import { GeoServerResponseError } from './util/geoserver.js';
  */
 export default class AboutClient {
   /**
-     * Creates a GeoServer REST AboutClient instance.
-     *
-     * @param {String} url The URL of the GeoServer REST API endpoint
-     * @param {String} user The user for the GeoServer REST API
-     * @param {String} password The password for the GeoServer REST API
-     */
+   * Creates a GeoServer REST AboutClient instance.
+   *
+   * @param {String} url The URL of the GeoServer REST API endpoint
+   * @param {String} user The user for the GeoServer REST API
+   * @param {String} password The password for the GeoServer REST API
+   */
   constructor (url, user, password) {
     this.url = url.endsWith('/') ? url : url + '/';
     this.user = user;
@@ -21,12 +21,12 @@ export default class AboutClient {
   }
 
   /**
-     * Get the GeoServer version.
-     *
-     * @throws Error if request fails
-     *
-     * @returns {Object} The version of GeoServer
-     */
+   * Get the GeoServer version.
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} The version of GeoServer
+   */
   async getVersion () {
     const auth =
             Buffer.from(this.user + ':' + this.password).toString('base64');
@@ -46,10 +46,10 @@ export default class AboutClient {
   }
 
   /**
-     * Checks if the configured GeoServer REST connection exists.
-     *
-     * @returns {Boolean} If the connection exists
-     */
+   * Checks if the configured GeoServer REST connection exists.
+   *
+   * @returns {Boolean} If the connection exists
+   */
   async exists () {
     let versionInfo;
     try {
