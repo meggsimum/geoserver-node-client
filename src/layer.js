@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer layers
@@ -27,7 +28,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object with layer information
+   * @returns {Object} An object with layer information or undefined if it cannot be found
    */
   async get (qualifiedName) {
     const response = await fetch(this.url + 'layers/' + qualifiedName + '.json', {
@@ -39,8 +40,15 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
     return await response.json();
   }
@@ -457,7 +465,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object with coverage information
+   * @returns {Object} An object with coverage information or undefined if it cannot be found
    */
   async getCoverage (workspace, coverageStore, name) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + name + '.json';
@@ -470,9 +478,16 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
-    return true;
+    return await response.json();
   }
 }

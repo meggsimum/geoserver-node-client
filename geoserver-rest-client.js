@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import LayerClient from './src/layer.js';
 import StyleClient from './src/style.js';
 import WorkspaceClient from './src/workspace.js';
@@ -7,7 +6,7 @@ import ImageMosaicClient from './src/imagemosaic.js';
 import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
-import { GeoServerResponseError } from './src/util/geoserver.js';
+import AboutClient from './src/about.js';
 
 /**
  * Client for GeoServer REST API.
@@ -43,39 +42,8 @@ export default class GeoServerRestClient {
     /** @member {SecurityClient} security GeoServer REST client instance for security related modifications */
     this.security = new SecurityClient(this.url, this.auth);
     /** @member {SettingsClient} settings GeoServer REST client instance for settings */
-    this.settings = new SettingsClient(this.url, this.auth);
-  }
-
-  /**
-   * Get the GeoServer version.
-   *
-   * @throws Error if request fails
-   *
-   * @returns {String|Boolean} The version of GeoServer or 'false'
-   */
-  async getVersion () {
-    const url = this.url + 'about/version.json';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'GET',
-      headers: {
-        Authorization: this.auth
-      }
-    });
-
-    if (!response.ok) {
-      throw new GeoServerResponseError();
-    }
-    return await response.json();
-  }
-
-  /**
-   * Checks if the configured GeoServer REST connection exists.
-   *
-   * @returns {Boolean} If the connection exists
-   */
-  async exists () {
-    const versionInfo = await this.getVersion();
-    return !!versionInfo
+    this.settings = new SettingsClient(this.url, this.user, this.password);
+    /** @member {AboutClient} settings GeoServer REST client instance for about endpoint */
+    this.about = new AboutClient(this.url, this.user, this.password);
   }
 }

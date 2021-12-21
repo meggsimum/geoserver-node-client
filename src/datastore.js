@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer data stores
@@ -25,7 +26,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get DataStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getDataStores (workspace) {
     return this.getStores(workspace, 'datastores');
@@ -36,7 +37,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get CoverageStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getCoverageStores (workspace) {
     return this.getStores(workspace, 'coveragestores');
@@ -47,7 +48,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get WmsStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmsStores (workspace) {
     return this.getStores(workspace, 'wmsstores');
@@ -58,7 +59,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get WmtsStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmtsStores (workspace) {
     return this.getStores(workspace, 'wmtsstores');
@@ -73,7 +74,7 @@ export default class DatastoreClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object containing store details
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getStores (workspace, storeType) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
@@ -96,7 +97,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search DataStore in
    * @param {String} dataStore DataStore name
    *
-   * @returns {Object} An object containing store details
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getDataStore (workspace, dataStore) {
     return this.getStore(workspace, dataStore, 'datastores');
@@ -108,7 +109,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search CoverageStore in
    * @param {String} covStore CoverageStore name
    *
-   * @returns {Object} An object containing store details
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getCoverageStore (workspace, covStore) {
     return this.getStore(workspace, covStore, 'coveragestores');
@@ -120,7 +121,8 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search WmsStore in
    * @param {String} wmsStore WmsStore name
    *
-   * @returns {Object} An object containing store details
+   * @returns {Object} An object containing store details or undefined if it cannot be found
+   *
    */
   async getWmsStore (workspace, wmsStore) {
     return this.getStore(workspace, wmsStore, 'wmsstores');
@@ -132,8 +134,8 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search WmtsStore in
    * @param {String} wmtsStore WmtsStore name
    *
-   * @returns {Object} An object containing store details
-s  */
+   * @returns {Object} An object containing store details or undefined if it cannot be found
+   */
   async getWmtsStore (workspace, wmtsStore) {
     return this.getStore(workspace, wmtsStore, 'wmtsstores');
   }
@@ -148,7 +150,7 @@ s  */
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object containing store details
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getStore (workspace, storeName, storeType) {
     const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
@@ -161,14 +163,14 @@ s  */
     });
 
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      switch (response.status) {
-        case 404:
-          throw new GeoServerResponseError(
-            `No ${storeType} with name "${storeName}" found`,
-            geoServerResponse);
-        default:
-          throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
     return await response.json();

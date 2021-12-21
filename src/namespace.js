@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer namespace
@@ -24,7 +25,7 @@ export default class NamespaceClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object|Boolean} An object describing the namespace or 'false'
+   * @returns {Object} An object describing the namespace
    */
   async getAll () {
     const response = await fetch(this.url + 'namespaces.json', {
@@ -84,7 +85,7 @@ export default class NamespaceClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object describing the namespace
+   * @returns {Object} An object describing the namespace or undefined if it cannot be found
    */
   async get (name) {
     const response = await fetch(this.url + 'namespaces/' + name + '.json', {
@@ -95,8 +96,15 @@ export default class NamespaceClient {
       }
     });
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
     return await response.json();
   }
@@ -122,8 +130,6 @@ export default class NamespaceClient {
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
-        case 200:
-          return true;
         case 403:
           throw new GeoServerResponseError(
             'Namespace or related Workspace is not empty (and recurse not true)',

@@ -20,12 +20,12 @@ const geoServerVersion = process.env.GEOSERVER_VERSION;
 
 describe('Basic GeoServer', () => {
   it('should exist', async () => {
-    const result = await grc.exists();
+    const result = await grc.about.exists();
     expect(result).to.be.true;
   });
 
   it('returns correct version', async () => {
-    const result = await grc.getVersion();
+    const result = await grc.about.getVersion();
     expect(result.about.resource[0].Version).to.equal(geoServerVersion);
   })
 });
@@ -454,6 +454,17 @@ describe('style', () => {
     const result = await grc.styles.getAllWorkspaceStyles();
     expect(result.length).to.equal(1);
   })
+
+  it('can delete a style', async () => {
+    const purge = false;
+    let recurse = false;
+    const fun = grc.styles.delete(workSpace, styleName, recurse, purge);
+    expect(fun).to.eventually.throw();
+
+    recurse = true;
+    const withRecurse = await grc.styles.delete(workSpace, styleName, recurse, purge)
+    expect(withRecurse).to.be.true;
+  });
 
   after('delete Workspace', async () => {
     const recursive = true;

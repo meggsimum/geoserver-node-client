@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer styles
@@ -112,7 +113,7 @@ export default class StyleClient {
   /**
    * Publishes a new SLD style.
    *
-   * @param {String} workspace The workspace to publish style in
+   * @param {String} workspace The workspace to publish the style in
    * @param {String} name Name of the style
    * @param {String} sldBody SLD style (as XML text)
    *
@@ -135,6 +136,64 @@ export default class StyleClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return true;
+  }
+
+  /**
+   * Deletes a style.
+   *
+   * @param {String} workspace The name of the workspace, can be undefined if style is not assigned to a workspace
+   * @param {String} name The name of the style to delete
+   * @param {Boolean} [recurse=false] If references to the specified style in existing layers should be deleted
+   * @param {Boolean} [purge=false] Whether the underlying file containing the style should be deleted on disk
+   *
+   * @returns {Boolean} If the style could be deleted
+   */
+  async delete (workspace, name, recurse, purge) {
+    let paramPurge = false;
+    let paramRecurse = false;
+
+    if (purge === true) {
+      paramPurge = true;
+    }
+    if (recurse === true) {
+      paramRecurse = true;
+    }
+
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    let endpoint;
+
+    if (workspace) {
+      // delete style inside workspace
+      endpoint = this.url + 'workspaces/' + workspace + '/styles/' + name +
+                  '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
+    } else {
+      // delete style without workspace
+      endpoint = this.url + 'styles/' + name +
+                  '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
+    }
+
+    const response = await fetch(endpoint, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 403:
+          throw new GeoServerResponseError(
+            'Deletion failed. There might be dependant layers to this style. Delete them first or call this with "recurse=false"',
+            geoServerResponse
+          );
+        default:
+          throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      }
+    }
+
     return true;
   }
 
@@ -178,7 +237,7 @@ export default class StyleClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object about the style
+   * @returns {Object} An object about the style or undefined if it cannot be found
    */
   async getStyleInformation (styleName, workspace) {
     let url;
@@ -197,8 +256,15 @@ export default class StyleClient {
     });
 
     if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      throw new GeoServerResponseError(null, geoServerResponse);
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
     return await response.json();
   }
