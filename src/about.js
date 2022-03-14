@@ -42,7 +42,7 @@ export default class AboutClient {
     if (!response.ok) {
       throw new GeoServerResponseError();
     }
-    return await response.json();
+    return response.json();
   }
 
   /**

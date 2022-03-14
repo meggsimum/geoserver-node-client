@@ -42,7 +42,7 @@ export default class NamespaceClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -81,7 +81,7 @@ export default class NamespaceClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
 
-    return await response.text();
+    return response.text();
   }
 
   /**
@@ -114,7 +114,7 @@ export default class NamespaceClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 
   /**

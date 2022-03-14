@@ -91,7 +91,7 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -178,7 +178,7 @@ export default class DatastoreClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -223,7 +223,7 @@ export default class DatastoreClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
     // TODO: enforce JSON response or parse XML
-    return await response.text();
+    return response.text();
   }
 
   /**
@@ -350,7 +350,7 @@ export default class DatastoreClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
 
-    return await response.text();
+    return response.text();
   };
 
   /**

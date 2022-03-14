@@ -41,7 +41,7 @@ export default class SecurityClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**

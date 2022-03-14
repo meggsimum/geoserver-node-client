@@ -11,7 +11,7 @@
  */
 async function getGeoServerResponseText (response) {
   try {
-    return await response.text()
+    return response.text()
   } catch {
     // return nothing
   }

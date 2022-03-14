@@ -44,7 +44,7 @@ export default class WorkspaceClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -77,7 +77,7 @@ export default class WorkspaceClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -119,7 +119,7 @@ export default class WorkspaceClient {
       }
     }
 
-    return await response.text();
+    return response.text();
   }
 
   /**
