@@ -49,7 +49,7 @@ export default class LayerClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -459,6 +459,6 @@ export default class LayerClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 }
