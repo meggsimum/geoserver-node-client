@@ -40,7 +40,7 @@ export default class StyleClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -65,7 +65,7 @@ export default class StyleClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -261,6 +261,6 @@ export default class StyleClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 }

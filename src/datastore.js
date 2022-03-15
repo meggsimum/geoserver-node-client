@@ -87,7 +87,7 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -172,7 +172,7 @@ export default class DatastoreClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -214,9 +214,8 @@ export default class DatastoreClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    const responseText = await response.text();
     // TODO: enforce JSON response or parse XML
-    return responseText;
+    return response.text();
   }
 
   /**
@@ -316,7 +315,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
-   * @param {String} zipArchivePath Aboslute path to zip archive with the 3 properties files
+   * @param {String} zipArchivePath Absolute path to zip archive with the 3 properties files
    *
    * @throws Error if request fails
    *
@@ -341,7 +340,7 @@ export default class DatastoreClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
 
-    return await response.text();
+    return response.text();
   };
 
   /**
