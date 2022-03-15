@@ -44,7 +44,7 @@ export default class GeoServerRestClient {
     this.security = new SecurityClient(this.url, this.user, this.password);
     /** @member {SettingsClient} settings GeoServer REST client instance for settings */
     this.settings = new SettingsClient(this.url, this.user, this.password);
-    /** @member {AboutClient} settings GeoServer REST client instance for about endpoint */
+    /** @member {AboutClient} about GeoServer REST client instance for about endpoint */
     this.about = new AboutClient(this.url, this.user, this.password);
   }
 }
