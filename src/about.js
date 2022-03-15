@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GeoServerResponseError } from './util/geoserver.js';
+import { GeoServerResponseError, getGeoServerResponseText } from './util/geoserver.js';
 
 /**
  * Client for GeoServer "about" endpoint
@@ -36,7 +36,8 @@ export default class AboutClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError();
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
     return response.json();
   }

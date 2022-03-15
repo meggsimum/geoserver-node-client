@@ -310,7 +310,8 @@ export default class LayerClient {
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
