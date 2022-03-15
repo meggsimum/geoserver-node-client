@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer settings.
@@ -22,48 +23,48 @@ export default class SettingsClient {
   /**
    * Get the complete GeoServer settings object.
    *
-   * @returns {Object|Boolean} Settings object or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} Settings object
    */
   async getSettings () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'settings.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      return await response.json();
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'settings.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
    * Update the global GeoServer settings.
    *
-   * @param {GeoServer} settings
-   * @returns {Boolean} Flag indicating if request was successful
+   * @param {Object} settings The adapted GeoServer settings object
    */
   async updateSettings (settings) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'settings', {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(settings)
-      });
+    const response = await fetch(this.url + 'settings', {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(settings)
+    });
 
-      return response.status === 200;
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -71,42 +72,43 @@ export default class SettingsClient {
    * Update the global proxyBaseUrl setting.
    *
    * @param {String} proxyBaseUrl The proxy base URL
-   * @returns {Boolean} Flag indicating if request was successful
    */
   async updateProxyBaseUrl (proxyBaseUrl) {
     const settingsJson = await this.getSettings();
 
+    // check if settings are correctly formatted
     if (!settingsJson.global && !settingsJson.global.settings) {
-      // settings seem to be wrongly formated
       return false;
     }
 
     // add proxyBaseUrl to settings
     settingsJson.global.settings.proxyBaseUrl = proxyBaseUrl;
 
-    return await this.updateSettings(settingsJson);
+    await this.updateSettings(settingsJson);
   }
 
   /**
    * Get the contact information of the GeoServer.
    *
-   * @returns {Object|Boolean} An object with contact information or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with contact information
    */
   async getContactInformation () {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'settings/contact', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      return await response.json();
-    } catch (error) {
-      return false;
+    const response = await fetch(this.url + 'settings/contact', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
@@ -124,47 +126,39 @@ export default class SettingsClient {
    * @param {String} [contactPerson] The contact person
    * @param {String} [phoneNumber] The contact's phone number
    *
-   * @returns {Boolean} If contact information could be updated.
+   * @throws Error if request fails
    */
   async updateContactInformation (address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
-    try {
-      const contact = {
-        address: address,
-        addressCity: city,
-        addressCountry: country,
-        addressPostalCode: postalCode,
-        addressState: state,
-        contactEmail: email,
-        contactOrganization: organization,
-        contactPerson: contactPerson,
-        contactVoice: phoneNumber
-      };
+    const contact = {
+      address: address,
+      addressCity: city,
+      addressCountry: country,
+      addressPostalCode: postalCode,
+      addressState: state,
+      contactEmail: email,
+      contactOrganization: organization,
+      contactPerson: contactPerson,
+      contactVoice: phoneNumber
+    };
 
-      const body = {
-        contact: contact
-      };
+    const body = {
+      contact: contact
+    };
 
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'settings/contact';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'settings/contact';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 }

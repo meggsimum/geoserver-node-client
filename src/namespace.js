@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer namespace
@@ -22,24 +24,25 @@ export default class NamespaceClient {
   /**
    * Returns all namespaces.
    *
-   * @returns {Object|Boolean} An object describing the namespace or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object describing the namespace
    */
   async getAll () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'namespaces.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'namespaces.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
@@ -48,66 +51,70 @@ export default class NamespaceClient {
    * @param {String} prefix Prefix of the new namespace
    * @param {String} uri Uri of the new namespace
    *
-   * @returns {String|Boolean} The name of the created namespace or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The name of the created namespace
    */
   async create (prefix, uri) {
-    try {
-      const body = {
-        namespace: {
-          prefix: prefix,
-          uri: uri
-        }
-      };
-
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-
-      const response = await fetch(this.url + 'namespaces', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 201) {
-        const responseText = await response.text();
-        return responseText;
-      } else {
-        return false;
+    const body = {
+      namespace: {
+        prefix: prefix,
+        uri: uri
       }
-    } catch (error) {
-      return false;
+    };
+
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+
+    const response = await fetch(this.url + 'namespaces', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+
+    return response.text();
   }
 
   /**
    * Returns a namespace.
    *
    * @param {String} name Name of the namespace
-   * @returns {Object|Boolean} An object describing the namespace or 'false'
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object describing the namespace or undefined if it cannot be found
    */
   async get (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'namespaces/' + name + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'namespaces/' + name + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
+    return response.json();
   }
 
   /**
@@ -115,28 +122,33 @@ export default class NamespaceClient {
    *
    * @param {String} name Name of the namespace to delete
    *
-   * @returns {Boolean} If deletion was successful
+   * @throws Error if request fails
    */
   async delete (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'namespaces/' + name, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      // TODO map other HTTP status
-      if (response.status === 200) {
-        return true;
-      } else {
-        return false;
+    const auth =
+    Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'namespaces/' + name, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 403:
+          throw new GeoServerResponseError(
+            'Namespace or related Workspace is not empty (and recurse not true)',
+            geoServerResponse);
+        case 404:
+          throw new GeoServerResponseError('Namespace doesn\'t exist', geoServerResponse);
+        case 405:
+          throw new GeoServerResponseError('Can\'t delete default namespace', geoServerResponse);
+        default:
+          throw new GeoServerResponseError('Response not recognized', geoServerResponse)
+      }
     }
   }
 }

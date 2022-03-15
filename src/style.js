@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer styles
@@ -23,29 +25,26 @@ export default class StyleClient {
   /**
    * Returns all default styles.
    *
-   * @returns {Object|Boolean} An object with the default styles or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with the default styles
    */
   async getDefaults () {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'styles.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(this.url + 'styles.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
@@ -53,76 +52,67 @@ export default class StyleClient {
    *
    * @param {String} workspace Workspace name to get styles for
    *
-   * @returns {Object|Boolean} An object with all styles or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with all styles
    */
   async getInWorkspace (workspace) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + workspace + '/styles.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/styles.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
    * Returns all styles defined in workspaces.
    *
-   * @returns {Object|Boolean} An object with all styles or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object[]} An array with all style objects
    */
   async getAllWorkspaceStyles () {
-    try {
-      const allStyles = [];
-      const ws = new WorkspaceClient(this.url, this.user, this.password);
-      const allWs = await ws.getAll();
+    const allStyles = [];
+    const ws = new WorkspaceClient(this.url, this.user, this.password);
+    const allWs = await ws.getAll();
 
-      // go over all workspaces and query the styles for
-      for (let i = 0; i < allWs.workspaces.workspace.length; i++) {
-        const ws = allWs.workspaces.workspace[i];
-        const wsStyles = await this.getInWorkspace(ws.name);
+    // go over all workspaces and query the styles for
+    for (let i = 0; i < allWs.workspaces.workspace.length; i++) {
+      const ws = allWs.workspaces.workspace[i];
+      const wsStyles = await this.getInWorkspace(ws.name);
 
-        if (wsStyles.styles.style) {
-          wsStyles.styles.style.forEach(wsStyle => {
-            allStyles.push(wsStyle);
-          });
-        }
+      if (wsStyles.styles.style) {
+        wsStyles.styles.style.forEach(wsStyle => {
+          allStyles.push(wsStyle);
+        });
       }
-
-      return allStyles;
-    } catch (error) {
-      return false;
     }
+
+    return allStyles;
   }
 
   /**
    * Returns all styles as combined object (default ones and those in
    * workspaces).
    *
-   * @returns {Object|Boolean} An object with all styles or 'false'
+   * @returns {Object[]} An array with all style objects
    */
   async getAll () {
-    try {
-      const defaultStyles = await this.getDefaults();
-      const wsStyles = await this.getAllWorkspaceStyles();
-      const allStyles = defaultStyles.styles.style.concat(wsStyles);
+    const defaultStyles = await this.getDefaults();
+    const wsStyles = await this.getAllWorkspaceStyles();
+    const allStyles = defaultStyles.styles.style.concat(wsStyles);
 
-      return allStyles;
-    } catch (error) {
-      return false;
-    }
+    return allStyles;
   }
 
   /**
@@ -132,29 +122,23 @@ export default class StyleClient {
    * @param {String} name Name of the style
    * @param {String} sldBody SLD style (as XML text)
    *
-   * @returns {Boolean} If the style could be published
+   * @throws Error if request fails
    */
   async publish (workspace, name, sldBody) {
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/vnd.ogc.sld+xml'
-        },
-        body: sldBody
-      });
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/vnd.ogc.sld+xml'
+      },
+      body: sldBody
+    });
 
-      if (response.status === 201) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -165,8 +149,6 @@ export default class StyleClient {
    * @param {String} name The name of the style to delete
    * @param {Boolean} [recurse=false] If references to the specified style in existing layers should be deleted
    * @param {Boolean} [purge=false] Whether the underlying file containing the style should be deleted on disk
-   *
-   * @returns {Boolean} If the style could be deleted
    */
   async delete (workspace, name, recurse, purge) {
     let paramPurge = false;
@@ -179,41 +161,38 @@ export default class StyleClient {
       paramRecurse = true;
     }
 
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      let endpoint;
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    let endpoint;
 
-      if (workspace) {
-        // delete style inside workspace
-        endpoint = this.url + 'workspaces/' + workspace + '/styles/' + name +
+    if (workspace) {
+      // delete style inside workspace
+      endpoint = this.url + 'workspaces/' + workspace + '/styles/' + name +
                   '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
-      } else {
-        // delete style without workspace
-        endpoint = this.url + 'styles/' + name +
+    } else {
+      // delete style without workspace
+      endpoint = this.url + 'styles/' + name +
                   '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
-      }
+    }
 
-      const response = await fetch(endpoint, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.ok) {
-        return true;
-      } else if (response.status === 403) {
-        console.warn('Deletion failed. There might be dependant objects to ' +
-        'this style. Delete them first or call this with "recurse=false"');
-        console.warn(await response.text());
-        return false;
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(endpoint, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 403:
+          throw new GeoServerResponseError(
+            'Deletion failed. There might be dependant layers to this style. Delete them first or call this with "recurse=false"',
+            geoServerResponse
+          );
+        default:
+          throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      }
     }
   }
 
@@ -225,32 +204,26 @@ export default class StyleClient {
    * @param {String} [workspaceStyle] The workspace of the style
    * @param {Boolean} [isDefaultStyle=true] If the style should be the default style of the layer
    *
-   * @returns {Boolean} If the style could be assigned
+   * @throws Error if request fails
    */
   async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
 
-      const styleBody = await this.getStyleInformation(styleName, workspaceStyle);
+    const styleBody = await this.getStyleInformation(styleName, workspaceStyle);
 
-      const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(styleBody)
-      });
+    const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(styleBody)
+    });
 
-      if (response.status === 201) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -260,36 +233,40 @@ export default class StyleClient {
    * @param {String} styleName The name of the style
    * @param {String} [workspace] The name of the workspace
    *
-   * @returns {Object|Boolean} An object about the style or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object about the style or undefined if it cannot be found
    */
   async getStyleInformation (styleName, workspace) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
 
-      let url;
-      if (workspace) {
-        url = this.url + 'workspaces/' + workspace + '/styles/' + styleName + '.json';
-      } else {
-        url = this.url + 'styles/' + styleName + '.json';
-      }
-
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    let url;
+    if (workspace) {
+      url = this.url + 'workspaces/' + workspace + '/styles/' + styleName + '.json';
+    } else {
+      url = this.url + 'styles/' + styleName + '.json';
     }
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
   }
 }
