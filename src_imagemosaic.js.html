@@ -27,6 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer image mosaics
@@ -54,32 +55,30 @@ export default class ImageMosaicClient {
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {*} coverage Name of image mosaic
    *
-   * @returns {Object|Boolean} An object with the granules or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with the granules
    */
   async getGranules (workspace, coverageStore, coverage) {
-    try {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/coverages/' + coverage + '/index/granules.json';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-type': 'text/plain'
-        }
-      });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-type': 'text/plain'
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+
+    return response.json();
   }
 
   /**
@@ -89,33 +88,31 @@ export default class ImageMosaicClient {
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} filePath Server path of folder to harvest
    *
-   * @returns {Object|Boolean} An object with the granules or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with the granules
    */
   async harvestGranules (workspace, coverageStore, filePath) {
-    try {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'text/plain'
-        },
-        body: filePath
-      });
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'text/plain'
+      },
+      body: filePath
+    });
 
-      if (response.status === 200) {
-        return await response.text();
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+
+    return response.json();
   }
 
   /**
@@ -125,70 +122,60 @@ export default class ImageMosaicClient {
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} filePath Server file path of new granule
    *
-   * @returns {Boolean} If granule could be added
+   * @throws Error if request fails
    */
   async addGranuleByServerFile (workspace, coverageStore, filePath) {
-    try {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-type': 'text/plain'
-        },
-        body: filePath
-      });
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-type': 'text/plain'
+      },
+      body: filePath
+    });
 
-      if (response.status === 202) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
   /**
    * Deletes a single granule of an image mosaic.
    *
-   * @param {*} workspace Workspace of image mosaic
-   * @param {*} coverageStore CoverageStore of image mosaic
-   * @param {*} coverage Name of image mosaic
-   * @param {*} covFileLocation Location of coverage file
+   * @param {String} workspace Workspace of image mosaic
+   * @param {String} coverageStore CoverageStore of image mosaic
+   * @param {String} coverage Name of image mosaic
+   * @param {String} covFileLocation Location of coverage file
    *
-   * @returns {Boolean} If granule could be deleted
+   * @throws Error if request fails
    */
   async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {
-    try {
-      const auth =
+    const auth =
       Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
-      url += '?filter=location=\'' + covFileLocation + '\'';
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
+    url += '?filter=location=\'' + covFileLocation + '\'';
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-type': 'text/plain'
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-type': 'text/plain'
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+
+    return true;
   }
 }
 </code></pre>
@@ -201,13 +188,13 @@ export default class ImageMosaicClient {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

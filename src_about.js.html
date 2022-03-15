@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: geoserver-rest-client.js</title>
+    <title>JSDoc: Source: src/about.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: geoserver-rest-client.js</h1>
+    <h1 class="page-title">Source: src/about.js</h1>
 
     
 
@@ -26,26 +26,17 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import LayerClient from './src/layer.js';
-import StyleClient from './src/style.js';
-import WorkspaceClient from './src/workspace.js';
-import DatastoreClient from './src/datastore.js';
-import ImageMosaicClient from './src/imagemosaic.js';
-import SecurityClient from './src/security.js';
-import SettingsClient from './src/settings.js';
-import NamespaceClient from './src/namespace.js';
-import AboutClient from './src/about.js';
+            <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
+import { GeoServerResponseError } from './util/geoserver.js';
 
 /**
- * Client for GeoServer REST API.
- * Has minimal basic functionality and offers REST client instances for
- * sub-entities, like workspaces or datastores as member variables.
+ * Client for GeoServer "about" endpoint
  *
- * @module GeoServerRestClient
+ * @module AboutClient
  */
-export default class GeoServerRestClient {
+export default class AboutClient {
   /**
-   * Creates a GeoServerRestClient instance.
+   * Creates a GeoServer REST AboutClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} user The user for the GeoServer REST API
@@ -55,25 +46,46 @@ export default class GeoServerRestClient {
     this.url = url.endsWith('/') ? url : url + '/';
     this.user = user;
     this.password = password;
+  }
 
-    /** @member {LayerClient} layers GeoServer REST client instance for layers */
-    this.layers = new LayerClient(this.url, this.user, this.password);
-    /** @member {StyleClient} styles GeoServer REST client instance for styles */
-    this.styles = new StyleClient(this.url, this.user, this.password);
-    /** @member {WorkspaceClient} workspaces GeoServer REST client instance for workspaces */
-    this.workspaces = new WorkspaceClient(this.url, this.user, this.password);
-    /** @member {NamespaceClient} namespaces GeoServer REST client instance for namespaces */
-    this.namespaces = new NamespaceClient(this.url, this.user, this.password);
-    /** @member {DatastoreClient} datastores GeoServer REST client instance for data stores */
-    this.datastores = new DatastoreClient(this.url, this.user, this.password);
-    /** @member {ImageMosaicClient} imagemosaics GeoServer REST client instance for image mosaics */
-    this.imagemosaics = new ImageMosaicClient(this.url, this.user, this.password);
-    /** @member {SecurityClient} security GeoServer REST client instance for security related modifications */
-    this.security = new SecurityClient(this.url, this.user, this.password);
-    /** @member {SettingsClient} settings GeoServer REST client instance for settings */
-    this.settings = new SettingsClient(this.url, this.user, this.password);
-    /** @member {AboutClient} about GeoServer REST client instance for about endpoint */
-    this.about = new AboutClient(this.url, this.user, this.password);
+  /**
+   * Get the GeoServer version.
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} The version of GeoServer
+   */
+  async getVersion () {
+    const auth =
+            Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'about/version.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+
+    if (!response.ok) {
+      throw new GeoServerResponseError();
+    }
+    return response.json();
+  }
+
+  /**
+   * Checks if the configured GeoServer REST connection exists.
+   *
+   * @returns {Boolean} If the connection exists
+   */
+  async exists () {
+    let versionInfo;
+    try {
+      versionInfo = await this.getVersion();
+      return !!versionInfo
+    } catch (error) {
+      return false;
+    }
   }
 }
 </code></pre>

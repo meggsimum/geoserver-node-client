@@ -188,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line16">line 16</a>
+        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -244,7 +244,7 @@
     
 
     
-    <h4 class="name" id="addGranuleByServerFile"><span class="type-signature">(async) </span>addGranuleByServerFile<span class="signature">(workspace, coverageStore, filePath)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="addGranuleByServerFile"><span class="type-signature">(async) </span>addGranuleByServerFile<span class="signature">(workspace, coverageStore, filePath)</span><span class="type-signature"></span></h4>
     
 
     
@@ -391,7 +391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line102">line 102</a>
+        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line99">line 99</a>
     </li></ul></dd>
     
 
@@ -414,30 +414,20 @@
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If granule could be added
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -449,7 +439,7 @@
     
 
     
-    <h4 class="name" id="deleteSingleGranule"><span class="type-signature">(async) </span>deleteSingleGranule<span class="signature">(workspace, coverageStore, coverage, covFileLocation)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="deleteSingleGranule"><span class="type-signature">(async) </span>deleteSingleGranule<span class="signature">(workspace, coverageStore, coverage, covFileLocation)</span><span class="type-signature"></span></h4>
     
 
     
@@ -499,7 +489,7 @@
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">String</span>
 
 
             
@@ -522,7 +512,7 @@
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">String</span>
 
 
             
@@ -545,7 +535,7 @@
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">String</span>
 
 
             
@@ -568,7 +558,7 @@
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">String</span>
 
 
             
@@ -619,7 +609,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line139">line 139</a>
+        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -642,30 +632,20 @@
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If granule could be deleted
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -677,7 +657,7 @@
     
 
     
-    <h4 class="name" id="getGranules"><span class="type-signature">(async) </span>getGranules<span class="signature">(workspace, coverageStore, coverage)</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getGranules"><span class="type-signature">(async) </span>getGranules<span class="signature">(workspace, coverageStore, coverage)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -824,7 +804,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line31">line 31</a>
+        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -847,13 +827,25 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object with the granules or 'false'
+    An object with the granules
 </div>
 
 
@@ -865,9 +857,6 @@
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -885,7 +874,7 @@
     
 
     
-    <h4 class="name" id="harvestGranules"><span class="type-signature">(async) </span>harvestGranules<span class="signature">(workspace, coverageStore, filePath)</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="harvestGranules"><span class="type-signature">(async) </span>harvestGranules<span class="signature">(workspace, coverageStore, filePath)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1032,7 +1021,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line66">line 66</a>
+        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -1055,13 +1044,25 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object with the granules or 'false'
+    An object with the granules
 </div>
 
 
@@ -1073,9 +1074,6 @@
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -1103,13 +1101,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -27,6 +27,8 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer workspaces
@@ -36,6 +38,8 @@
 export default class WorkspaceClient {
   /**
    * Creates a GeoServer REST WorkspaceClient instance.
+   *
+   * WARNING: For most cases the 'NameSpaceClient' seems to fit better.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} user The user for the GeoServer REST API
@@ -50,51 +54,58 @@ export default class WorkspaceClient {
   /**
    * Returns all workspaces.
    *
-   * @returns {Object|Boolean} An Object describing the workspaces or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An Object describing the workspaces
    */
   async getAll () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
    * Returns a workspace.
    *
    * @param {String} name Name of the workspace
-   * @returns {Object|Boolean} An object describing the workspaces or 'false'
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object describing the workspaces
    */
   async get (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + name + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces/' + name + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.user, this.password);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
+    return response.json();
   }
 
   /**
@@ -102,38 +113,41 @@ export default class WorkspaceClient {
    *
    * @param {String} name Name of the new workspace
    *
-   * @returns {String|Boolean} The name of the created workspace or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The name of the created workspace
    */
   async create (name) {
-    try {
-      const body = {
-        workspace: {
-          name: name
-        }
-      };
-
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-
-      const response = await fetch(this.url + 'workspaces', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 201) {
-        const responseText = await response.text();
-        return responseText;
-      } else {
-        return false;
+    const body = {
+      workspace: {
+        name: name
       }
-    } catch (error) {
-      return false;
+    };
+
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+
+    const response = await fetch(this.url + 'workspaces', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 409:
+          throw new GeoServerResponseError('Unable to add workspace as it already exists', geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
+
+    return response.text();
   }
 
   /**
@@ -142,28 +156,33 @@ export default class WorkspaceClient {
    * @param {String} name Name of the workspace to delete
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
-   * @returns {Boolean} If Deletion was successful
+   * @throws Error if request fails
    */
   async delete (name, recurse) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      // TODO map other HTTP status
-      if (response.status === 200) {
-        return true;
-      } else {
-        return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Basic ' + auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 400:
+          // the docs say code 403, but apparently it is code 400
+          // https://docs.geoserver.org/latest/en/api/#1.0.0/workspaces.yaml
+          throw new GeoServerResponseError(
+            'Workspace or related Namespace is not empty (and recurse not true)',
+            geoServerResponse);
+        case 404:
+          throw new GeoServerResponseError('Workspace doesn\'t exist', geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
   }
 }
@@ -177,13 +196,13 @@ export default class WorkspaceClient {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -188,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line16">line 16</a>
+        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -244,7 +244,7 @@
     
 
     
-    <h4 class="name" id="associateUserRole"><span class="type-signature">(async) </span>associateUserRole<span class="signature">(username, role)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="associateUserRole"><span class="type-signature">(async) </span>associateUserRole<span class="signature">(username, role)</span><span class="type-signature"></span></h4>
     
 
     
@@ -368,7 +368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line139">line 139</a>
+        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line129">line 129</a>
     </li></ul></dd>
     
 
@@ -391,30 +391,20 @@
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If the role could be associated
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -426,7 +416,7 @@
     
 
     
-    <h4 class="name" id="createUser"><span class="type-signature">(async) </span>createUser<span class="signature">(username, password)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="createUser"><span class="type-signature">(async) </span>createUser<span class="signature">(username, password)</span><span class="type-signature"></span></h4>
     
 
     
@@ -550,7 +540,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line56">line 56</a>
+        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -573,30 +563,20 @@
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If the user could be created
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -608,7 +588,7 @@
     
 
     
-    <h4 class="name" id="getAllUsers"><span class="type-signature">(async) </span>getAllUsers<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getAllUsers"><span class="type-signature">(async) </span>getAllUsers<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -660,7 +640,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line26">line 26</a>
+        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -683,8 +663,42 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
 
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An object with all users
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -696,7 +710,7 @@
     
 
     
-    <h4 class="name" id="updateUser"><span class="type-signature">(async) </span>updateUser<span class="signature">(username, password, enabled)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="updateUser"><span class="type-signature">(async) </span>updateUser<span class="signature">(username, password, enabled)</span><span class="type-signature"></span></h4>
     
 
     
@@ -844,7 +858,7 @@ cannot be changed with this API call.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line100">line 100</a>
+        <a href="src_security.js.html">src/security.js</a>, <a href="src_security.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -867,30 +881,20 @@ cannot be changed with this API call.
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If user could be updated
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -912,13 +916,13 @@ cannot be changed with this API call.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

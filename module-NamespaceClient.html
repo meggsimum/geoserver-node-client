@@ -188,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line16">line 16</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -244,7 +244,7 @@
     
 
     
-    <h4 class="name" id="create"><span class="type-signature">(async) </span>create<span class="signature">(prefix, uri)</span><span class="type-signature"> &rarr; {String|Boolean}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">(async) </span>create<span class="signature">(prefix, uri)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -368,7 +368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line53">line 53</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -391,13 +391,25 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    The name of the created namespace or 'false'
+    The name of the created namespace
 </div>
 
 
@@ -409,9 +421,6 @@
     <dd>
         
 <span class="param-type">String</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -429,7 +438,7 @@
     
 
     
-    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(name)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(name)</span><span class="type-signature"></span></h4>
     
 
     
@@ -530,7 +539,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line120">line 120</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -553,30 +562,20 @@
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If deletion was successful
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -588,7 +587,7 @@
     
 
     
-    <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(name)</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(name)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -689,7 +688,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line92">line 92</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -712,13 +711,25 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object describing the namespace or 'false'
+    An object describing the namespace or undefined if it cannot be found
 </div>
 
 
@@ -730,9 +741,6 @@
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -750,7 +758,7 @@
     
 
     
-    <h4 class="name" id="getAll"><span class="type-signature">(async) </span>getAll<span class="signature">()</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getAll"><span class="type-signature">(async) </span>getAll<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -802,7 +810,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line27">line 27</a>
+        <a href="src_namespace.js.html">src/namespace.js</a>, <a href="src_namespace.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -825,13 +833,25 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object describing the namespace or 'false'
+    An object describing the namespace
 </div>
 
 
@@ -843,9 +863,6 @@
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -873,13 +890,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -188,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line17">line 17</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -244,7 +244,7 @@
     
 
     
-    <h4 class="name" id="assignStyleToLayer"><span class="type-signature">(async) </span>assignStyleToLayer<span class="signature">(qualifiedName, styleName, workspaceStyle<span class="signature-attributes">opt</span>, isDefaultStyle<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="assignStyleToLayer"><span class="type-signature">(async) </span>assignStyleToLayer<span class="signature">(qualifiedName, styleName, workspaceStyle<span class="signature-attributes">opt</span>, isDefaultStyle<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -472,7 +472,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line230">line 230</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -495,30 +495,20 @@
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If the style could be assigned
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -530,7 +520,7 @@
     
 
     
-    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(workspace, name, recurse<span class="signature-attributes">opt</span>, purge<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(workspace, name, recurse<span class="signature-attributes">opt</span>, purge<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -760,7 +750,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line171">line 171</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line153">line 153</a>
     </li></ul></dd>
     
 
@@ -785,28 +775,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    If the style could be deleted
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -818,7 +786,7 @@
     
 
     
-    <h4 class="name" id="getAll"><span class="type-signature">(async) </span>getAll<span class="signature">()</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getAll"><span class="type-signature">(async) </span>getAll<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;Object>}</span></h4>
     
 
     
@@ -871,7 +839,7 @@ workspaces).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line116">line 116</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
@@ -900,7 +868,7 @@ workspaces).
 
         
 <div class="param-desc">
-    An object with all styles or 'false'
+    An array with all style objects
 </div>
 
 
@@ -911,10 +879,7 @@ workspaces).
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
+<span class="param-type">Array.&lt;Object></span>
 
 
     </dd>
@@ -932,7 +897,7 @@ workspaces).
     
 
     
-    <h4 class="name" id="getAllWorkspaceStyles"><span class="type-signature">(async) </span>getAllWorkspaceStyles<span class="signature">()</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getAllWorkspaceStyles"><span class="type-signature">(async) </span>getAllWorkspaceStyles<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;Object>}</span></h4>
     
 
     
@@ -984,7 +949,7 @@ workspaces).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line86">line 86</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -1007,13 +972,25 @@ workspaces).
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object with all styles or 'false'
+    An array with all style objects
 </div>
 
 
@@ -1024,10 +1001,7 @@ workspaces).
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
+<span class="param-type">Array.&lt;Object></span>
 
 
     </dd>
@@ -1045,7 +1019,7 @@ workspaces).
     
 
     
-    <h4 class="name" id="getDefaults"><span class="type-signature">(async) </span>getDefaults<span class="signature">()</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getDefaults"><span class="type-signature">(async) </span>getDefaults<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1097,7 +1071,7 @@ workspaces).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line28">line 28</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -1120,13 +1094,25 @@ workspaces).
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object with the default styles or 'false'
+    An object with the default styles
 </div>
 
 
@@ -1138,9 +1124,6 @@ workspaces).
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -1158,7 +1141,7 @@ workspaces).
     
 
     
-    <h4 class="name" id="getInWorkspace"><span class="type-signature">(async) </span>getInWorkspace<span class="signature">(workspace)</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getInWorkspace"><span class="type-signature">(async) </span>getInWorkspace<span class="signature">(workspace)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1259,7 +1242,7 @@ workspaces).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line58">line 58</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -1282,13 +1265,25 @@ workspaces).
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object with all styles or 'false'
+    An object with all styles
 </div>
 
 
@@ -1300,9 +1295,6 @@ workspaces).
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -1320,7 +1312,7 @@ workspaces).
     
 
     
-    <h4 class="name" id="getStyleInformation"><span class="type-signature">(async) </span>getStyleInformation<span class="signature">(styleName, workspace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object|Boolean}</span></h4>
+    <h4 class="name" id="getStyleInformation"><span class="type-signature">(async) </span>getStyleInformation<span class="signature">(styleName, workspace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -1464,7 +1456,7 @@ workspaces).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line265">line 265</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line240">line 240</a>
     </li></ul></dd>
     
 
@@ -1487,13 +1479,25 @@ workspaces).
 
 
 
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
 
 
 <h5>Returns:</h5>
 
         
 <div class="param-desc">
-    An object about the style or 'false'
+    An object about the style or undefined if it cannot be found
 </div>
 
 
@@ -1505,9 +1509,6 @@ workspaces).
     <dd>
         
 <span class="param-type">Object</span>
-|
-
-<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -1525,7 +1526,7 @@ workspaces).
     
 
     
-    <h4 class="name" id="publish"><span class="type-signature">(async) </span>publish<span class="signature">(workspace, name, sldBody)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="publish"><span class="type-signature">(async) </span>publish<span class="signature">(workspace, name, sldBody)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1672,7 +1673,7 @@ workspaces).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line137">line 137</a>
+        <a href="src_style.js.html">src/style.js</a>, <a href="src_style.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -1695,30 +1696,20 @@ workspaces).
 
 
 
-
-
-<h5>Returns:</h5>
+<h5>Throws:</h5>
 
         
-<div class="param-desc">
-    If the style could be published
-</div>
 
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
 
     
+
+
 
 
 
@@ -1740,13 +1731,13 @@ workspaces).
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

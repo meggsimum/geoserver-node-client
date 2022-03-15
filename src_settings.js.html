@@ -27,6 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer settings.
@@ -50,48 +51,48 @@ export default class SettingsClient {
   /**
    * Get the complete GeoServer settings object.
    *
-   * @returns {Object|Boolean} Settings object or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} Settings object
    */
   async getSettings () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'settings.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      return await response.json();
-    } catch (error) {
-      return false;
+    const auth =
+      Buffer.from(this.user + ':' + this.password).toString('base64');
+    const response = await fetch(this.url + 'settings.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
    * Update the global GeoServer settings.
    *
-   * @param {GeoServer} settings
-   * @returns {Boolean} Flag indicating if request was successful
+   * @param {Object} settings The adapted GeoServer settings object
    */
   async updateSettings (settings) {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'settings', {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(settings)
-      });
+    const response = await fetch(this.url + 'settings', {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(settings)
+    });
 
-      return response.status === 200;
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -99,42 +100,43 @@ export default class SettingsClient {
    * Update the global proxyBaseUrl setting.
    *
    * @param {String} proxyBaseUrl The proxy base URL
-   * @returns {Boolean} Flag indicating if request was successful
    */
   async updateProxyBaseUrl (proxyBaseUrl) {
     const settingsJson = await this.getSettings();
 
+    // check if settings are correctly formatted
     if (!settingsJson.global &amp;&amp; !settingsJson.global.settings) {
-      // settings seem to be wrongly formated
       return false;
     }
 
     // add proxyBaseUrl to settings
     settingsJson.global.settings.proxyBaseUrl = proxyBaseUrl;
 
-    return await this.updateSettings(settingsJson);
+    await this.updateSettings(settingsJson);
   }
 
   /**
    * Get the contact information of the GeoServer.
    *
-   * @returns {Object|Boolean} An object with contact information or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with contact information
    */
   async getContactInformation () {
-    try {
-      const auth =
+    const auth =
         Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'settings/contact', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      return await response.json();
-    } catch (error) {
-      return false;
+    const response = await fetch(this.url + 'settings/contact', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
@@ -152,47 +154,39 @@ export default class SettingsClient {
    * @param {String} [contactPerson] The contact person
    * @param {String} [phoneNumber] The contact's phone number
    *
-   * @returns {Boolean} If contact information could be updated.
+   * @throws Error if request fails
    */
   async updateContactInformation (address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
-    try {
-      const contact = {
-        address: address,
-        addressCity: city,
-        addressCountry: country,
-        addressPostalCode: postalCode,
-        addressState: state,
-        contactEmail: email,
-        contactOrganization: organization,
-        contactPerson: contactPerson,
-        contactVoice: phoneNumber
-      };
+    const contact = {
+      address: address,
+      addressCity: city,
+      addressCountry: country,
+      addressPostalCode: postalCode,
+      addressState: state,
+      contactEmail: email,
+      contactOrganization: organization,
+      contactPerson: contactPerson,
+      contactVoice: phoneNumber
+    };
 
-      const body = {
-        contact: contact
-      };
+    const body = {
+      contact: contact
+    };
 
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'settings/contact';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
+    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+    const url = this.url + 'settings/contact';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 }
@@ -206,13 +200,13 @@ export default class SettingsClient {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul><h3>Classes</h3><ul><li><a href="module-AboutClient.html">AboutClient</a></li><li><a href="module-DatastoreClient.html">DatastoreClient</a></li><li><a href="module-GeoServerRestClient.html">GeoServerRestClient</a></li><li><a href="module-ImageMosaicClient.html">ImageMosaicClient</a></li><li><a href="module-LayerClient.html">LayerClient</a></li><li><a href="module-NamespaceClient.html">NamespaceClient</a></li><li><a href="module-SecurityClient.html">SecurityClient</a></li><li><a href="module-SettingsClient.html">SettingsClient</a></li><li><a href="module-StyleClient.html">StyleClient</a></li><li><a href="module-WorkspaceClient.html">WorkspaceClient</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 16 2021 14:57:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 15 2022 16:35:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
