@@ -36,7 +36,7 @@ npm run demo
 
 ### Error Handling
 
-A request either succeeds or throws an Error. The thrown error has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exists and can be a simple text, or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used:
+A request either succeeds or throws an Error. The thrown error has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exist and can either be a simple text or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used:
 
 ```javascript
   try {
@@ -46,7 +46,7 @@ A request either succeeds or throws an Error. The thrown error has the standard 
       // the standard error message
       console.error(error.message);
 
-      // the whole Error including stack trace and (if available) the property 'geoServerOutput'
+      // the whole error including stack trace and (if available) the property 'geoServerOutput'
       console.error(error);
     }
 ```
@@ -71,7 +71,7 @@ GEOSERVER_VERSION=2.20.1 npm run test
 
 ### Release
 
-Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it). 
+Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it).
 
 The GitHub release has to be performed manually based on the tag created by `release-it`.
 

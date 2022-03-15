@@ -38,7 +38,7 @@ export default class NamespaceClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -74,7 +74,7 @@ export default class NamespaceClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
 
-    return await response.text();
+    return response.text();
   }
 
   /**
@@ -105,7 +105,7 @@ export default class NamespaceClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return await response.json();
+    return response.json();
   }
 
   /**
@@ -132,11 +132,11 @@ export default class NamespaceClient {
             'Namespace or related Workspace is not empty (and recurse not true)',
             geoServerResponse);
         case 404:
-          throw new GeoServerResponseError('Namespace doesn’t exist', geoServerResponse);
+          throw new GeoServerResponseError('Namespace doesn\'t exist', geoServerResponse);
         case 405:
-          throw new GeoServerResponseError('Can’t delete default namespace', geoServerResponse);
+          throw new GeoServerResponseError('Can\'t delete default namespace', geoServerResponse);
         default:
-          throw new GeoServerResponseError('Response not recognised', geoServerResponse)
+          throw new GeoServerResponseError('Response not recognized', geoServerResponse)
       }
     }
   }
