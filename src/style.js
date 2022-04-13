@@ -206,7 +206,7 @@ export default class StyleClient {
     } else {
       qualifiedName = layerName;
     }
-    const styleBody = await this.getStyleInformation(styleName, workspaceOfStyle);
+    const styleBody = await this.getStyleInformation(workspaceOfStyle, styleName);
 
     const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
       credentials: 'include',
