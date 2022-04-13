@@ -193,13 +193,13 @@ export default class StyleClient {
    *
    * @param {String} qualifiedName GeoServer layer name with workspace prefix
    * @param {String} styleName The name of the style
-   * @param {String} [workspaceStyle] The workspace of the style
+   * @param {String} [workspace] The workspace of the style
    * @param {Boolean} [isDefaultStyle=true] If the style should be the default style of the layer
    *
    * @throws Error if request fails
    */
-  async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
-    const styleBody = await this.getStyleInformation(workspaceStyle, styleName);
+  async assignStyleToLayer (qualifiedName, styleName, workspace, isDefaultStyle) {
+    const styleBody = await this.getStyleInformation(workspace, styleName);
 
     const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
       credentials: 'include',
