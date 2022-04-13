@@ -13,13 +13,11 @@ export default class StyleClient {
    * Creates a GeoServer REST StyleClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
@@ -30,13 +28,11 @@ export default class StyleClient {
    * @returns {Object} An object with the default styles
    */
   async getDefaults () {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'styles.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -57,13 +53,11 @@ export default class StyleClient {
    * @returns {Object} An object with all styles
    */
   async getInWorkspace (workspace) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/styles.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -83,7 +77,7 @@ export default class StyleClient {
    */
   async getAllWorkspaceStyles () {
     const allStyles = [];
-    const ws = new WorkspaceClient(this.url, this.user, this.password);
+    const ws = new WorkspaceClient(this.url, this.auth);
     const allWs = await ws.getAll();
 
     // go over all workspaces and query the styles for
@@ -125,12 +119,11 @@ export default class StyleClient {
    * @throws Error if request fails
    */
   async publish (workspace, name, sldBody) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/vnd.ogc.sld+xml'
       },
       body: sldBody
@@ -161,7 +154,6 @@ export default class StyleClient {
       paramRecurse = true;
     }
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     let endpoint;
 
     if (workspace) {
@@ -178,7 +170,7 @@ export default class StyleClient {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -191,7 +183,7 @@ export default class StyleClient {
             geoServerResponse
           );
         default:
-          throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
   }
@@ -207,15 +199,13 @@ export default class StyleClient {
    * @throws Error if request fails
    */
   async assignStyleToLayer (qualifiedName, styleName, workspaceStyle, isDefaultStyle) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-
     const styleBody = await this.getStyleInformation(styleName, workspaceStyle);
 
     const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(styleBody)
@@ -238,9 +228,6 @@ export default class StyleClient {
    * @returns {Object} An object about the style or undefined if it cannot be found
    */
   async getStyleInformation (styleName, workspace) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-
     let url;
     if (workspace) {
       url = this.url + 'workspaces/' + workspace + '/styles/' + styleName + '.json';
@@ -252,12 +239,12 @@ export default class StyleClient {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;

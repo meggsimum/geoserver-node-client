@@ -11,13 +11,11 @@ export default class SecurityClient {
    * Creates a GeoServer REST SecurityClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
@@ -28,12 +26,11 @@ export default class SecurityClient {
    * @returns {Object} An object with all users
    */
   async getAllUsers () {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'security/usergroup/users.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -61,12 +58,11 @@ export default class SecurityClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'security/usergroup/users.json', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -101,12 +97,11 @@ export default class SecurityClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'security/usergroup/user/' + username, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -127,12 +122,11 @@ export default class SecurityClient {
    * @throws Error if request fails
    */
   async associateUserRole (username, role) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 

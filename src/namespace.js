@@ -12,13 +12,11 @@ export default class NamespaceClient {
    * Creates a GeoServer REST NamespaceClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
@@ -29,13 +27,11 @@ export default class NamespaceClient {
    * @returns {Object} An object describing the namespace
    */
   async getAll () {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -63,14 +59,11 @@ export default class NamespaceClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
-
     const response = await fetch(this.url + 'namespaces', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -94,17 +87,15 @@ export default class NamespaceClient {
    * @returns {Object} An object describing the namespace or undefined if it cannot be found
    */
   async get (name) {
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces/' + name + '.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;
@@ -125,13 +116,11 @@ export default class NamespaceClient {
    * @throws Error if request fails
    */
   async delete (name) {
-    const auth =
-    Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'namespaces/' + name, {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 

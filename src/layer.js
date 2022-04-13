@@ -12,13 +12,11 @@ export default class LayerClient {
    * Creates a GeoServer REST LayerClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
@@ -32,17 +30,16 @@ export default class LayerClient {
    * @returns {Object} An object with layer information or undefined if it cannot be found
    */
   async get (qualifiedName) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'layers/' + qualifiedName + '.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;
@@ -76,13 +73,12 @@ export default class LayerClient {
       jsonBody.layer.attribution.href = attributionLink;
     }
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'layers/' + qualifiedName + '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(jsonBody)
@@ -102,12 +98,11 @@ export default class LayerClient {
    * @returns {Object} An object with all layer information
    */
   async getAll () {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'layers.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -143,12 +138,11 @@ export default class LayerClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/featuretypes', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -196,12 +190,11 @@ export default class LayerClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -239,12 +232,11 @@ export default class LayerClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/wmsstores/' + dataStore + '/wmslayers', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -282,12 +274,11 @@ export default class LayerClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -310,17 +301,17 @@ export default class LayerClient {
    * @throws Error if request fails
    */
   async deleteFeatureType (workspace, datastore, name, recurse) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '?recurse=' + recurse, {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
     if (!response.ok) {
-      throw new GeoServerResponseError('Requesting GeoServer failed:' + await response.text());
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -363,14 +354,12 @@ export default class LayerClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + name + '.json';
-    console.log(url);
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -422,13 +411,12 @@ export default class LayerClient {
       }
     };
 
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes/' + name + '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -452,18 +440,17 @@ export default class LayerClient {
    * @returns {Object} An object with coverage information or undefined if it cannot be found
    */
   async getCoverage (workspace, coverageStore, name) {
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + name + '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;

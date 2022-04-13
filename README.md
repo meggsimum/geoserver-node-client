@@ -71,7 +71,7 @@ GEOSERVER_VERSION=2.20.1 npm run test
 
 ### Release
 
-Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it). 
+Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it).
 
 The GitHub release has to be performed manually based on the tag created by `release-it`.
 

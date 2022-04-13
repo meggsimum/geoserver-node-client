@@ -13,13 +13,11 @@ export default class DatastoreClient {
    * Creates a GeoServer REST DatastoreClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
@@ -78,13 +76,11 @@ export default class DatastoreClient {
    * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getStores (workspace, storeType) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
     if (!response.ok) {
@@ -156,19 +152,17 @@ export default class DatastoreClient {
    * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getStore (workspace, storeName, storeType) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.user, this.password);
+      const grc = new AboutClient(this.url, this.auth);
       if (await grc.exists()) {
         // GeoServer exists, but requested item does not exist,  we return empty
         return;
@@ -202,8 +196,6 @@ export default class DatastoreClient {
     const fileSizeInBytes = stats.size;
     const readStream = fs.createReadStream(filePath);
 
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/file.geotiff';
     url += '?filename=' + lyrTitle + '&coverageName=' + layerName;
@@ -211,7 +203,7 @@ export default class DatastoreClient {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'image/tiff',
         'Content-length': fileSizeInBytes
       },
@@ -294,14 +286,12 @@ export default class DatastoreClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -333,13 +323,13 @@ export default class DatastoreClient {
    */
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
     const readStream = fs.createReadStream(zipArchivePath);
-    const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
+
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/zip'
       },
       body: readStream
@@ -371,14 +361,12 @@ export default class DatastoreClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/wmsstores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -425,14 +413,12 @@ export default class DatastoreClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -454,8 +440,6 @@ export default class DatastoreClient {
    * @throws Error if request fails
    */
   async deleteDataStore (workspace, dataStore, recurse) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
     url += '?recurse=' + recurse;
 
@@ -463,7 +447,7 @@ export default class DatastoreClient {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -485,8 +469,6 @@ export default class DatastoreClient {
    * @throws Error if request fails
    */
   async deleteCoverageStore (workspace, coverageStore, recurse) {
-    const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
     url += '?recurse=' + recurse;
 
@@ -494,7 +476,7 @@ export default class DatastoreClient {
       credentials: 'include',
       method: 'DELETE',
       headers: {
-        Authorization: 'Basic ' + auth
+        Authorization: this.auth
       }
     });
 
@@ -540,14 +522,12 @@ export default class DatastoreClient {
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
