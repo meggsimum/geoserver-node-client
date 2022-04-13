@@ -333,9 +333,9 @@ describe('Layer', () => {
     const attributionText = 'sample attribution';
     const attributionLink = 'http://www.example.com';
 
-    await grc.layers.modifyAttribution(`${workSpace}:${wmsLayerName}`, attributionText, attributionLink);
+    await grc.layers.modifyAttribution(workSpace, wmsLayerName, attributionText, attributionLink);
 
-    const layerProperties = await grc.layers.get(`${workSpace}:${wmsLayerName}`);
+    const layerProperties = await grc.layers.get(workSpace, wmsLayerName);
 
     expect(layerProperties.layer.attribution.title).to.equal(attributionText);
     expect(layerProperties.layer.attribution.href).to.equal(attributionLink);
@@ -346,12 +346,12 @@ describe('Layer', () => {
     expect(result.layers.layer.length).to.equal(3);
   })
 
-  it('can get a layer by qualified name', async () => {
+  it('can get a layer by name and workspace', async () => {
     const nonExistentLayer = 'non-existent-layer';
-    const nonExistentResult = await grc.layers.get(workSpace + ':' + nonExistentLayer);
+    const nonExistentResult = await grc.layers.get(workSpace, nonExistentLayer);
     expect(nonExistentResult).to.be.undefined;
 
-    const result = await grc.layers.get(workSpace + ':' + wmsLayerName);
+    const result = await grc.layers.get(workSpace, wmsLayerName);
     expect(result.layer.name).to.equal(wmsLayerName);
   })
 
@@ -431,10 +431,9 @@ describe('style', () => {
       true
     );
 
-    const qualifiedName = workSpace + ':' + featureLayerName;
     const workspaceStyle = workSpace;
     const isDefaultStyle = true;
-    await grc.styles.assignStyleToLayer(qualifiedName, styleName, workspaceStyle, isDefaultStyle);
+    await grc.styles.assignStyleToLayer(workSpace, featureLayerName, styleName, workspaceStyle, isDefaultStyle);
   });
 
   it('can get style information', async () => {

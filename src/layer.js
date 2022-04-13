@@ -20,16 +20,23 @@ export default class LayerClient {
   }
 
   /**
-   * Returns a GeoServer layer by the given full qualified layer name,
+   * Returns a GeoServer layer by the given workspace and layer name,
    * e.g. "myWs:myLayer".
    *
-   * @param {String} qualifiedName GeoServer layer name with workspace prefix
+   * @param {String} workspace The name of the workspace, can be undefined
+   * @param {String} layerName The name of the layer to query
    *
    * @throws Error if request fails
    *
    * @returns {Object} An object with layer information or undefined if it cannot be found
    */
-  async get (qualifiedName) {
+  async get (workspace, layerName) {
+    let qualifiedName;
+    if (workspace) {
+      qualifiedName = `${workspace}:${layerName}`;
+    } else {
+      qualifiedName = layerName;
+    }
     const response = await fetch(this.url + 'layers/' + qualifiedName + '.json', {
       credentials: 'include',
       method: 'GET',
@@ -55,15 +62,22 @@ export default class LayerClient {
   /**
    * Sets the attribution text and link of a layer.
    *
-   * @param {String} qualifiedName GeoServer layer name with workspace prefix
+   * @param {String} workspace The name of the workspace, can be undefined
+   * @param {String} layerName The name of the layer to query
    * @param {String} [attributionText] The attribution text
    * @param {String} [attributionLink] The attribution link
    *
    * @throws Error if request fails
    */
-  async modifyAttribution (qualifiedName, attributionText, attributionLink) {
+  async modifyAttribution (workspace, layerName, attributionText, attributionLink) {
+    let qualifiedName;
+    if (workspace) {
+      qualifiedName = `${workspace}:${layerName}`;
+    } else {
+      qualifiedName = layerName;
+    }
     // take existing layer properties as template
-    const jsonBody = await this.get(qualifiedName);
+    const jsonBody = await this.get(workspace, layerName);
 
     // set attribution text and link
     if (attributionText) {
