@@ -79,6 +79,12 @@ export default class LayerClient {
     // take existing layer properties as template
     const jsonBody = await this.get(workspace, layerName);
 
+    if (!jsonBody || !jsonBody.layer || !jsonBody.layer.attribution) {
+      throw new GeoServerResponseError(
+        `layer '${workspace}:${layerName}' misses the property 'attribution'`
+      );
+    }
+
     // set attribution text and link
     if (attributionText) {
       jsonBody.layer.attribution.title = attributionText;
