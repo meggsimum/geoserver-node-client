@@ -200,9 +200,6 @@ export default class StyleClient {
    * @throws Error if request fails
    */
   async assignStyleToLayer (workspaceOfLayer, layerName, styleName, workspaceOfStyle, isDefaultStyle) {
-    // TODO: add default value
-    // TODO: ensure default value is true or false
-    // TODO: consider removing `?default` if no value provided
 
     let qualifiedName;
     if (workspaceOfLayer) {
@@ -212,7 +209,15 @@ export default class StyleClient {
     }
     const styleBody = await this.getStyleInformation(workspaceOfStyle, styleName);
 
-    const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
+    let url;
+    // we set the style as defaultStyle, unless user explicitly provides 'false'
+    if (isDefaultStyle !== false) {
+      url = this.url + 'layers/' + qualifiedName + '/styles?default=true';
+    } else {
+      url = this.url + 'layers/' + qualifiedName + '/styles';
+    }
+
+    const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
