@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
  * Client for GeoServer security.
@@ -10,39 +11,34 @@ export default class SecurityClient {
    * Creates a GeoServer REST SecurityClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
-  // TODO: I could not get it working, got Code '406'
   /**
    * Returns all users registered in GeoServer.
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with all users
    */
   async getAllUsers () {
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/users.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(this.url + 'security/usergroup/users.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
@@ -51,7 +47,7 @@ export default class SecurityClient {
    * @param {String} username The name of the user to be created
    * @param {String} password The password of the user to be created
    *
-   * @returns {Boolean} If the user could be created
+   * @throws Error if request fails
    */
   async createUser (username, password) {
     const body = {
@@ -62,28 +58,24 @@ export default class SecurityClient {
       }
     };
 
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/users.json', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
+    const response = await fetch(this.url + 'security/usergroup/users.json', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
-      if (response.status === 201) {
-        return true;
-      } else if (response.status === 404) {
-        console.warn(`Received HTTP 404 - the user ${username} might already exist.`);
-      } else {
-        console.warn(await response.text());
-        return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 404:
+          throw new GeoServerResponseError(`User ${username} might already exists.`, geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
       }
-    } catch (error) {
-      return false;
     }
   }
 
@@ -95,7 +87,7 @@ export default class SecurityClient {
    * @param {String} password The password of the user to be created
    * @param {Boolean} enabled Enable / disable the user
    *
-   * @returns {Boolean} If user could be updated
+   * @throws Error if request fails
    */
   async updateUser (username, password, enabled) {
     const body = {
@@ -105,26 +97,19 @@ export default class SecurityClient {
       }
     };
 
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'security/usergroup/user/' + username, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
+    const response = await fetch(this.url + 'security/usergroup/user/' + username, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -134,28 +119,20 @@ export default class SecurityClient {
    * @param {String} username The name of the user to add the role to
    * @param {String} role The role to associate
    *
-   * @returns {Boolean} If the role could be associated
+   * @throws Error if request fails
    */
   async associateUserRole (username, role) {
-    try {
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      console.log(`${this.url}security/roles/role/${role}/user/${username}`);
-      const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else {
-        console.warn(await response.text());
-        return false;
+    const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 }

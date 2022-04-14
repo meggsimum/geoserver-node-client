@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer data stores
@@ -11,13 +13,11 @@ export default class DatastoreClient {
    * Creates a GeoServer REST DatastoreClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
@@ -25,7 +25,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get DataStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getDataStores (workspace) {
     return this.getStores(workspace, 'datastores');
@@ -36,7 +36,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get CoverageStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getCoverageStores (workspace) {
     return this.getStores(workspace, 'coveragestores');
@@ -47,7 +47,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get WmsStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmsStores (workspace) {
     return this.getStores(workspace, 'wmsstores');
@@ -58,7 +58,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace to get WmtsStores for
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details
    */
   async getWmtsStores (workspace) {
     return this.getStores(workspace, 'wmtsstores');
@@ -68,30 +68,26 @@ export default class DatastoreClient {
    * @private
    * Get information about various store types in a workspace.
    *
-   * @param {String} workspace
-   * @param {String} storeType
+   * @param {String} workspace The workspace name
+   * @param {String} storeType The type of store
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getStores (workspace, storeType) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
       }
-      console.warn(await response.text());
-      return false;
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
@@ -100,7 +96,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search DataStore in
    * @param {String} dataStore DataStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getDataStore (workspace, dataStore) {
     return this.getStore(workspace, dataStore, 'datastores');
@@ -112,7 +108,7 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search CoverageStore in
    * @param {String} covStore CoverageStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getCoverageStore (workspace, covStore) {
     return this.getStore(workspace, covStore, 'coveragestores');
@@ -124,7 +120,8 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search WmsStore in
    * @param {String} wmsStore WmsStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @returns {Object} An object containing store details or undefined if it cannot be found
+   *
    */
   async getWmsStore (workspace, wmsStore) {
     return this.getStore(workspace, wmsStore, 'wmsstores');
@@ -136,44 +133,46 @@ export default class DatastoreClient {
    * @param {String} workspace The workspace to search WmtsStore in
    * @param {String} wmtsStore WmtsStore name
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
-s  */
+   * @returns {Object} An object containing store details or undefined if it cannot be found
+   */
   async getWmtsStore (workspace, wmtsStore) {
     return this.getStore(workspace, wmtsStore, 'wmtsstores');
   }
 
   /**
    * @private
-   * @param {String} workspace
-   * @param {String} storeName
-   * @param {String} storeType
+   * Get GeoServer store by type
    *
-   * @returns {Object|Boolean} An object containing store details or 'false'
+   * @param {String} workspace The name of the workspace
+   * @param {String} storeName The name of the store
+   * @param {String} storeType The type of the store
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object containing store details or undefined if it cannot be found
    */
   async getStore (workspace, storeName, storeType) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else if (response.status === 404) {
-        console.warn('No ' + storeType + ' with name "' + storeName + '" found');
-        return false;
-      } else {
-        console.warn(await response.text());
-        return false;
+    const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
+    return response.json();
   }
 
   /**
@@ -187,41 +186,36 @@ s  */
    * @param {String} layerTitle The published title of the new layer
    * @param {String} filePath The path to the GeoTIFF file on the server
    *
-   * @returns {String|Boolean} The successful response text or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The successful response text
    */
   async createGeotiffFromFile (workspace, coverageStore, layerName, layerTitle, filePath) {
-    try {
-      const lyrTitle = layerTitle || layerName;
-      const stats = fs.statSync(filePath);
-      const fileSizeInBytes = stats.size;
-      const readStream = fs.createReadStream(filePath);
+    const lyrTitle = layerTitle || layerName;
+    const stats = fs.statSync(filePath);
+    const fileSizeInBytes = stats.size;
+    const readStream = fs.createReadStream(filePath);
 
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
         coverageStore + '/file.geotiff';
-      url += '?filename=' + lyrTitle + '&coverageName=' + layerName;
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'image/tiff',
-          'Content-length': fileSizeInBytes
-        },
-        body: readStream
-      });
+    url += '?filename=' + lyrTitle + '&coverageName=' + layerName;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'image/tiff',
+        'Content-length': fileSizeInBytes
+      },
+      body: readStream
+    });
 
-      if (response.status === 201) {
-        const responseText = await response.text();
-        // TODO enforce JSON response or parse XML
-        return responseText;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    // TODO: enforce JSON response or parse XML
+    return response.text();
   }
 
   /**
@@ -238,7 +232,7 @@ s  */
    * @param {String} pgDb The PostGIS DB name
    * @param {String} [exposePk] expose primary key, defaults to false
    *
-   * @returns {Boolean} If the store could be created
+   * @throws Error if request fails
    */
   async createPostgisStore (workspace, namespaceUri, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk) {
     const body = {
@@ -292,24 +286,21 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    // TODO: not tested yet
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -324,35 +315,32 @@ s  */
    *
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
-   * @param {String} zipArchivePath Aboslute path to zip archive with the 3 properties files
+   * @param {String} zipArchivePath Absolute path to zip archive with the 3 properties files
    *
-   * @returns {String|Boolen} The response text or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The response text
    */
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
-    try {
-      const readStream = fs.createReadStream(zipArchivePath);
-      const auth = Buffer.from(this.user + ':' + this.password).toString('base64');
-      const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/zip'
-        },
-        body: readStream
-      });
+    const readStream = fs.createReadStream(zipArchivePath);
 
-      if (response.status === 201) {
-        return await response.text();
-      } else {
-        console.warn(await response.text());
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/zip'
+      },
+      body: readStream
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+
+    return response.text();
   };
 
   /**
@@ -362,7 +350,7 @@ s  */
    * @param {String} dataStore The data store name
    * @param {String} wmsCapabilitiesUrl Base WMS capabilities URL
    *
-   * @returns {Boolean} If store could be created
+   * @throws Error if request fails
    */
   async createWmsStore (workspace, dataStore, wmsCapabilitiesUrl) {
     const body = {
@@ -373,24 +361,20 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/wmsstores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -403,7 +387,7 @@ s  */
    * @param {String} namespaceUrl URL of the GeoServer namespace
    * @param {Boolean} [useHttpConnectionPooling=true] use HTTP connection pooling for WFS connection
    *
-   * @returns {Boolean} If store could be created
+   * @throws Error if request fails
    */
   async createWfsStore (workspace, dataStore, wfsCapabilitiesUrl, namespaceUrl, useHttpConnectionPooling) {
     const body = {
@@ -429,24 +413,20 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -457,35 +437,25 @@ s  */
    * @param {String} coverageStore Name of data store to delete
    * @param {String} recurse Flag to enable recursive deletion
    *
-   * @returns {Boolean} If the datastore could be deleted
+   * @throws Error if request fails
    */
   async deleteDataStore (workspace, dataStore, recurse) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
-      url += '?recurse=' + recurse;
+    let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
+    url += '?recurse=' + recurse;
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else if (response.status === 401) {
-        console.warn('Deletion failed. There might be dependant objects to ' +
-          'this store. Delete them first or call this with "recurse=false"');
-        console.warn(response.text());
-        return false;
-      } else {
-        return false;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      // TODO: could not find status codes in the docs or via testing
+      //       https://docs.geoserver.org/latest/en/api/#1.0.0/datastores.yaml
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 
@@ -496,35 +466,30 @@ s  */
    * @param {String} coverageStore Name of CoverageStore to delete
    * @param {String} recurse Flag to enable recursive deletion
    *
-   * @returns {Boolean} If the datastore could be deleted
+   * @throws Error if request fails
    */
   async deleteCoverageStore (workspace, coverageStore, recurse) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
-      url += '?recurse=' + recurse;
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
+    url += '?recurse=' + recurse;
 
-      const response = await fetch(url, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      if (response.status === 200) {
-        return true;
-      } else if (response.status === 401) {
-        console.warn('Deletion failed. There might be dependant objects to ' +
-          'this store. Delete them first or call this with "recurse=false"');
-        console.warn(response.text());
-        return false;
-      } else {
-        return false;
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    // TODO: could not test it
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 401:
+          throw new GeoServerResponseError('Deletion failed. There might be dependant objects to ' +
+          'this store. Delete them first or call this with "recurse=false"', geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
   }
 
@@ -535,7 +500,7 @@ s  */
    * @param {String} dataStore The data store name
    * @param {String} gpkgPath Relative path to GeoPackage file within geoserver_data dir
    *
-   * @returns {Boolean} If store could be created
+   * @throws Error if request fails
    */
   async createGpkgStore (workspace, dataStore, gpkgPath) {
     const body = {
@@ -557,24 +522,20 @@ s  */
       }
     };
 
-    const auth =
-      Buffer.from(this.user + ':' + this.password).toString('base64');
     const url = this.url + 'workspaces/' + workspace + '/datastores';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + auth,
+        Authorization: this.auth,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     });
 
-    if (response.status === 201) {
-      return true;
-    } else {
-      console.warn(await response.text());
-      return false;
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 }

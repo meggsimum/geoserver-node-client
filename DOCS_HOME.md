@@ -8,8 +8,10 @@ Node.js / JavaScript Client for the [GeoServer REST API](https://docs.geoserver.
 
 Compatible with [GeoServer](https://geoserver.org)
 
-  - v2.17.x
-  - v2.18.x
+  - v2.20.x
+  - v2.19.x
+  - v2.18.x (no more maintained and officially deprecated)
+  - v2.17.x (no more maintained and officially deprecated)
 
 ### Who do I talk to? ###
 

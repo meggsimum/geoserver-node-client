@@ -15,8 +15,9 @@ Detailed API-Docs can be found [here](https://meggsimum.github.io/geoserver-node
 
 Compatible with [GeoServer](https://geoserver.org)
 
+  - v2.20.x
   - v2.19.x
-  - v2.18.x
+  - v2.18.x (no more maintained and officially deprecated)
   - v2.17.x (no more maintained and officially deprecated)
 
 ### Setup
@@ -33,6 +34,22 @@ npm install
 npm run demo
 ```
 
+### Error Handling
+
+A request either succeeds or throws an Error. The thrown error has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exist and can either be a simple text or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used:
+
+```javascript
+  try {
+      // call any function from this library
+      await grc.styles.publish(workspace, styleName, sldBody)
+    } catch (error) {
+      // the standard error message
+      console.error(error.message);
+
+      // the whole error including stack trace and (if available) the property 'geoServerOutput'
+      console.error(error);
+    }
+```
 
 ### Unit Tests
 
@@ -42,18 +59,23 @@ First start a GeoServer, e.g. by using this Docker container:
 docker run \
   -p 8080:8080 \
   -v /path/to/geoserver_mnt:/opt/geoserver_data \
-  meggsimum/geoserver:2.18.2
+  meggsimum/geoserver:2.20.1
 ```
 
 Then, in an other terminal, run:
 
 ```shell
-npm run test
+# specify the GeoServer version and run the test suite
+GEOSERVER_VERSION=2.20.1 npm run test
 ```
 
 ### Release
 
-The release to GitHub and npm is done via [release-it](https://github.com/release-it/release-it). This is the workflow for releasing:
+Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it).
+
+The GitHub release has to be performed manually based on the tag created by `release-it`.
+
+This is the workflow for releasing:
 
 1. Make sure a `GITHUB_TOKEN` is available as environment variable. See [here](https://github.com/release-it/release-it/blob/master/docs/github-releases.md) for more information.
 
@@ -75,6 +97,9 @@ npm run release
 ```
 
 4. Follow the questions in the commandline.
+  - automatically upgrades the version in `package.json`
+  - makes a release commit and pushes it to GitHub
+  - publishes the new version to npm
 
 ### Who do I talk to? ###
 

@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import AboutClient from './about.js'
 
 /**
  * Client for GeoServer workspaces
@@ -9,64 +11,67 @@ export default class WorkspaceClient {
   /**
    * Creates a GeoServer REST WorkspaceClient instance.
    *
+   * WARNING: For most cases the 'NameSpaceClient' seems to fit better.
+   *
    * @param {String} url The URL of the GeoServer REST API endpoint
-   * @param {String} user The user for the GeoServer REST API
-   * @param {String} password The password for the GeoServer REST API
+   * @param {String} auth The Basic Authentication string
    */
-  constructor (url, user, password) {
-    this.url = url.endsWith('/') ? url : url + '/';
-    this.user = user;
-    this.password = password;
+  constructor (url, auth) {
+    this.url = url;
+    this.auth = auth;
   }
 
   /**
    * Returns all workspaces.
    *
-   * @returns {Object|Boolean} An Object describing the workspaces or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {Object} An Object describing the workspaces
    */
   async getAll () {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      return false;
+    const response = await fetch(this.url + 'workspaces.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
+    return response.json();
   }
 
   /**
    * Returns a workspace.
    *
    * @param {String} name Name of the workspace
-   * @returns {Object|Boolean} An object describing the workspaces or 'false'
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object describing the workspaces
    */
   async get (name) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + name + '.json', {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-      if (response.status === 200) {
-        return await response.json();
-      } else {
-        return false;
+    const response = await fetch(this.url + 'workspaces/' + name + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
+    return response.json();
   }
 
   /**
@@ -74,38 +79,38 @@ export default class WorkspaceClient {
    *
    * @param {String} name Name of the new workspace
    *
-   * @returns {String|Boolean} The name of the created workspace or 'false'
+   * @throws Error if request fails
+   *
+   * @returns {String} The name of the created workspace
    */
   async create (name) {
-    try {
-      const body = {
-        workspace: {
-          name: name
-        }
-      };
-
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-
-      const response = await fetch(this.url + 'workspaces', {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (response.status === 201) {
-        const responseText = await response.text();
-        return responseText;
-      } else {
-        return false;
+    const body = {
+      workspace: {
+        name: name
       }
-    } catch (error) {
-      return false;
+    };
+
+    const response = await fetch(this.url + 'workspaces', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 409:
+          throw new GeoServerResponseError('Unable to add workspace as it already exists', geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
+
+    return response.text();
   }
 
   /**
@@ -114,28 +119,31 @@ export default class WorkspaceClient {
    * @param {String} name Name of the workspace to delete
    * @param {Boolean} recurse Flag to enable recursive deletion
    *
-   * @returns {Boolean} If Deletion was successful
+   * @throws Error if request fails
    */
   async delete (name, recurse) {
-    try {
-      const auth =
-        Buffer.from(this.user + ':' + this.password).toString('base64');
-      const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          Authorization: 'Basic ' + auth
-        }
-      });
-
-      // TODO map other HTTP status
-      if (response.status === 200) {
-        return true;
-      } else {
-        return false;
+    const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: this.auth
       }
-    } catch (error) {
-      return false;
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 400:
+          // the docs say code 403, but apparently it is code 400
+          // https://docs.geoserver.org/latest/en/api/#1.0.0/workspaces.yaml
+          throw new GeoServerResponseError(
+            'Workspace or related Namespace is not empty (and recurse not true)',
+            geoServerResponse);
+        case 404:
+          throw new GeoServerResponseError('Workspace doesn\'t exist', geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
     }
   }
 }
