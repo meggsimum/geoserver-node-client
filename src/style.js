@@ -193,13 +193,13 @@ export default class StyleClient {
    *
    * @param {String} workspaceOfLayer The name of the layer's workspace, can be undefined
    * @param {String} layerName The name of the layer to query
+   * @param {String} workspaceOfStyle The workspace of the style, can be undefined
    * @param {String} styleName The name of the style
-   * @param {String} [workspaceOfStyle] The workspace of the style
    * @param {Boolean} [isDefaultStyle=true] If the style should be the default style of the layer
    *
    * @throws Error if request fails
    */
-  async assignStyleToLayer (workspaceOfLayer, layerName, styleName, workspaceOfStyle, isDefaultStyle) {
+  async assignStyleToLayer (workspaceOfLayer, layerName, workspaceOfStyle, styleName, isDefaultStyle) {
     let qualifiedName;
     if (workspaceOfLayer) {
       qualifiedName = `${workspaceOfLayer}:${layerName}`;
