@@ -200,7 +200,6 @@ export default class StyleClient {
    * @throws Error if request fails
    */
   async assignStyleToLayer (workspaceOfLayer, layerName, styleName, workspaceOfStyle, isDefaultStyle) {
-
     let qualifiedName;
     if (workspaceOfLayer) {
       qualifiedName = `${workspaceOfLayer}:${layerName}`;
