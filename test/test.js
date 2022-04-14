@@ -452,7 +452,7 @@ describe('style', () => {
 
     // case: style shall be default style
     isDefaultStyle = true;
-    await grc.styles.assignStyleToLayer(workSpace, featureLayerName, workspaceStyle, styleName, isDefaultStyle);
+    await grc.styles.assignStyleToLayer(workSpace, featureLayerName, workspaceStyle, styleName);
 
     const layerInfo3 = await grc.layers.get(workSpace, featureLayerName)
     const changedDefaultStyleName = layerInfo3.layer.defaultStyle.name;
