@@ -434,7 +434,7 @@ describe('style', () => {
     const workspaceStyle = workSpace;
 
     // case: style shall **not** be default style
-    let isDefaultStyle = false;
+    const isDefaultStyle = false;
     const layerInfo1 = await grc.layers.get(workSpace, featureLayerName)
     const defaultStyleNameBefore = layerInfo1.layer.defaultStyle.name;
 
@@ -450,8 +450,7 @@ describe('style', () => {
     // we check if the new style got associated with the layer
     expect(associatedStyleName).to.equal(InputStyleQualifiedName);
 
-    // case: style shall be default style
-    isDefaultStyle = true;
+    // case: style shall be default style (default behavior)
     await grc.styles.assignStyleToLayer(workSpace, featureLayerName, workspaceStyle, styleName);
 
     const layerInfo3 = await grc.layers.get(workSpace, featureLayerName)
