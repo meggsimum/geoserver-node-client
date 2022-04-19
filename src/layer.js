@@ -144,7 +144,7 @@ export default class LayerClient {
     const body = {
       featureType: {
         name: name,
-        nativeName: name,
+        nativeName: nativeName || name,
         title: title || name,
         srs: srs || 'EPSG:4326',
         enabled: enabled,
