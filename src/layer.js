@@ -221,6 +221,41 @@ export default class LayerClient {
   }
 
   /**
+   * Get detailed information about a featureType.
+   *
+   * @param {String} workspace The workspace of the featureType
+   * @param {String} datastore The datastore of the featureType
+   * @param {String} name The name of the featureType
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} The object of the featureType
+   */
+  async getFeatureType (workspace, datastore, name) {
+    const url = this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
+  }
+
+  /**
    *  Publishes a WMS layer.
    *
    * @param {String} workspace Workspace to publish WMS layer in

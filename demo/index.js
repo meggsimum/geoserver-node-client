@@ -193,6 +193,10 @@ async function main () {
     // );
 
     // console.log(
+    //   prettyJson(await grc.layers.getFeatureType(ws, 'testdataStore', 'testName'))
+    // );
+
+    // console.log(
     //   'Created WMS Layer',
     //   await grc.layers.publishWmsLayer(ws, 'testWmsDs', 'OSM-Overlay-WMS', 'aTestName4Wms', 'Test Title WMS', 'EPSG:900913', true)
     // );
