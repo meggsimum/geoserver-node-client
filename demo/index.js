@@ -1,4 +1,4 @@
-import GeoServerRestClient from '../geoserver-rest-client';
+import GeoServerRestClient from '../geoserver-rest-client.js';
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';
@@ -22,12 +22,12 @@ async function main () {
 
     console.log(
       'GeoServer REST exists',
-      await grc.exists()
+      await grc.about.exists()
     );
 
     console.log(
       'GeoServer REST version info',
-      prettyJson(await grc.getVersion())
+      prettyJson(await grc.about.getVersion())
     );
 
     // NAMESPACES
@@ -190,6 +190,10 @@ async function main () {
     // console.log(
     //   'Created FT with explicit native BBOX',
     //   await grc.layers.publishFeatureType(ws, 'testdataStore', 'nativeFtName', 'aTestNameBbox', 'Test Title Bbox', 'EPSG:4326', true, null, nativeBoundingBox)
+    // );
+
+    // console.log(
+    //   prettyJson(await grc.layers.getFeatureType(ws, 'testdataStore', 'testName'))
     // );
 
     // console.log(

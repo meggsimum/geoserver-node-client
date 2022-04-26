@@ -230,19 +230,19 @@ describe('Datastore', () => {
     ).to.be.undefined;
   });
 
-  it('can retrive the data stores', async () => {
+  it('can retrieve the data stores', async () => {
     const result = await grc.datastores.getDataStores(workSpace);
     const dataStores = result.dataStores.dataStore;
     expect(dataStores.length).to.equal(2);
   });
 
-  it('can retrive the coverage stores', async () => {
+  it('can retrieve the coverage stores', async () => {
     const result = await grc.datastores.getCoverageStores(workSpace);
     const coverageStores = result.coverageStores.coverageStore;
     expect(coverageStores.length).to.equal(1);
   });
 
-  it('can retrive the WMS stores', async () => {
+  it('can retrieve the WMS stores', async () => {
     const result = await grc.datastores.getWmsStores(workSpace);
     const wmsStores = result.wmsStores.wmsStore;
     expect(wmsStores.length).to.equal(1);
@@ -284,6 +284,11 @@ describe('Layer', () => {
       true,
       'Sample Abstract'
     );
+  });
+
+  it('can read information of a FeatureType', async () => {
+    const layerInfo = await grc.layers.getFeatureType(workSpace, wfsDataStore, featureLayerName);
+    expect(layerInfo.featureType.name).to.equal(featureLayerName);
   });
 
   it('can publish a FeatureType with explicit native BBOX', async () => {

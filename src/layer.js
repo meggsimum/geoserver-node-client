@@ -79,6 +79,12 @@ export default class LayerClient {
     // take existing layer properties as template
     const jsonBody = await this.get(workspace, layerName);
 
+    if (!jsonBody || !jsonBody.layer || !jsonBody.layer.attribution) {
+      throw new GeoServerResponseError(
+        `layer '${workspace}:${layerName}' misses the property 'attribution'`
+      );
+    }
+
     // set attribution text and link
     if (attributionText) {
       jsonBody.layer.attribution.title = attributionText;
@@ -144,7 +150,7 @@ export default class LayerClient {
     const body = {
       featureType: {
         name: name,
-        nativeName: name,
+        nativeName: nativeName || name,
         title: title || name,
         srs: srs || 'EPSG:4326',
         enabled: enabled,
@@ -218,6 +224,41 @@ export default class LayerClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
+  }
+
+  /**
+   * Get detailed information about a FeatureType.
+   *
+   * @param {String} workspace The workspace of the FeatureType
+   * @param {String} datastore The datastore of the FeatureType
+   * @param {String} name The name of the FeatureType
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} The object of the FeatureType
+   */
+  async getFeatureType (workspace, datastore, name) {
+    const url = this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist, we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
   }
 
   /**
