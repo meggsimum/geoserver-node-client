@@ -80,6 +80,13 @@ export default class StyleClient {
     const ws = new WorkspaceClient(this.url, this.auth);
     const allWs = await ws.getAll();
 
+    if (!allWs ||
+      !allWs.workspaces ||
+      !allWs.workspaces.workspace ||
+      !Array.isArray(allWs.workspaces.workspace)) {
+      throw new GeoServerResponseError('Response of available workspaces is malformed');
+    }
+
     // go over all workspaces and query the styles for
     for (let i = 0; i < allWs.workspaces.workspace.length; i++) {
       const ws = allWs.workspaces.workspace[i];
@@ -104,6 +111,14 @@ export default class StyleClient {
   async getAll () {
     const defaultStyles = await this.getDefaults();
     const wsStyles = await this.getAllWorkspaceStyles();
+    if (
+      !defaultStyles ||
+      !defaultStyles.styles ||
+      !defaultStyles.styles.style ||
+      !Array.isArray(defaultStyles.styles.style)
+    ) {
+      throw new GeoServerResponseError('Response of default styles malformed')
+    }
     const allStyles = defaultStyles.styles.style.concat(wsStyles);
 
     return allStyles;
