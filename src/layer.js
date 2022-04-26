@@ -221,15 +221,15 @@ export default class LayerClient {
   }
 
   /**
-   * Get detailed information about a featureType.
+   * Get detailed information about a FeatureType.
    *
-   * @param {String} workspace The workspace of the featureType
-   * @param {String} datastore The datastore of the featureType
-   * @param {String} name The name of the featureType
+   * @param {String} workspace The workspace of the FeatureType
+   * @param {String} datastore The datastore of the FeatureType
+   * @param {String} name The name of the FeatureType
    *
    * @throws Error if request fails
    *
-   * @returns {Object} The object of the featureType
+   * @returns {Object} The object of the FeatureType
    */
   async getFeatureType (workspace, datastore, name) {
     const url = this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '.json';
