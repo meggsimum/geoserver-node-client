@@ -286,6 +286,11 @@ describe('Layer', () => {
     );
   });
 
+  it('can read information of a FeatureType', async () => {
+    const layerInfo = await grc.layers.getFeatureType(workSpace, wfsDataStore, featureLayerName);
+    expect(layerInfo.featureType.name).to.equal(featureLayerName);
+  });
+
   it('can publish a FeatureType with explicit native BBOX', async () => {
     const ftName = featureLayerName + '_native_bbox';
     const nativeBoundingBox = {
