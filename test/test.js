@@ -446,9 +446,9 @@ describe('style', () => {
     expect(defaultStyleNameBefore).to.equal(defaultStyleNameAfter);
 
     const associatedStyleName = layerInfo2.layer.styles.style[0].name;
-    const InputStyleQualifiedName = `${workspaceStyle}:${styleName}`
+    const inputStyleQualifiedName = `${workspaceStyle}:${styleName}`
     // we check if the new style got associated with the layer
-    expect(associatedStyleName).to.equal(InputStyleQualifiedName);
+    expect(associatedStyleName).to.equal(inputStyleQualifiedName);
 
     // case: style shall be default style (default behavior)
     await grc.styles.assignStyleToLayer(workSpace, featureLayerName, workspaceStyle, styleName);
@@ -456,7 +456,7 @@ describe('style', () => {
     const layerInfo3 = await grc.layers.get(workSpace, featureLayerName)
     const changedDefaultStyleName = layerInfo3.layer.defaultStyle.name;
     // we check if the default style got updated
-    expect(changedDefaultStyleName).to.equal(InputStyleQualifiedName);
+    expect(changedDefaultStyleName).to.equal(inputStyleQualifiedName);
   });
 
   it('can get style information', async () => {
