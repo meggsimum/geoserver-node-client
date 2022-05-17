@@ -12,7 +12,7 @@
 async function getGeoServerResponseText (response) {
   try {
     return response.text()
-  } catch {
+  } catch (e) {
     // return nothing
   }
 }
