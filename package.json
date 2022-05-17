@@ -11,7 +11,17 @@
     "lint-fix": "eslint --fix src/**/*.js test/**/*.js",
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
-    "release": "release-it"
+    "release": "release-it",
+    "build": "npm run build:clean && npm run build:babel && npm run build:fixup",
+    "build:clean": "rm -rf dist",
+    "build:babel": "babel geoserver-rest-client.js -d dist && babel src -d dist/src",
+    "build:fixup": "node scripts/create-custom-package-json.js"
+
+  },
+  "exports": {
+    "import": "./geoserver-rest-client.js",
+    "require": "./dist/geoserver-rest-client.js",
+    "default": "./dist/esm/index.js"
   },
   "keywords": [
     "GeoServer",
@@ -24,6 +34,8 @@
     "node-fetch": "^2.6.5"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^14.1.1",

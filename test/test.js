@@ -1,7 +1,7 @@
 /* global describe:false, it:false, before:false, after:false */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import GeoServerRestClient from '../geoserver-rest-client.js';
+import { GeoServerRestClient } from '../geoserver-rest-client.js';
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';
