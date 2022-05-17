@@ -10,7 +10,7 @@ import fs from 'fs';
 const inputData = fs.readFileSync('package.json');
 const packageJson = JSON.parse(inputData);
 
-packageJson['type'] = 'commonjs';
+packageJson.type = 'commonjs';
 
-let outputData = JSON.stringify(packageJson, undefined, 2);
+const outputData = JSON.stringify(packageJson, undefined, 2);
 fs.writeFileSync('./dist/package.json', outputData);
