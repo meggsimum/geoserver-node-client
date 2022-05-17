@@ -16,7 +16,6 @@
     "build:clean": "rm -rf dist",
     "build:babel": "babel geoserver-rest-client.js -d dist && babel src -d dist/src",
     "build:fixup": "node scripts/create-custom-package-json.js"
-
   },
   "exports": {
     "import": "./geoserver-rest-client.js",
