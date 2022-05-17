@@ -393,7 +393,7 @@ export default class LayerClient {
             {
               '@key': 'time',
               dimensionInfo: {
-                presentation: 'DISCRETE_INTERVAL',
+                presentation: presentation || 'DISCRETE_INTERVAL',
                 resolution: resolution,
                 units: 'ISO8601',
                 defaultValue: {
