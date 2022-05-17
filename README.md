@@ -18,6 +18,48 @@ Compatible with [GeoServer](https://geoserver.org)
   - v2.18.x (no more maintained and officially deprecated)
   - v2.17.x (no more maintained and officially deprecated)
 
+
+### Usage
+
+```shell
+npm i geoserver-node-client
+```
+
+usage with require (ES5):
+```js
+const grcImport = require('geoserver-node-client');
+const GeoServerRestClient = grcImport.GeoServerRestClient;
+
+const url = 'http://localhost:8080/geoserver/rest/';
+const user = 'admin';
+const pw = 'geoserver';
+const grc = new GeoServerRestClient(url, user, pw);
+
+async function main () {
+    const result =  await grc.about.exists();
+    console.log(result);
+};
+
+main();
+```
+
+usage as ES module (ES6)
+```js
+import {GeoServerRestClient} from 'geoserver-node-client';
+
+const url = 'http://localhost:8080/geoserver/rest/';
+const user = 'admin';
+const pw = 'geoserver';
+const grc = new GeoServerRestClient(url, user, pw);
+
+async function main () {
+    const result =  await grc.about.exists();
+    console.log(result);
+};
+
+main();
+```
+
 ### Setup
 
 Run as local checkout (mainly for development purposes)
