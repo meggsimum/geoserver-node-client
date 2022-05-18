@@ -19,8 +19,7 @@
   },
   "exports": {
     "import": "./geoserver-rest-client.js",
-    "require": "./dist/geoserver-rest-client.js",
-    "default": "./dist/esm/index.js"
+    "require": "./dist/geoserver-rest-client.js"
   },
   "keywords": [
     "GeoServer",
