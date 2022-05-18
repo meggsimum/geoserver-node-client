@@ -2,7 +2,7 @@
 
 /**
  * Copies the package.json to the ES5 compatible "dist" directory
- * and change its "type" to "commonjs"
+ * and changes its "type" to "commonjs"
  */
 
 import fs from 'fs';
