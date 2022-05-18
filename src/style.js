@@ -208,13 +208,13 @@ export default class StyleClient {
    *
    * @param {String} workspaceOfLayer The name of the layer's workspace, can be undefined
    * @param {String} layerName The name of the layer to query
+   * @param {String} workspaceOfStyle The workspace of the style, can be undefined
    * @param {String} styleName The name of the style
-   * @param {String} [workspaceOfStyle] The workspace of the style
    * @param {Boolean} [isDefaultStyle=true] If the style should be the default style of the layer
    *
    * @throws Error if request fails
    */
-  async assignStyleToLayer (workspaceOfLayer, layerName, styleName, workspaceOfStyle, isDefaultStyle) {
+  async assignStyleToLayer (workspaceOfLayer, layerName, workspaceOfStyle, styleName, isDefaultStyle) {
     let qualifiedName;
     if (workspaceOfLayer) {
       qualifiedName = `${workspaceOfLayer}:${layerName}`;
@@ -223,7 +223,15 @@ export default class StyleClient {
     }
     const styleBody = await this.getStyleInformation(workspaceOfStyle, styleName);
 
-    const response = await fetch(this.url + 'layers/' + qualifiedName + '/styles?default=' + isDefaultStyle, {
+    let url;
+    // we set the style as defaultStyle, unless user explicitly provides 'false'
+    if (isDefaultStyle !== false) {
+      url = this.url + 'layers/' + qualifiedName + '/styles?default=true';
+    } else {
+      url = this.url + 'layers/' + qualifiedName + '/styles';
+    }
+
+    const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
