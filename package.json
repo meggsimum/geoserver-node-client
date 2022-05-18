@@ -21,6 +21,11 @@
     "import": "./geoserver-rest-client.js",
     "require": "./dist/geoserver-rest-client.js"
   },
+  "files": [
+    "geoserver-rest-client.js",
+    "src",
+    "dist"
+  ],
   "keywords": [
     "GeoServer",
     "REST",
