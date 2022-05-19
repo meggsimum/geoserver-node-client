@@ -517,4 +517,52 @@ export default class LayerClient {
     }
     return response.json();
   }
+
+  /**
+   * Renames the existing bands of a coverage layer.
+   *
+   * Make sure to provide the same number of bands as existing in the layer.
+   *
+   * @param {String} workspace Workspace of layer
+   * @param {String} datastore The datastore of the layer
+   * @param {String} layername The layer name
+   * @param {String[]} bandNames An array of the new band names in correct order
+   *
+   * @throws Error if request fails
+   */
+  async renameCoverageBands (workspace, dataStore, layername, bandNames) {
+    const body = {
+      coverage: {
+        dimensions: {
+          coverageDimension: [
+          ]
+        }
+      }
+    };
+
+    // dynamically create the body
+    bandNames.forEach(bandName => {
+      body.coverage.dimensions.coverageDimension.push(
+        {
+          name: bandName
+        }
+      );
+    })
+
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + layername + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
 }

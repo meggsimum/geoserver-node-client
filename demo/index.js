@@ -163,6 +163,11 @@ async function main () {
     // );
 
     // console.log(
+    //   'Band names\n',
+    //   await grc.layers.renameCoverageBands('dummy-ws','pfalz', 'pfalz_multiband', ['eins', 'zwei'])
+    // );
+
+    // console.log(
     //   'All GeoServer layers',
     //   prettyJson(await grc.layers.getAll())
     // );

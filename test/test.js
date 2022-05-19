@@ -175,8 +175,7 @@ describe('Datastore', () => {
   // TODO: test image mosaic
   // TODO: test WMTS-Stores
 
-  // TODO: copy test data to GeoServer before
-  it('can create GeoTIFF', async () => {
+  it('can create a coverage store', async () => {
     const geotiff = 'test/sample_data/world.geotiff'
     await grc.datastores.createGeotiffFromFile(
       workSpace,
@@ -259,6 +258,8 @@ describe('Layer', () => {
   const wmsLayerName = 'my-wms-layer-name';
   const featureLayerName = 'my-feature-layer-name'
   const wfsDataStore = 'my-wfs-datastore';
+  const rasterStoreName = 'my-rasterstore';
+  const rasterLayerName = 'my-raster-name';
 
   before('create workspace', async () => {
     createdWorkSpace = await grc.workspaces.create(workSpace);
@@ -372,11 +373,32 @@ describe('Layer', () => {
     );
   })
 
-  it('has function to query coverages', async () => {
-    // query a non-existing coverage to check that the function exists
-    // TODO: test valid response once we have coverages in test setup
-    const result = await grc.layers.getCoverage(workSpace, 'testCovStore', 'testCoverage');
-    expect(result).to.be.undefined;
+  it('can create Coverage layer', async () => {
+    const geotiff = 'test/sample_data/world.geotiff'
+    await grc.datastores.createGeotiffFromFile(
+      workSpace,
+      rasterStoreName,
+      rasterLayerName,
+      'My Raster Title',
+      geotiff);
+  });
+
+  it('can query coverages', async () => {
+    const nonExistentLayer = 'non-existent-layer';
+    const nonExistentResult = await grc.layers.getCoverage(workSpace, rasterStoreName, nonExistentLayer);
+    expect(nonExistentResult).to.be.undefined;
+
+    const result = await grc.layers.getCoverage(workSpace, rasterStoreName, rasterLayerName);
+    expect(result.coverage.name).to.equal(rasterLayerName);
+  })
+
+  it('can rename band names of a coverage', async () => {
+    const bandNames = ['one', 'two', 'three', 'four'];
+    await grc.layers.renameCoverageBands(workSpace, rasterStoreName, rasterLayerName, bandNames);
+    const result = await grc.layers.getCoverage(workSpace, rasterStoreName, rasterLayerName);
+    const bandResult = result.coverage.dimensions.coverageDimension;
+    expect(bandResult.length).to.equal(4);
+    expect(bandResult[3].name).to.equal(bandNames[3]);
   })
 
   after('delete Workspace', async () => {
