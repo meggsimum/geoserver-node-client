@@ -15,7 +15,7 @@ import AboutClient from './src/about.js';
  *
  * @module GeoServerRestClient
  */
-export default class GeoServerRestClient {
+export class GeoServerRestClient {
   /**
    * Creates a GeoServerRestClient instance.
    *

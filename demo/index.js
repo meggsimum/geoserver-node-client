@@ -1,4 +1,4 @@
-import GeoServerRestClient from '../geoserver-rest-client.js';
+import { GeoServerRestClient } from '../geoserver-rest-client.js';
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';

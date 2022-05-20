@@ -3,6 +3,9 @@ node_modules/
 # the built documentation
 out/
 
+# the ES5 build
+dist/
+
 # GeoPackage
 *gpkg-shm
 *gpkg-wal

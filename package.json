@@ -6,13 +6,26 @@
   "main": "geoserver-rest-client.js",
   "scripts": {
     "demo": "node demo/index.js",
-    "docs": "jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
-    "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
-    "lint-fix": "eslint --fix '**/*.js' --ignore-pattern node_modules/ --ignore-pattern out/",
+    "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
+    "lint": "eslint src/**/*.js test/**/*.js scripts/**/*.js geoserver-rest-client.js",
+    "lint-fix": "eslint --fix  src/**/*.js test/**/*.js scripts/**/*.js geoserver-rest-client.js",
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
-    "release": "release-it"
+    "release": "release-it",
+    "build": "npm run build:clean && npm run build:babel && npm run build:fixup",
+    "build:clean": "rm -rf dist",
+    "build:babel": "babel geoserver-rest-client.js -d dist && babel src -d dist/src",
+    "build:fixup": "node scripts/create-custom-package-json.js"
   },
+  "exports": {
+    "import": "./geoserver-rest-client.js",
+    "require": "./dist/geoserver-rest-client.js"
+  },
+  "files": [
+    "geoserver-rest-client.js",
+    "src",
+    "dist"
+  ],
   "keywords": [
     "GeoServer",
     "REST",
@@ -24,6 +37,10 @@
     "node-fetch": "^2.6.5"
   },
   "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.12",
+    "@babel/plugin-transform-runtime": "^7.18.0",
+    "@babel/preset-env": "^7.17.12",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^14.1.1",
