@@ -76,7 +76,7 @@ npm run demo
 
 ### Error Handling
 
-A request either succeeds or throws an Error. The thrown error has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exist and can either be a simple text or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used:
+A request either succeeds or throws the custom `GeoServerResponseError`. It has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exist and can either be a simple text or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used. It also shows how to filter by error type:
 
 ```javascript
   try {
@@ -88,6 +88,12 @@ A request either succeeds or throws an Error. The thrown error has the standard 
 
       // the whole error including stack trace and (if available) the property 'geoServerOutput'
       console.error(error);
+
+      if (error instanceof GeoServerResponseError) {
+        // a GeoServer specific error happened
+      } else {
+        // another error happened
+      }
     }
 ```
 

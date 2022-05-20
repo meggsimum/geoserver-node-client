@@ -8,6 +8,8 @@ import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
 import AboutClient from './src/about.js';
 
+export { GeoServerResponseError } from './src/util/geoserver.js'
+
 /**
  * Client for GeoServer REST API.
  * Has minimal basic functionality and offers REST client instances for
