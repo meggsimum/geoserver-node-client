@@ -1,5 +1,15 @@
 {
     "presets": [
-        "es2015"
+        [
+            "@babel/preset-env",
+            {
+                "modules": "commonjs"
+            }
+        ]
+    ],
+    "plugins": [
+        [
+            "@babel/plugin-transform-runtime"
+        ]
     ]
 }
