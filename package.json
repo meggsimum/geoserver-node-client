@@ -1,6 +1,6 @@
 {
   "name": "geoserver-node-client",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "Node.js client for GeoServer REST API",
   "type": "module",
   "main": "geoserver-rest-client.js",
