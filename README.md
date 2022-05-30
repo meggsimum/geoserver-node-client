@@ -13,8 +13,9 @@ Detailed [API-Docs](https://meggsimum.github.io/geoserver-node-client/) are auto
 
 Compatible with [GeoServer](https://geoserver.org)
 
+  - v2.21.x
   - v2.20.x
-  - v2.19.x
+  - v2.19.x (no more maintained and officially deprecated)
   - v2.18.x (no more maintained and officially deprecated)
   - v2.17.x (no more maintained and officially deprecated)
 

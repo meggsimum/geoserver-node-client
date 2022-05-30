@@ -472,7 +472,18 @@ describe('style', () => {
     // we check if the default style of before has not changed
     expect(defaultStyleNameBefore).to.equal(defaultStyleNameAfter);
 
-    const associatedStyleName = layerInfo2.layer.styles.style[0].name;
+    let associatedStyleName;
+    // from GeoServer 2.21.0 on, the response of a layer has changed for the "style" property
+    // earlier it was always an array, now it is an object, if only one style is assigned
+    const styleStoredAsArray = Array.isArray(layerInfo2.layer.styles.style);
+    if (styleStoredAsArray) {
+      // GeoServer 2.20.4 and earlier
+      associatedStyleName = layerInfo2.layer.styles.style[0].name;
+    } else {
+      // GeoServer 2.21.0 and later
+      associatedStyleName = layerInfo2.layer.styles.style.name;
+    }
+
     const inputStyleQualifiedName = `${workspaceStyle}:${styleName}`
     // we check if the new style got associated with the layer
     expect(associatedStyleName).to.equal(inputStyleQualifiedName);
