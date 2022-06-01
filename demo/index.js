@@ -278,6 +278,9 @@ async function main () {
     //   'Deleting Granule',
     //   await grc.imagemosaics.deleteSingleGranule('imagemosaic_test', 'testCovStore', 'testCov', coverageToDelete)
     // );
+
+    // await grc.resetReload.reset();
+    // await grc.resetReload.reload();
   } catch (error) {
     console.error('#### Error message #####');
     console.error(error.message);
