@@ -28,17 +28,18 @@ npm i geoserver-node-client
 
 usage with require (ES5):
 ```js
-const grcImport = require('geoserver-node-client');
-const GeoServerRestClient = grcImport.GeoServerRestClient;
+var grcImport = require('geoserver-node-client');
+var GeoServerRestClient = grcImport.GeoServerRestClient;
 
-const url = 'http://localhost:8080/geoserver/rest/';
-const user = 'admin';
-const pw = 'geoserver';
-const grc = new GeoServerRestClient(url, user, pw);
+var url = 'http://localhost:8080/geoserver/rest/';
+var user = 'admin';
+var pw = 'geoserver';
+var grc = new GeoServerRestClient(url, user, pw);
 
-async function main () {
-    const result =  await grc.about.exists();
-    console.log(result);
+function main () {
+    grc.about.exists().then(function (result) {
+      console.log(result);
+    });
 };
 
 main();
