@@ -23,7 +23,7 @@ export default class ImageMosaicClient {
    *
    * @param {String} workspace Workspace of image mosaic
    * @param {String} coverageStore CoverageStore of image mosaic
-   * @param {*} coverage Name of image mosaic
+   * @param {String} coverage Name of image mosaic
    *
    * @throws Error if request fails
    *
