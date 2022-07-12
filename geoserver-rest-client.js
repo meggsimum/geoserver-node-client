@@ -48,7 +48,7 @@ export class GeoServerRestClient {
     this.settings = new SettingsClient(this.url, this.auth);
     /** @member {AboutClient} about GeoServer REST client instance for about endpoint */
     this.about = new AboutClient(this.url, this.auth);
-    /** @member {AboutClient} about GeoServer REST client instance for about endpoint */
+    /** @member {ResetReloadClient} about GeoServer REST client instance for reset/reload endpoints */
     this.resetReload = new ResetReloadClient(this.url, this.auth);
   }
 }
