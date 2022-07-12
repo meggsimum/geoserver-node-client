@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: src/namespace.js</title>
+    <title>JSDoc: Source: src/reset-reload.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: src/namespace.js</h1>
+    <h1 class="page-title">Source: src/reset-reload.js</h1>
 
     
 
@@ -27,17 +27,17 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import fetch from 'node-fetch';
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import AboutClient from './about.js'
+import { GeoServerResponseError, getGeoServerResponseText } from './util/geoserver.js';
 
 /**
- * Client for GeoServer namespace
+ * Client for GeoServer "Reset/Reload" to clear internal caches and reload
+ * configuration from disk endpoint.
  *
- * @module NamespaceClient
+ * @module ResetReloadClient
  */
-export default class NamespaceClient {
+export default class ResetReloadClient {
   /**
-   * Creates a GeoServer REST NamespaceClient instance.
+   * Creates a GeoServer REST ResetReloadClient instance.
    *
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
@@ -48,105 +48,43 @@ export default class NamespaceClient {
   }
 
   /**
-   * Returns all namespaces.
+   * Resets all store, raster, and schema caches. This operation is used to
+   * force GeoServer to drop all caches and store connections and reconnect to
+   * each of them the next time they are needed by a request.
+   * This is useful in case the stores themselves cache some information about
+   * the data structures they manage that may have changed in the meantime.
    *
    * @throws Error if request fails
-   *
-   * @returns {Object} An object describing the namespace
    */
-  async getAll () {
-    const response = await fetch(this.url + 'namespaces.json', {
-      credentials: 'include',
-      method: 'GET',
-      headers: {
-        Authorization: this.auth
-      }
-    });
-    if (!response.ok) {
-      const geoServerResponse = await getGeoServerResponseText(response);
-      throw new GeoServerResponseError(null, geoServerResponse);
-    }
-    return response.json();
-  }
-
-  /**
-   * Creates a new namespace.
-   *
-   * @param {String} prefix Prefix of the new namespace
-   * @param {String} uri Uri of the new namespace
-   *
-   * @throws Error if request fails
-   *
-   * @returns {String} The name of the created namespace
-   */
-  async create (prefix, uri) {
-    const body = {
-      namespace: {
-        prefix: prefix,
-        uri: uri
-      }
-    };
-
-    const response = await fetch(this.url + 'namespaces', {
+  async reset () {
+    const url = this.url + 'reset';
+    const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        Authorization: this.auth,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+        Authorization: this.auth
+      }
     });
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
-
-    return response.text();
   }
 
   /**
-   * Returns a namespace.
-   *
-   * @param {String} name Name of the namespace
-   *
-   * @throws Error if request fails
-   *
-   * @returns {Object} An object describing the namespace or undefined if it cannot be found
-   */
-  async get (name) {
-    const response = await fetch(this.url + 'namespaces/' + name + '.json', {
-      credentials: 'include',
-      method: 'GET',
-      headers: {
-        Authorization: this.auth
-      }
-    });
-    if (!response.ok) {
-      const grc = new AboutClient(this.url, this.auth);
-      if (await grc.exists()) {
-        // GeoServer exists, but requested item does not exist,  we return empty
-        return;
-      } else {
-        // There was a general problem with GeoServer
-        const geoServerResponse = await getGeoServerResponseText(response);
-        throw new GeoServerResponseError(null, geoServerResponse);
-      }
-    }
-    return response.json();
-  }
-
-  /**
-   * Deletes a namespace.
-   *
-   * @param {String} name Name of the namespace to delete
+   * Reloads the GeoServer catalog and configuration from disk. This operation
+   * is used in cases where an external tool has modified the on-disk
+   * configuration. This operation will also force GeoServer to drop any
+   * internal caches and reconnect to all data stores.
    *
    * @throws Error if request fails
    */
-  async delete (name) {
-    const response = await fetch(this.url + 'namespaces/' + name, {
+  async reload () {
+    const url = this.url + 'reload';
+    const response = await fetch(url, {
       credentials: 'include',
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         Authorization: this.auth
       }
@@ -154,18 +92,7 @@ export default class NamespaceClient {
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
-      switch (response.status) {
-        case 403:
-          throw new GeoServerResponseError(
-            'Namespace or related Workspace is not empty (and recurse not true)',
-            geoServerResponse);
-        case 404:
-          throw new GeoServerResponseError('Namespace doesn\'t exist', geoServerResponse);
-        case 405:
-          throw new GeoServerResponseError('Can\'t delete default namespace', geoServerResponse);
-        default:
-          throw new GeoServerResponseError('Response not recognized', geoServerResponse)
-      }
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
 }
