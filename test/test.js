@@ -394,9 +394,14 @@ describe('Layer', () => {
     expect(result.layers).to.equal('');
   });
 
-  it('Can get a WMS layer', async () => {
+  it('can get a WMS layer', async () => {
     const result = await grc.layers.getWmsLayer(workSpace, wmsDataStore, wmsLayerName);
     expect(result.wmsLayer.nativeName).to.equal(wmsNativeName);
+  });
+
+  it('returns undefined on an unknown WMS layer', async () => {
+    const result = await grc.layers.getWmsLayer(workSpace, 'fantasy', 'fantasy');
+    expect(result).to.be.undefined;
   });
 
   it('can query coverages', async () => {
