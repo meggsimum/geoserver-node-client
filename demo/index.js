@@ -226,6 +226,16 @@ async function main () {
     //   prettyJson(await grc.layers.getCoverage(ws, 'testCovStore', 'testCoverage'))
     // );
 
+    // console.log(
+    //   'Get Layers',
+    //   prettyJson(await grc.layers.getLayers('asdf'))
+    // );
+
+    // console.log(
+    //   'Get WMS Layer',
+    //   prettyJson(await grc.layers.getWmsLayer('asdf', 'meg', 'ne_worldX' ))
+    // );
+
     // STYLES
 
     // console.log(
