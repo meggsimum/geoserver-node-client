@@ -562,3 +562,25 @@ describe('Security', () => {
     await grc.workspaces.delete(createdWorkSpace, recursive);
   });
 });
+
+describe('Reset/Reload', () => {
+  it('reset can be triggered successfully', async () => {
+    let assume = 0;
+    try {
+      await grc.resetReload.reset();
+    } catch (error) {
+      assume++;
+    }
+    expect(assume).to.equal(0);
+  });
+
+  it('reload can be triggered successfully', async () => {
+    let assume = 0;
+    try {
+      await grc.resetReload.reload();
+    } catch (error) {
+      assume++;
+    }
+    expect(assume).to.equal(0);
+  })
+});

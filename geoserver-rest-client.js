@@ -7,6 +7,7 @@ import SecurityClient from './src/security.js';
 import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
 import AboutClient from './src/about.js';
+import ResetReloadClient from './src/reset-reload.js';
 
 export { GeoServerResponseError } from './src/util/geoserver.js'
 
@@ -47,5 +48,7 @@ export class GeoServerRestClient {
     this.settings = new SettingsClient(this.url, this.auth);
     /** @member {AboutClient} about GeoServer REST client instance for about endpoint */
     this.about = new AboutClient(this.url, this.auth);
+    /** @member {ResetReloadClient} about GeoServer REST client instance for reset/reload endpoints */
+    this.resetReload = new ResetReloadClient(this.url, this.auth);
   }
 }
