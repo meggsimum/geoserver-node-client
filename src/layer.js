@@ -194,6 +194,42 @@ export default class LayerClient {
     return await response.json();
   }
 
+  // TODO: automated test needed
+  /**
+   * Returns information about a cascaded WMTS layer.
+   *
+   * @param {String} workspace The workspace
+   * @param {String} datastore The datastore
+   * @param {String} layerName The WMTS layer name
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with layer information or undefined if it cannot be found
+   */
+   async getWmtsLayer (workspace, datastore, layerName) {
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/wmtsstores/' + datastore + '/layers/' + layerName + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth,
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+
+    return await response.json();
+  }
+
   /**
    * Publishes a FeatureType in the default data store of the workspace.
    *
