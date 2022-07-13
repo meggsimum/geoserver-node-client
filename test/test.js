@@ -194,6 +194,15 @@ describe('Datastore', () => {
       wmsUrl);
   });
 
+  it('can create a WMTS Store', async () => {
+    // TODO: make sure the WMS actually exists
+    const wmtsUrl = 'https://services.meggsimum.de/geoserver/gwc/service/wmts?REQUEST=GetCapabilities';
+    await grc.datastores.createWmtsStore(
+      workSpace,
+      'my-wmts-datastore',
+      wmtsUrl);
+  });
+
   it('can create a WFS Store', async () => {
     // TODO: make sure the WFS actually exists
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
