@@ -236,6 +236,11 @@ async function main () {
     //   prettyJson(await grc.layers.getWmsLayer('asdf', 'meg', 'ne_worldX' ))
     // );
 
+    // console.log(
+    //   'Get WMTS Layer',
+    //   prettyJson(await grc.layers.getWmtsLayer('mgsm-world', 'meg_wmts', 'postal_codes_germany' ))
+    // );
+
     // STYLES
 
     // console.log(
