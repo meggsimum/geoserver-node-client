@@ -106,7 +106,6 @@ First start a GeoServer, e.g. by using this Docker container:
 ```shell
 docker run \
   -p 8080:8080 \
-  -v /path/to/geoserver_mnt:/opt/geoserver_data \
   meggsimum/geoserver:2.20.4
 ```
 

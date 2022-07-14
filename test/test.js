@@ -15,7 +15,7 @@ const nameSpaceUri = 'http://www.example.com';
 
 const geoServerVersion = process.env.GEOSERVER_VERSION;
 
-describe('Basic GeoServer', () => {
+describe('About', () => {
   it('should exist', async () => {
     const result = await grc.about.exists();
     expect(result).to.be.true;
@@ -407,7 +407,7 @@ describe('Layer', () => {
   });
 });
 
-describe('style', () => {
+describe('Style', () => {
   let createdWorkSpace;
   const styleName = 'my-style-name';
   const featureLayerName = 'my-feature-layer-name'
