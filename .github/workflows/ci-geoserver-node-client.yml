@@ -10,7 +10,7 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.20.4
+      GEOSERVER_VERSION: 2.20.5
     steps:
       - uses: actions/checkout@v2
 
