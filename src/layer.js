@@ -134,6 +134,103 @@ export default class LayerClient {
   }
 
   /**
+   * Get all layers of a workspace.
+   *
+   * @param {String} workspace The workspace
+   *
+   * @throws Error if request fails
+   *
+   * @return {Object} An object with the information about the layers
+   */
+  async getLayers (workspace) {
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/layers.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth,
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+
+    return await response.json();
+  }
+
+  /**
+   * Returns information about a cascaded WMS layer.
+   *
+   * @param {String} workspace The workspace
+   * @param {String} datastore The datastore
+   * @param {String} layerName The WMS layer name
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with layer information or undefined if it cannot be found
+   */
+  async getWmsLayer (workspace, datastore, layerName) {
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/wmsstores/' + datastore + '/wmslayers/' + layerName + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth,
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+
+    return await response.json();
+  }
+
+  // TODO: automated test needed
+  /**
+   * Returns information about a cascaded WMTS layer.
+   *
+   * @param {String} workspace The workspace
+   * @param {String} datastore The datastore
+   * @param {String} layerName The WMTS layer name
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with layer information or undefined if it cannot be found
+   */
+   async getWmtsLayer (workspace, datastore, layerName) {
+    const response = await fetch(this.url + 'workspaces/' + workspace + '/wmtsstores/' + datastore + '/layers/' + layerName + '.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth,
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+
+    return await response.json();
+  }
+
+  /**
    * Publishes a FeatureType in the default data store of the workspace.
    *
    * @param {String} workspace Workspace to publish FeatureType in

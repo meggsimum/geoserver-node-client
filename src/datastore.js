@@ -379,6 +379,41 @@ export default class DatastoreClient {
   }
 
   /**
+   * Creates a WMTS based data store.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {String} wmtsCapabilitiesUrl Base WMTS capabilities URL
+   *
+   * @throws Error if request fails
+   */
+  async createWmtsStore (workspace, dataStore, wmtsCapabilitiesUrl) {
+    const body = {
+      wmtsStore: {
+        name: dataStore,
+        type: 'WMTS',
+        capabilitiesURL: wmtsCapabilitiesUrl
+      }
+    };
+
+    const url = this.url + 'workspaces/' + workspace + '/wmtsstores';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
+
+  /**
    * Creates a WFS based data store.
    *
    * @param {String} workspace The WS to create the data store in

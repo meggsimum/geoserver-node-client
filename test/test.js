@@ -194,6 +194,15 @@ describe('Datastore', () => {
       wmsUrl);
   });
 
+  it('can create a WMTS Store', async () => {
+    // TODO: make sure the WMTS actually exists
+    const wmtsUrl = 'https://services.meggsimum.de/geoserver/gwc/service/wmts?REQUEST=GetCapabilities';
+    await grc.datastores.createWmtsStore(
+      workSpace,
+      'my-wmts-datastore',
+      wmtsUrl);
+  });
+
   it('can create a WFS Store', async () => {
     // TODO: make sure the WFS actually exists
     const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
@@ -255,7 +264,9 @@ describe('Datastore', () => {
 
 describe('Layer', () => {
   let createdWorkSpace;
+  const wmsDataStore = 'my-wms-datastore';
   const wmsLayerName = 'my-wms-layer-name';
+  const wmsNativeName = 'OSM-Overlay-WMS';
   const featureLayerName = 'my-feature-layer-name'
   const wfsDataStore = 'my-wfs-datastore';
   const rasterStoreName = 'my-rasterstore';
@@ -317,7 +328,6 @@ describe('Layer', () => {
   it('can publish a WMS layer', async () => {
     // TODO: make sure WMS url is still working
     const wmsUrl = 'https://ows.terrestris.de/osm/service?';
-    const wmsDataStore = 'my-wms-datastore';
     await grc.datastores.createWmsStore(
       workSpace,
       wmsDataStore,
@@ -326,7 +336,7 @@ describe('Layer', () => {
     await grc.layers.publishWmsLayer(
       workSpace,
       wmsDataStore,
-      'OSM-Overlay-WMS',
+      wmsNativeName,
       wmsLayerName,
       'My WMS Title',
       'EPSG:900913',
@@ -381,6 +391,26 @@ describe('Layer', () => {
       rasterLayerName,
       'My Raster Title',
       geotiff);
+  });
+
+  it('can get layers by workspace', async () => {
+    const result = await grc.layers.getLayers(workSpace);
+    expect(result.layers.layer.length).to.equal(3);
+  });
+
+  it('works with non-existing workspaces', async () => {
+    const result = await grc.layers.getLayers('fantasy-workspace');
+    expect(result.layers).to.equal('');
+  });
+
+  it('can get a WMS layer', async () => {
+    const result = await grc.layers.getWmsLayer(workSpace, wmsDataStore, wmsLayerName);
+    expect(result.wmsLayer.nativeName).to.equal(wmsNativeName);
+  });
+
+  it('returns undefined on an unknown WMS layer', async () => {
+    const result = await grc.layers.getWmsLayer(workSpace, 'fantasy', 'fantasy');
+    expect(result).to.be.undefined;
   });
 
   it('can query coverages', async () => {

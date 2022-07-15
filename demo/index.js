@@ -226,6 +226,21 @@ async function main () {
     //   prettyJson(await grc.layers.getCoverage(ws, 'testCovStore', 'testCoverage'))
     // );
 
+    // console.log(
+    //   'Get Layers',
+    //   prettyJson(await grc.layers.getLayers('my-workspace'))
+    // );
+
+    // console.log(
+    //   'Get WMS Layer',
+    //   prettyJson(await grc.layers.getWmsLayer('my-workspace', 'meg', 'ne_worldX' ))
+    // );
+
+    // console.log(
+    //   'Get WMTS Layer',
+    //   prettyJson(await grc.layers.getWmtsLayer('mgsm-world', 'meg_wmts', 'postal_codes_germany' ))
+    // );
+
     // STYLES
 
     // console.log(
