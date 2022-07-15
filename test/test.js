@@ -195,7 +195,7 @@ describe('Datastore', () => {
   });
 
   it('can create a WMTS Store', async () => {
-    // TODO: make sure the WMS actually exists
+    // TODO: make sure the WMTS actually exists
     const wmtsUrl = 'https://services.meggsimum.de/geoserver/gwc/service/wmts?REQUEST=GetCapabilities';
     await grc.datastores.createWmtsStore(
       workSpace,
