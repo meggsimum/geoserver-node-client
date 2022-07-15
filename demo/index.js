@@ -228,12 +228,12 @@ async function main () {
 
     // console.log(
     //   'Get Layers',
-    //   prettyJson(await grc.layers.getLayers('asdf'))
+    //   prettyJson(await grc.layers.getLayers('my-workspace'))
     // );
 
     // console.log(
     //   'Get WMS Layer',
-    //   prettyJson(await grc.layers.getWmsLayer('asdf', 'meg', 'ne_worldX' ))
+    //   prettyJson(await grc.layers.getWmsLayer('my-workspace', 'meg', 'ne_worldX' ))
     // );
 
     // console.log(
