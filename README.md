@@ -1,6 +1,9 @@
 # GeoServer Node Client
 
 [![npm version](https://badge.fury.io/js/geoserver-node-client.svg)](https://www.npmjs.com/package/geoserver-node-client)
+[![Website](https://img.shields.io/website?up_message=API-Docs&url=https%3A%2F%2Fmeggsimum.github.io%2Fgeoserver-node-client%2F)](https://meggsimum.github.io/geoserver-node-client)
+![GitHub Release Date](https://img.shields.io/github/release-date/meggsimum/geoserver-node-client)
+![GitHub last commit](https://img.shields.io/github/last-commit/meggsimum/geoserver-node-client)
 ![](https://github.com/meggsimum/geoserver-node-client/actions/workflows/ci-geoserver-node-client.yml/badge.svg)
 
 Node.js / JavaScript Client for the [GeoServer REST API](https://docs.geoserver.org/stable/en/user/rest/).
