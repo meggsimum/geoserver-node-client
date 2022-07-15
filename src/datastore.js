@@ -383,7 +383,7 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The WS to create the data store in
    * @param {String} dataStore The data store name
-   * @param {String} wmsCapabilitiesUrl Base WMTS capabilities URL
+   * @param {String} wmtsCapabilitiesUrl Base WMTS capabilities URL
    *
    * @throws Error if request fails
    */
