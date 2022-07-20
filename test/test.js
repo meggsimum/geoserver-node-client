@@ -187,7 +187,7 @@ describe('Datastore', () => {
 
   it('can create a WMS Store', async () => {
     // TODO: make sure the WMS actually exists
-    const wmsUrl = 'https://ows.terrestris.de/osm/service?';
+    const wmsUrl = 'https://services.meggsimum.de/geoserver/ows?';
     await grc.datastores.createWmsStore(
       workSpace,
       'my-wms-datastore',
@@ -205,7 +205,7 @@ describe('Datastore', () => {
 
   it('can create a WFS Store', async () => {
     // TODO: make sure the WFS actually exists
-    const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
+    const wfsCapsUrl = 'https://services.meggsimum.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
     await grc.datastores.createWfsStore(
       workSpace,
