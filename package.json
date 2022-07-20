@@ -6,7 +6,7 @@
   "main": "geoserver-rest-client.js",
   "scripts": {
     "demo": "node demo/index.js",
-    "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md",
+    "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md && cp img/*.png out/",
     "lint": "eslint src/**/*.js test/**/*.js scripts/**/*.js geoserver-rest-client.js",
     "lint-fix": "eslint --fix  src/**/*.js test/**/*.js scripts/**/*.js geoserver-rest-client.js",
     "pretest": "npm run lint",

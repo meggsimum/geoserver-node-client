@@ -1,6 +1,6 @@
 # GeoServer Node Client
 
-![GeoSever Node Client Logo](/img/geoserver-node-client-logo_150px.png)
+![GeoSever Node Client Logo](geoserver-node-client-logo_150px.png)
 
 Node.js / JavaScript Client for the [GeoServer REST API](https://docs.geoserver.org/stable/en/user/rest/).
 
