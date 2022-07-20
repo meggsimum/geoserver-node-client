@@ -6,6 +6,8 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/meggsimum/geoserver-node-client)
 ![](https://github.com/meggsimum/geoserver-node-client/actions/workflows/ci-geoserver-node-client.yml/badge.svg)
 
+![GeoSever Node Client Logo](/img/geoserver-node-client-logo_150px.png)
+
 Node.js / JavaScript Client for the [GeoServer REST API](https://docs.geoserver.org/stable/en/user/rest/).
 
 ### API-Docs ###
