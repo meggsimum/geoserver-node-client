@@ -187,7 +187,7 @@ describe('Datastore', () => {
 
   it('can create a WMS Store', async () => {
     // TODO: make sure the WMS actually exists
-    const wmsUrl = 'https://ows.terrestris.de/osm/service?';
+    const wmsUrl = 'https://services.meggsimum.de/geoserver/ows?';
     await grc.datastores.createWmsStore(
       workSpace,
       'my-wms-datastore',
@@ -205,7 +205,7 @@ describe('Datastore', () => {
 
   it('can create a WFS Store', async () => {
     // TODO: make sure the WFS actually exists
-    const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
+    const wfsCapsUrl = 'https://services.meggsimum.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
     await grc.datastores.createWfsStore(
       workSpace,
@@ -266,7 +266,7 @@ describe('Layer', () => {
   let createdWorkSpace;
   const wmsDataStore = 'my-wms-datastore';
   const wmsLayerName = 'my-wms-layer-name';
-  const wmsNativeName = 'OSM-Overlay-WMS';
+  const wmsNativeName = 'mgsm-ger:postal_codes_germany';
   const featureLayerName = 'my-feature-layer-name'
   const wfsDataStore = 'my-wfs-datastore';
   const rasterStoreName = 'my-rasterstore';
@@ -277,7 +277,7 @@ describe('Layer', () => {
   });
 
   it('can publish a FeatureType', async () => {
-    const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
+    const wfsCapsUrl = 'https://services.meggsimum.de/geoserver/ows?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
     await grc.datastores.createWfsStore(
       workSpace,
@@ -289,7 +289,7 @@ describe('Layer', () => {
     await grc.layers.publishFeatureType(
       workSpace,
       wfsDataStore,
-      'osm_osm-country-borders',
+      'mgsm-ger_federal_states_germany',
       featureLayerName,
       'My Feature title',
       'EPSG:4326',
@@ -315,7 +315,7 @@ describe('Layer', () => {
     await grc.layers.publishFeatureType(
       workSpace,
       wfsDataStore,
-      'osm_osm-country-borders',
+      'mgsm-ger_postal_codes_germany',
       ftName,
       'My Feature title native BBOX',
       'EPSG:4326',
@@ -327,7 +327,7 @@ describe('Layer', () => {
 
   it('can publish a WMS layer', async () => {
     // TODO: make sure WMS url is still working
-    const wmsUrl = 'https://ows.terrestris.de/osm/service?';
+    const wmsUrl = 'https://services.meggsimum.de/geoserver/ows?';
     await grc.datastores.createWmsStore(
       workSpace,
       wmsDataStore,
@@ -468,7 +468,7 @@ describe('Style', () => {
   })
 
   it('can assign a style to a layer', async () => {
-    const wfsCapsUrl = 'https://ows-demo.terrestris.de/geoserver/osm/wfs?service=wfs&version=1.1.0&request=GetCapabilities';
+    const wfsCapsUrl = 'https://services.meggsimum.de/geoserver/ows?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
 
     await grc.datastores.createWfsStore(
@@ -481,7 +481,7 @@ describe('Style', () => {
     await grc.layers.publishFeatureType(
       workSpace,
       wfsDataStore,
-      'osm_osm-country-borders',
+      'mgsm-ger_federal_states_germany',
       featureLayerName,
       'My Feature title',
       'EPSG:4326',
