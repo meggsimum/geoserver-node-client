@@ -485,6 +485,8 @@ export default class LayerClient {
   async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
     const body = {
       coverage: {
+        name: name,
+        nativeName: name,
         metadata: {
           entry: [
             {
