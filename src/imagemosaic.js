@@ -109,6 +109,26 @@ export default class ImageMosaicClient {
     }
   }
 
+  // TODO: docs
+  async addGranuleByRemoteFile (workspace, coverageStore, fileUrl) {
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/remote.imagemosaic';
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-type': 'text/plain'
+      },
+      body: fileUrl
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
+
   /**
    * Deletes a single granule of an image mosaic.
    *
