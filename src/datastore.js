@@ -175,6 +175,32 @@ export default class DatastoreClient {
     return response.json();
   }
 
+  // TODO: docs
+  async initCoverageStore (workspace, storeName,){
+    const storeType = 'coveragestores';
+    const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '/' + 'coverages.xml?list=all';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
+  }
+
   /**
    * Creates a GeoTIFF store from a file by path and publishes it as layer.
    * The GeoTIFF file has to be placed on the server, where your GeoServer
