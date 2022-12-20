@@ -516,7 +516,7 @@ export default class LayerClient {
     console.log('url', url);
     const response = await fetch(url, {
       credentials: 'include',
-      method: 'PUT',
+      method: 'POST',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
