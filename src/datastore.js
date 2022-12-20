@@ -198,7 +198,7 @@ export default class DatastoreClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    return response.json();
+    // return response.json();
   }
 
   /**
