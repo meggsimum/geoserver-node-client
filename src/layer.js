@@ -511,7 +511,7 @@ export default class LayerClient {
 
     console.log('body', JSON.stringify(body));
 
-    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + name + '.json';
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages';
 
     console.log('url', url);
     const response = await fetch(url, {
