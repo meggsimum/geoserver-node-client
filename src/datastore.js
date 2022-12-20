@@ -314,17 +314,24 @@ export default class DatastoreClient {
    * placed on the server, where your GeoServer is running.
    *
    * @param {String} workspace The WS to create the data store in
-   * @param {String} dataStore The data store name
+   * @param {String} coverageStore The data store name
    * @param {String} zipArchivePath Absolute path to zip archive with the 3 properties files
+   * @param {Boolean} [configure=true] If a coverage/layer is configured upon file upload
    *
    * @throws Error if request fails
    *
    * @returns {String} The response text
    */
-  async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
+  async createImageMosaicStore (workspace, coverageStore, zipArchivePath, configure) {
     const readStream = fs.createReadStream(zipArchivePath);
 
-    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+    let url;
+    if (configure === false) {
+      url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic?configure=none';
+    } else {
+      url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+    }
+
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
