@@ -527,6 +527,11 @@ export default class LayerClient {
   /**
    * Enables TIME dimension for the given COG-based coverage layer.
    *
+   * NOTE: Strangely, enabling the time dimension for a COG-based image mosaic
+   *       does not work with the same request as for a classic image mosaic.
+   *       The request of this function is taken from this tutorial:
+   *       https://docs.geoserver.org/latest/en/user/community/cog/mosaic.html#imagemosaic-rest-operations
+   *
    * @param {String} workspace Workspace where layer to enable time dimension for is in
    * @param {String} dataStore The datastore where the layer to enable time dimension for is in
    * @param {String} name Layer to enable time dimension for
@@ -567,7 +572,6 @@ export default class LayerClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages';
-
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',

@@ -178,6 +178,10 @@ export default class DatastoreClient {
   /**
    * Initializes a coverage store by requesting its granules.
    *
+   * This approach is taken from these tutorials:
+   *   - https://docs.geoserver.org/latest/en/user/community/cog/mosaic.html#imagemosaic-rest-operations
+   *   - https://docs.geoserver.geo-solutions.it/edu/en/multidim/rest/index.html#configuring-an-empty-mosaic
+   *
    * @param {String} workspace The name of the workspace
    * @param {String} storeName The name of the store
    *
