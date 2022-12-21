@@ -568,7 +568,6 @@ export default class LayerClient {
 
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages';
 
-    console.log('url', url);
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
