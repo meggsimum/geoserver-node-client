@@ -525,7 +525,7 @@ export default class LayerClient {
   }
 
   /**
-   * Enables TIME dimension for the given coverage layer.
+   * Enables TIME dimension for the given COG-based coverage layer.
    *
    * @param {String} workspace Workspace where layer to enable time dimension for is in
    * @param {String} dataStore The datastore where the layer to enable time dimension for is in

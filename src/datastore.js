@@ -364,9 +364,6 @@ export default class DatastoreClient {
       url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
     }
 
-    console.log('url', url);
-
-
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',

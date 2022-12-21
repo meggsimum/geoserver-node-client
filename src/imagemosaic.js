@@ -109,7 +109,15 @@ export default class ImageMosaicClient {
     }
   }
 
-  // TODO: docs
+  /**
+   * Adds a granule (defined by a URL) to an image mosaic.
+   *
+   * @param {String} workspace Workspace of image mosaic
+   * @param {String} coverageStore CoverageStore of image mosaic
+   * @param {String} fileUrl URL of new granule
+   *
+   * @throws Error if request fails
+   */
   async addGranuleByRemoteFile (workspace, coverageStore, fileUrl) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/remote.imagemosaic';
 
