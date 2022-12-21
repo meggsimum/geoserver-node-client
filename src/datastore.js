@@ -175,7 +175,14 @@ export default class DatastoreClient {
     return response.json();
   }
 
-  // TODO: docs
+  /**
+   * Initializes a coverage store by requesting its granules.
+   *
+   * @param {String} workspace The name of the workspace
+   * @param {String} storeName The name of the store
+   *
+   * @throws Error if request fails
+   */
   async initCoverageStore (workspace, storeName,){
     const storeType = 'coveragestores';
     const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '/' + 'coverages.xml?list=all';
@@ -198,7 +205,6 @@ export default class DatastoreClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    // return response.json();
   }
 
   /**
