@@ -471,7 +471,7 @@ export default class LayerClient {
    * Enables TIME dimension for the given coverage layer.
    *
    * @param {String} workspace Workspace where layer to enable time dimension for is in
-   * @param {String} datastore The datastore where the layer to enable time dimension for is in
+   * @param {String} dataStore The datastore where the layer to enable time dimension for is in
    * @param {String} name Layer to enable time dimension for
    * @param {String} presentation Presentation type: 'LIST' or 'DISCRETE_INTERVAL' or 'CONTINUOUS_INTERVAL'
    * @param {Number} resolution Resolution in milliseconds, e.g. 3600000 for 1 hour
@@ -483,6 +483,63 @@ export default class LayerClient {
    * @throws Error if request fails
    */
   async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
+    const body = {
+      coverage: {
+        metadata: {
+          entry: [
+            {
+              '@key': 'time',
+              dimensionInfo: {
+                enabled: true,
+                presentation: presentation || 'DISCRETE_INTERVAL',
+                resolution: resolution,
+                units: 'ISO8601',
+                defaultValue: {
+                  strategy: defaultValue
+                },
+                nearestMatchEnabled: nearestMatchEnabled,
+                rawNearestMatchEnabled: rawNearestMatchEnabled,
+                acceptableInterval: acceptableInterval
+              }
+            }
+          ]
+        }
+      }
+    };
+
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + name + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
+
+  /**
+   * Enables TIME dimension for the given coverage layer.
+   *
+   * @param {String} workspace Workspace where layer to enable time dimension for is in
+   * @param {String} dataStore The datastore where the layer to enable time dimension for is in
+   * @param {String} name Layer to enable time dimension for
+   * @param {String} presentation Presentation type: 'LIST' or 'DISCRETE_INTERVAL' or 'CONTINUOUS_INTERVAL'
+   * @param {Number} resolution Resolution in milliseconds, e.g. 3600000 for 1 hour
+   * @param {String} defaultValue The default time value, e.g. 'MINIMUM' or 'MAXIMUM' or 'NEAREST' or 'FIXED'
+   * @param {Boolean} [nearestMatchEnabled] Enable nearest match
+   * @param {Boolean} [rawNearestMatchEnabled] Enable raw nearest match
+   * @param {String} [acceptableInterval] Acceptable interval for nearest match, e.g.'PT30M'
+   *
+   * @throws Error if request fails
+   */
+  async enableTimeCoverageForCogLayer (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
     const body = {
       coverage: {
         name: name,
@@ -508,8 +565,6 @@ export default class LayerClient {
         }
       }
     };
-
-    console.log('body', JSON.stringify(body));
 
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages';
 
