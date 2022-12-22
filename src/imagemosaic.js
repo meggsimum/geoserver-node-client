@@ -13,7 +13,7 @@ export default class ImageMosaicClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -29,9 +29,9 @@ export default class ImageMosaicClient {
    *
    * @returns {Object} An object with the granules
    */
-  async getGranules (workspace, coverageStore, coverage) {
+  async getGranules(workspace, coverageStore, coverage) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
-        coverageStore + '/coverages/' + coverage + '/index/granules.json';
+      coverageStore + '/coverages/' + coverage + '/index/granules.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
@@ -60,7 +60,7 @@ export default class ImageMosaicClient {
    *
    * @returns {Object} An object with the granules
    */
-  async harvestGranules (workspace, coverageStore, filePath) {
+  async harvestGranules(workspace, coverageStore, filePath) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
     const response = await fetch(url, {
@@ -90,7 +90,7 @@ export default class ImageMosaicClient {
    *
    * @throws Error if request fails
    */
-  async addGranuleByServerFile (workspace, coverageStore, filePath) {
+  async addGranuleByServerFile(workspace, coverageStore, filePath) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/external.imagemosaic';
 
     const response = await fetch(url, {
@@ -118,7 +118,7 @@ export default class ImageMosaicClient {
    *
    * @throws Error if request fails
    */
-  async addGranuleByRemoteFile (workspace, coverageStore, fileUrl) {
+  async addGranuleByRemoteFile(workspace, coverageStore, fileUrl) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/remote.imagemosaic';
 
     const response = await fetch(url, {
@@ -147,7 +147,7 @@ export default class ImageMosaicClient {
    *
    * @throws Error if request fails
    */
-  async deleteSingleGranule (workspace, coverageStore, coverage, covFileLocation) {
+  async deleteSingleGranule(workspace, coverageStore, coverage, covFileLocation) {
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + coverage + '/index/granules.xml';
     url += '?filter=location=\'' + covFileLocation + '\'';
 
@@ -168,13 +168,18 @@ export default class ImageMosaicClient {
     return true;
   }
 
-  // TODO
+  /**
+   * Checks if a granule exists in an image mosaic store.
+   *
+   * @param {String} workspace Workspace of image mosaic
+   * @param {String} coverageStore CoverageStore of image mosaic
+   * @param {String} coverage Name of image mosaic
+   * @param {String} granuleToCheck The path or the URL of the granule to check
+   *
+   * @returns {Promise<boolean>} If granule already exist in store
+   */
   async doesGranuleExist(workspace, coverageStore, coverage, granuleToCheck) {
     const granules = await this.getGranules(workspace, coverageStore, coverage);
-    console.log('granules', JSON.stringify(granules, undefined, 2));
-    const result =  granules.features.some(feature => feature.properties.location === granuleToCheck);
-    console.log('result', result);
-
-    return result;
+    return granules.features.some(feature => feature.properties.location === granuleToCheck);
   }
 }
