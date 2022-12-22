@@ -167,4 +167,10 @@ export default class ImageMosaicClient {
 
     return true;
   }
+
+  // TODO
+  async doesGranuleExist(workspace, coverageStore, coverage, granuleToCheck) {
+    const granules = await this.getGranules(workspace, coverageStore, coverage);
+    return granules.features.some(feature => feature.properties.location === granuleToCheck);
+  }
 }
