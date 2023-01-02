@@ -135,6 +135,13 @@ export default class ImageMosaicClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       throw new GeoServerResponseError(null, geoServerResponse);
     }
+
+    // GeoServer does not notify us if it could add the provided granule.
+    // Therefore we manually need to check if the granule could be added.
+    const granuleRecognisedByGeoServer = await this.doesGranuleExist(workspace, coverageStore, coverageStore, fileUrl);
+    if (!granuleRecognisedByGeoServer) {
+      throw `GeoServer could not locate provided COG granule URL: ${fileUrl}`
+    }
   }
 
   /**
