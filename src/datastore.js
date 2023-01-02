@@ -361,11 +361,9 @@ export default class DatastoreClient {
   async createImageMosaicStore (workspace, coverageStore, zipArchivePath, configure) {
     const readStream = fs.createReadStream(zipArchivePath);
 
-    let url;
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
     if (configure === false) {
-      url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic?configure=none';
-    } else {
-      url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+      url = url + '?configure=none';
     }
 
     const response = await fetch(url, {
