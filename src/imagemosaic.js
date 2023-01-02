@@ -31,7 +31,7 @@ export default class ImageMosaicClient {
    */
   async getGranules (workspace, coverageStore, coverage) {
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' +
-      coverageStore + '/coverages/' + coverage + '/index/granules.json';
+        coverageStore + '/coverages/' + coverage + '/index/granules.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
