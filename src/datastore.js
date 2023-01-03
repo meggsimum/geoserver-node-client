@@ -225,12 +225,12 @@ export default class DatastoreClient {
    * @param {String} namespaceUri The namespace URI of the workspace
    * @param {String} dataStore The data store name to be created
    * @param {String} pgHost The PostGIS DB host
-   * @param {String} pgPort The PostGIS DB port
+   * @param {Number} pgPort The PostGIS DB port
    * @param {String} pgUser The PostGIS DB user
    * @param {String} pgPassword The PostGIS DB password
    * @param {String} pgSchema The PostGIS DB schema
    * @param {String} pgDb The PostGIS DB name
-   * @param {String} [exposePk] expose primary key, defaults to false
+   * @param {Boolean} [exposePk] expose primary key, defaults to false
    *
    * @throws Error if request fails
    */
