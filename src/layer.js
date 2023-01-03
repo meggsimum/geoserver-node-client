@@ -525,7 +525,7 @@ export default class LayerClient {
   }
 
   /**
-   * Enables TIME dimension for the given COG-based coverage layer.
+   * Enables layer with TIME dimension for the given COG-based coverage layer.
    *
    * NOTE: Strangely, enabling the time dimension for a COG-based image mosaic
    *       does not work with the same request as for a classic image mosaic.

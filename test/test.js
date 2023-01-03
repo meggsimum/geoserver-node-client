@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { GeoServerRestClient } from '../geoserver-rest-client.js';
+import fetch from 'node-fetch';
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';
@@ -286,6 +287,56 @@ describe('Layer', () => {
 
   before('create workspace', async () => {
     createdWorkSpace = await grc.workspaces.create(workSpace);
+  });
+
+  it('can create a COG based mosaic layer with time dimension', async () => {
+    const coverageStore = 'cog_mosaic';
+    const zipArchivePath = 'test/sample_data/image-mosaic-conf/image-mosaic-conf.zip';
+    const configure = false;
+
+    await grc.datastores.createImageMosaicStore(workSpace, coverageStore, zipArchivePath, configure);
+
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0100Z.tif'
+    );
+
+    await grc.datastores.initCoverageStore(workSpace, coverageStore);
+
+    const presentation = 'LIST';
+    const resolution = 3600000;
+    const defaultValue = 'MAXIMUM';
+    const nearestMatchEnabled = true;
+    const rawNearestMatchEnabled = false;
+    const acceptableInterval = 'PT1H';
+
+    await grc.layers.enableTimeCoverageForCogLayer(workSpace, coverageStore, coverageStore, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval);
+
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0200Z.tif'
+    );
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0300Z.tif'
+    );
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0400Z.tif'
+    );
+
+    const wmsCapabilitiesResponse = await fetch('http://localhost:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities');
+    const wmsCapabilitiesText = await wmsCapabilitiesResponse.text();
+
+    console.log(wmsCapabilitiesText);
+
+    const timeDimensionRecognised = wmsCapabilitiesText.includes('2022-01-01T01:00:00.000Z,2022-01-01T02:00:00.000Z,2022-01-01T03:00:00.000Z,2022-01-01T04:00:00.000Z');
+
+    expect(timeDimensionRecognised).to.be.true;
   });
 
   it('can publish a FeatureType from a WFS', async () => {
