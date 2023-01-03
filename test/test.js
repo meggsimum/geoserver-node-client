@@ -171,12 +171,24 @@ describe('Datastore', () => {
     createdWorkSpace = await grc.workspaces.create(workSpace);
   });
 
-  // TODO: test PostGIS store
-  // TODO: test image mosaic
-  // TODO: test WMTS-Stores
+  it('can create a PostGIS store', async () => {
+    // TODO: read params from env (?)
+    const dataStore = 'jm-postgis';
+    const pgHost = 'postgres';
+    const pgPort = 5432;
+    const pgUser = 'postgres';
+    const pgPassword = 'postgres';
+    const pgSchema = 'public';
+    const pgDb = 'demo';
+    const exposePk = true;
+
+    await grc.datastores.createPostgisStore(
+      workSpace, nameSpaceUri, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk
+    );
+  });
 
   it('can create a coverage store', async () => {
-    const geotiff = 'test/sample_data/world.geotiff'
+    const geotiff = 'test/sample_data/world.tif'
     await grc.datastores.createGeotiffFromFile(
       workSpace,
       'my-rasterstore',
@@ -241,7 +253,7 @@ describe('Datastore', () => {
   it('can retrieve the data stores', async () => {
     const result = await grc.datastores.getDataStores(workSpace);
     const dataStores = result.dataStores.dataStore;
-    expect(dataStores.length).to.equal(2);
+    expect(dataStores.length).to.equal(3);
   });
 
   it('can retrieve the coverage stores', async () => {
@@ -276,7 +288,7 @@ describe('Layer', () => {
     createdWorkSpace = await grc.workspaces.create(workSpace);
   });
 
-  it('can publish a FeatureType', async () => {
+  it('can publish a FeatureType from a WFS', async () => {
     const wfsCapsUrl = 'https://services.meggsimum.de/geoserver/ows?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
     await grc.datastores.createWfsStore(
@@ -292,6 +304,33 @@ describe('Layer', () => {
       'mgsm-ger_federal_states_germany',
       featureLayerName,
       'My Feature title',
+      'EPSG:4326',
+      true,
+      'Sample Abstract'
+    );
+  });
+
+  it('can publish a FeatureType from PostGIS', async () => {
+    // TODO: use env vars
+    const postGisDataStore = 'my-postgis-datastore';
+    const pgHost = 'postgres';
+    const pgPort = 5432;
+    const pgUser = 'postgres';
+    const pgPassword = 'postgres';
+    const pgSchema = 'public';
+    const pgDb = 'demo';
+    const exposePk = true;
+
+    await grc.datastores.createPostgisStore(
+      workSpace, nameSpaceUri, postGisDataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk
+    );
+
+    await grc.layers.publishFeatureType(
+      workSpace,
+      postGisDataStore,
+      'places',
+      'places',
+      'places',
       'EPSG:4326',
       true,
       'Sample Abstract'
@@ -359,7 +398,7 @@ describe('Layer', () => {
 
   it('can get retrieve all layers', async () => {
     const result = await grc.layers.getAll();
-    expect(result.layers.layer.length).to.equal(3);
+    expect(result.layers.layer.length).to.equal(4);
   })
 
   it('can get a layer by name and workspace', async () => {
@@ -384,7 +423,7 @@ describe('Layer', () => {
   })
 
   it('can create Coverage layer', async () => {
-    const geotiff = 'test/sample_data/world.geotiff'
+    const geotiff = 'test/sample_data/world.tif'
     await grc.datastores.createGeotiffFromFile(
       workSpace,
       rasterStoreName,
@@ -395,7 +434,7 @@ describe('Layer', () => {
 
   it('can get layers by workspace', async () => {
     const result = await grc.layers.getLayers(workSpace);
-    expect(result.layers.layer.length).to.equal(3);
+    expect(result.layers.layer.length).to.equal(4);
   });
 
   it('works with non-existing workspaces', async () => {
