@@ -115,10 +115,12 @@ export default class ImageMosaicClient {
    * @param {String} workspace Workspace of image mosaic
    * @param {String} coverageStore CoverageStore of image mosaic
    * @param {String} fileUrl URL of new granule
+   * @param {Boolean} [checkIfSuccessful=true] Check if adding granule was successful. Does not work for the first prototype granule.
    *
    * @throws Error if request fails
    */
-  async addGranuleByRemoteFile(workspace, coverageStore, fileUrl) {
+  async addGranuleByRemoteFile(workspace, coverageStore, fileUrl, checkIfSuccessful) {
+
     const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/remote.imagemosaic';
 
     const response = await fetch(url, {
@@ -136,11 +138,18 @@ export default class ImageMosaicClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
 
-    // GeoServer does not notify us if it could add the provided granule.
-    // Therefore we manually need to check if the granule could be added.
-    const granuleRecognisedByGeoServer = await this.doesGranuleExist(workspace, coverageStore, coverageStore, fileUrl);
-    if (!granuleRecognisedByGeoServer) {
-      throw `GeoServer could not locate provided COG granule URL: ${fileUrl}`
+    // we only avoid to check if the false is set explicitly
+    checkIfSuccessful = checkIfSuccessful === false ? false : true;
+
+    if (checkIfSuccessful) {
+      // GeoServer does not notify us if it could add the provided granule.
+      // Therefore we manually need to check if the granule could be added.
+      // This does not work for the first prototype granule,
+      // because the coverage layer is not created yet
+      const granuleRecognisedByGeoServer = await this.doesGranuleExist(workspace, coverageStore, coverageStore, fileUrl);
+      if (!granuleRecognisedByGeoServer) {
+        throw `GeoServer could not locate provided COG granule URL: ${fileUrl}`
+      }
     }
   }
 

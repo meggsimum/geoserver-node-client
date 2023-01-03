@@ -299,7 +299,8 @@ describe('Layer', () => {
     await grc.imagemosaics.addGranuleByRemoteFile(
       workSpace,
       coverageStore,
-      'http://nginx/cog/20220101T0100Z.tif'
+      'http://nginx/cog/20220101T0100Z.tif',
+      false
     );
 
     await grc.datastores.initCoverageStore(workSpace, coverageStore);
@@ -332,9 +333,10 @@ describe('Layer', () => {
     const wmsCapabilitiesResponse = await fetch('http://localhost:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities');
     const wmsCapabilitiesText = await wmsCapabilitiesResponse.text();
 
-    console.log(wmsCapabilitiesText);
-
-    const timeDimensionRecognised = wmsCapabilitiesText.includes('2022-01-01T01:00:00.000Z,2022-01-01T02:00:00.000Z,2022-01-01T03:00:00.000Z,2022-01-01T04:00:00.000Z');
+    // check if capabilities have entries for the available timestamps
+    const timeDimensionRecognised = wmsCapabilitiesText.includes(
+      '2022-01-01T01:00:00.000Z,2022-01-01T02:00:00.000Z,2022-01-01T03:00:00.000Z,2022-01-01T04:00:00.000Z'
+    );
 
     expect(timeDimensionRecognised).to.be.true;
   });
