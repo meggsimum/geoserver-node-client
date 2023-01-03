@@ -451,7 +451,7 @@ describe('Layer', () => {
 
   it('can get retrieve all layers', async () => {
     const result = await grc.layers.getAll();
-    expect(result.layers.layer.length).to.equal(4);
+    expect(result.layers.layer.length).to.equal(5);
   })
 
   it('can get a layer by name and workspace', async () => {
@@ -487,7 +487,7 @@ describe('Layer', () => {
 
   it('can get layers by workspace', async () => {
     const result = await grc.layers.getLayers(workSpace);
-    expect(result.layers.layer.length).to.equal(4);
+    expect(result.layers.layer.length).to.equal(5);
   });
 
   it('works with non-existing workspaces', async () => {
