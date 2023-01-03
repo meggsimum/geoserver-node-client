@@ -28,72 +28,6 @@ describe('About', () => {
   })
 });
 
-describe('Settings', () => {
-  after(async () => {
-    await grc.settings.updateSettings({
-      global: {
-        settings: {
-          verbose: true
-        }
-      }
-    });
-    await grc.settings.updateProxyBaseUrl('');
-  });
-
-  it('returns settings object', async () => {
-    const settings = await grc.settings.getSettings();
-    expect(settings).to.not.be.false;
-    expect(settings.global.settings.charset).to.not.be.false;
-  })
-
-  it('updates settings object', async () => {
-    const settingsJson = {
-      global: {
-        settings: {
-          verbose: false
-        }
-      }
-    };
-    await grc.settings.updateSettings(settingsJson);
-
-    const settings = await grc.settings.getSettings();
-    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
-  })
-
-  it('updates proxyBaseUrl', async () => {
-    const url = 'http://foobar.de/geoserver';
-    await grc.settings.updateProxyBaseUrl(url);
-
-    const settings = await grc.settings.getSettings();
-    expect(settings.global.settings.proxyBaseUrl).to.equal(url);
-  })
-
-  it('returns contact information', async () => {
-    const contactInfo = await grc.settings.getContactInformation();
-    expect(contactInfo).to.not.be.false;
-  })
-
-  it('can update contact information', async () => {
-    const address = 'Unter den Linden';
-    const city = 'Berlin';
-    const country = 'Deutschland';
-    const postalCode = 123445;
-    const state = 'Berlin';
-    const email = 'example email address';
-    const organization = 'A organization';
-    const contactPerson = 'My contact persion';
-    const phoneNumber = 1231234234123;
-
-    await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
-
-    const contactResponse = await grc.settings.getContactInformation();
-
-    // test two sample values
-    expect(address).to.equal(contactResponse.contact.address);
-    expect(state).to.equal(contactResponse.contact.addressState);
-  })
-});
-
 describe('Workspace', () => {
   it('has no workspace', async () => {
     const gsWorkspaces = await grc.workspaces.getAll();
@@ -704,5 +638,73 @@ describe('Reset/Reload', () => {
       assume++;
     }
     expect(assume).to.equal(0);
+  })
+});
+
+// Settings is executed last, because it caused an error when
+// it was executed before the COG mosaic layer
+describe('Settings', () => {
+  after(async () => {
+    await grc.settings.updateSettings({
+      global: {
+        settings: {
+          verbose: true
+        }
+      }
+    });
+    await grc.settings.updateProxyBaseUrl('');
+  });
+
+  it('returns settings object', async () => {
+    const settings = await grc.settings.getSettings();
+    expect(settings).to.not.be.false;
+    expect(settings.global.settings.charset).to.not.be.false;
+  })
+
+  it('updates settings object', async () => {
+    const settingsJson = {
+      global: {
+        settings: {
+          verbose: false
+        }
+      }
+    };
+    await grc.settings.updateSettings(settingsJson);
+
+    const settings = await grc.settings.getSettings();
+    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
+  })
+
+  it('updates proxyBaseUrl', async () => {
+    const url = 'http://foobar.de/geoserver';
+    await grc.settings.updateProxyBaseUrl(url);
+
+    const settings = await grc.settings.getSettings();
+    expect(settings.global.settings.proxyBaseUrl).to.equal(url);
+  })
+
+  it('returns contact information', async () => {
+    const contactInfo = await grc.settings.getContactInformation();
+    expect(contactInfo).to.not.be.false;
+  })
+
+  it('can update contact information', async () => {
+    const address = 'Unter den Linden';
+    const city = 'Berlin';
+    const country = 'Deutschland';
+    const postalCode = 123445;
+    const state = 'Berlin';
+    const email = 'example email address';
+    const organization = 'A organization';
+    const contactPerson = 'My contact persion';
+    const phoneNumber = 1231234234123;
+
+    await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
+
+    const contactResponse = await grc.settings.getContactInformation();
+
+    // test two sample values
+    expect(address).to.equal(contactResponse.contact.address);
+    expect(state).to.equal(contactResponse.contact.addressState);
   })
 });
