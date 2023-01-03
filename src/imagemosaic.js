@@ -110,6 +110,41 @@ export default class ImageMosaicClient {
   }
 
   /**
+   * Adds a granule (defined by a URL) to an image mosaic.
+   *
+   * @param {String} workspace Workspace of image mosaic
+   * @param {String} coverageStore CoverageStore of image mosaic
+   * @param {String} fileUrl URL of new granule
+   *
+   * @throws Error if request fails
+   */
+  async addGranuleByRemoteFile(workspace, coverageStore, fileUrl) {
+    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/remote.imagemosaic';
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-type': 'text/plain'
+      },
+      body: fileUrl
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+
+    // GeoServer does not notify us if it could add the provided granule.
+    // Therefore we manually need to check if the granule could be added.
+    const granuleRecognisedByGeoServer = await this.doesGranuleExist(workspace, coverageStore, coverageStore, fileUrl);
+    if (!granuleRecognisedByGeoServer) {
+      throw `GeoServer could not locate provided COG granule URL: ${fileUrl}`
+    }
+  }
+
+  /**
    * Deletes a single granule of an image mosaic.
    *
    * @param {String} workspace Workspace of image mosaic
@@ -138,5 +173,20 @@ export default class ImageMosaicClient {
     }
 
     return true;
+  }
+
+  /**
+   * Checks if a granule exists in an image mosaic store.
+   *
+   * @param {String} workspace Workspace of image mosaic
+   * @param {String} coverageStore CoverageStore of image mosaic
+   * @param {String} coverage Name of image mosaic
+   * @param {String} granuleToCheck The path or the URL of the granule to check
+   *
+   * @returns {Promise<boolean>} If granule already exist in store
+   */
+  async doesGranuleExist(workspace, coverageStore, coverage, granuleToCheck) {
+    const granules = await this.getGranules(workspace, coverageStore, coverage);
+    return granules.features.some(feature => feature.properties.location === granuleToCheck);
   }
 }
