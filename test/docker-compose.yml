@@ -3,8 +3,11 @@ version: '3'
 services:
 
   geoserver:
-    # TODO: version
-    build: ./geoserver
+    build:
+       context: ./geoserver
+       args:
+        - GEOSERVER_VERSION=${GEOSERVER_VERSION}
+        - GEOSERVER_COMMUNITY_VERSION=${GEOSERVER_COMMUNITY_VERSION}
     restart: unless-stopped
     ports:
       - 8080:8080
