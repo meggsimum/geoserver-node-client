@@ -176,6 +176,42 @@ export default class DatastoreClient {
   }
 
   /**
+   * Initializes a coverage store by requesting its granules.
+   *
+   * This approach is taken from these tutorials:
+   *   - https://docs.geoserver.org/latest/en/user/community/cog/mosaic.html#imagemosaic-rest-operations
+   *   - https://docs.geoserver.geo-solutions.it/edu/en/multidim/rest/index.html#configuring-an-empty-mosaic
+   *
+   * @param {String} workspace The name of the workspace
+   * @param {String} storeName The name of the store
+   *
+   * @throws Error if request fails
+   */
+  async initCoverageStore (workspace, storeName,){
+    const storeType = 'coveragestores';
+    const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '/' + 'coverages.xml?list=all';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist,  we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+  }
+
+  /**
    * Creates a GeoTIFF store from a file by path and publishes it as layer.
    * The GeoTIFF file has to be placed on the server, where your GeoServer
    * is running.
@@ -314,17 +350,22 @@ export default class DatastoreClient {
    * placed on the server, where your GeoServer is running.
    *
    * @param {String} workspace The WS to create the data store in
-   * @param {String} dataStore The data store name
+   * @param {String} coverageStore The data store name
    * @param {String} zipArchivePath Absolute path to zip archive with the 3 properties files
+   * @param {Boolean} [configure=true] If a coverage/layer is configured upon file upload
    *
    * @throws Error if request fails
    *
    * @returns {String} The response text
    */
-  async createImageMosaicStore (workspace, coverageStore, zipArchivePath) {
+  async createImageMosaicStore (workspace, coverageStore, zipArchivePath, configure) {
     const readStream = fs.createReadStream(zipArchivePath);
 
-    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+    let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.imagemosaic';
+    if (configure === false) {
+      url = url + '?configure=none';
+    }
+
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',

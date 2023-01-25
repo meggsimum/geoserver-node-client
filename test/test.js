@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { GeoServerRestClient } from '../geoserver-rest-client.js';
+import fetch from 'node-fetch';
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';
@@ -24,72 +25,6 @@ describe('About', () => {
   it('returns correct version', async () => {
     const result = await grc.about.getVersion();
     expect(result.about.resource[0].Version).to.equal(geoServerVersion);
-  })
-});
-
-describe('Settings', () => {
-  after(async () => {
-    await grc.settings.updateSettings({
-      global: {
-        settings: {
-          verbose: true
-        }
-      }
-    });
-    await grc.settings.updateProxyBaseUrl('');
-  });
-
-  it('returns settings object', async () => {
-    const settings = await grc.settings.getSettings();
-    expect(settings).to.not.be.false;
-    expect(settings.global.settings.charset).to.not.be.false;
-  })
-
-  it('updates settings object', async () => {
-    const settingsJson = {
-      global: {
-        settings: {
-          verbose: false
-        }
-      }
-    };
-    await grc.settings.updateSettings(settingsJson);
-
-    const settings = await grc.settings.getSettings();
-    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
-  })
-
-  it('updates proxyBaseUrl', async () => {
-    const url = 'http://foobar.de/geoserver';
-    await grc.settings.updateProxyBaseUrl(url);
-
-    const settings = await grc.settings.getSettings();
-    expect(settings.global.settings.proxyBaseUrl).to.equal(url);
-  })
-
-  it('returns contact information', async () => {
-    const contactInfo = await grc.settings.getContactInformation();
-    expect(contactInfo).to.not.be.false;
-  })
-
-  it('can update contact information', async () => {
-    const address = 'Unter den Linden';
-    const city = 'Berlin';
-    const country = 'Deutschland';
-    const postalCode = 123445;
-    const state = 'Berlin';
-    const email = 'example email address';
-    const organization = 'A organization';
-    const contactPerson = 'My contact persion';
-    const phoneNumber = 1231234234123;
-
-    await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
-
-    const contactResponse = await grc.settings.getContactInformation();
-
-    // test two sample values
-    expect(address).to.equal(contactResponse.contact.address);
-    expect(state).to.equal(contactResponse.contact.addressState);
   })
 });
 
@@ -290,6 +225,58 @@ describe('Layer', () => {
     createdWorkSpace = await grc.workspaces.create(workSpace);
   });
 
+  it('can create a COG based mosaic layer with time dimension', async () => {
+    const coverageStore = 'cog_mosaic';
+    const zipArchivePath = 'test/sample_data/image-mosaic-conf/image-mosaic-conf.zip';
+    const configure = false;
+
+    await grc.datastores.createImageMosaicStore(workSpace, coverageStore, zipArchivePath, configure);
+
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0100Z.tif',
+      false
+    );
+
+    await grc.datastores.initCoverageStore(workSpace, coverageStore);
+
+    const presentation = 'LIST';
+    const resolution = 3600000;
+    const defaultValue = 'MAXIMUM';
+    const nearestMatchEnabled = true;
+    const rawNearestMatchEnabled = false;
+    const acceptableInterval = 'PT1H';
+
+    await grc.layers.enableTimeCoverageForCogLayer(workSpace, coverageStore, coverageStore, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval);
+
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0200Z.tif'
+    );
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0300Z.tif'
+    );
+    await grc.imagemosaics.addGranuleByRemoteFile(
+      workSpace,
+      coverageStore,
+      'http://nginx/cog/20220101T0400Z.tif'
+    );
+
+    const wmsCapabilitiesResponse = await fetch('http://localhost:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities');
+    const wmsCapabilitiesText = await wmsCapabilitiesResponse.text();
+
+    // check if capabilities have entries for the available timestamps
+    const timeDimensionRecognised = wmsCapabilitiesText.includes(
+      '2022-01-01T01:00:00.000Z,2022-01-01T02:00:00.000Z,2022-01-01T03:00:00.000Z,2022-01-01T04:00:00.000Z'
+    );
+
+    expect(timeDimensionRecognised).to.be.true;
+  });
+
   it('can publish a FeatureType from a WFS', async () => {
     const wfsCapsUrl = 'https://services.meggsimum.de/geoserver/ows?service=wfs&version=1.1.0&request=GetCapabilities';
     const namespaceUrl = 'http://test';
@@ -406,7 +393,7 @@ describe('Layer', () => {
 
   it('can get retrieve all layers', async () => {
     const result = await grc.layers.getAll();
-    expect(result.layers.layer.length).to.equal(4);
+    expect(result.layers.layer.length).to.equal(5);
   })
 
   it('can get a layer by name and workspace', async () => {
@@ -442,7 +429,7 @@ describe('Layer', () => {
 
   it('can get layers by workspace', async () => {
     const result = await grc.layers.getLayers(workSpace);
-    expect(result.layers.layer.length).to.equal(4);
+    expect(result.layers.layer.length).to.equal(5);
   });
 
   it('works with non-existing workspaces', async () => {
@@ -659,5 +646,73 @@ describe('Reset/Reload', () => {
       assume++;
     }
     expect(assume).to.equal(0);
+  })
+});
+
+// Settings is executed last, because it caused an error when
+// it was executed before the COG mosaic layer
+describe('Settings', () => {
+  after(async () => {
+    await grc.settings.updateSettings({
+      global: {
+        settings: {
+          verbose: true
+        }
+      }
+    });
+    await grc.settings.updateProxyBaseUrl('');
+  });
+
+  it('returns settings object', async () => {
+    const settings = await grc.settings.getSettings();
+    expect(settings).to.not.be.false;
+    expect(settings.global.settings.charset).to.not.be.false;
+  })
+
+  it('updates settings object', async () => {
+    const settingsJson = {
+      global: {
+        settings: {
+          verbose: false
+        }
+      }
+    };
+    await grc.settings.updateSettings(settingsJson);
+
+    const settings = await grc.settings.getSettings();
+    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
+  })
+
+  it('updates proxyBaseUrl', async () => {
+    const url = 'http://foobar.de/geoserver';
+    await grc.settings.updateProxyBaseUrl(url);
+
+    const settings = await grc.settings.getSettings();
+    expect(settings.global.settings.proxyBaseUrl).to.equal(url);
+  })
+
+  it('returns contact information', async () => {
+    const contactInfo = await grc.settings.getContactInformation();
+    expect(contactInfo).to.not.be.false;
+  })
+
+  it('can update contact information', async () => {
+    const address = 'Unter den Linden';
+    const city = 'Berlin';
+    const country = 'Deutschland';
+    const postalCode = 123445;
+    const state = 'Berlin';
+    const email = 'example email address';
+    const organization = 'A organization';
+    const contactPerson = 'My contact persion';
+    const phoneNumber = 1231234234123;
+
+    await grc.settings.updateContactInformation(address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber);
+
+    const contactResponse = await grc.settings.getContactInformation();
+
+    // test two sample values
+    expect(address).to.equal(contactResponse.contact.address);
+    expect(state).to.equal(contactResponse.contact.addressState);
   })
 });
