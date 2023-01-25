@@ -172,8 +172,7 @@ describe('Datastore', () => {
   });
 
   it('can create a PostGIS store', async () => {
-    // TODO: read params from env (?)
-    const dataStore = 'jm-postgis';
+    const dataStore = 'my-postgis-datastore';
     const pgHost = 'postgres';
     const pgPort = 5432;
     const pgUser = 'postgres';
@@ -311,7 +310,6 @@ describe('Layer', () => {
   });
 
   it('can publish a FeatureType from PostGIS', async () => {
-    // TODO: use env vars
     const postGisDataStore = 'my-postgis-datastore';
     const pgHost = 'postgres';
     const pgPort = 5432;
