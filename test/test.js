@@ -184,6 +184,9 @@ describe('Datastore', () => {
     await grc.datastores.createPostgisStore(
       workSpace, nameSpaceUri, dataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk
     );
+
+    const result = await grc.datastores.getDataStore(workSpace, dataStore)
+    expect(result.dataStore.name).equals(dataStore)
   });
 
   it('can create a coverage store', async () => {
