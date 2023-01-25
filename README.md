@@ -107,7 +107,7 @@ A request either succeeds or throws the custom `GeoServerResponseError`. It has 
 
 ### Unit Tests
 
-First start a GeoServer, e.g. by using this Docker container:
+First start a test setup using this Docker compose file:
 
 ```shell
 docker-compose -f test/docker-compose.yml up
