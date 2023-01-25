@@ -107,12 +107,10 @@ A request either succeeds or throws the custom `GeoServerResponseError`. It has 
 
 ### Unit Tests
 
-First start a GeoServer, e.g. by using this Docker container:
+First start a test setup using this Docker compose file:
 
 ```shell
-docker run \
-  -p 8080:8080 \
-  meggsimum/geoserver:2.20.4
+docker-compose -f test/docker-compose.yml up
 ```
 
 Then, in an other terminal, run:
