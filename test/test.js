@@ -325,16 +325,20 @@ describe('Layer', () => {
       workSpace, nameSpaceUri, postGisDataStore, pgHost, pgPort, pgUser, pgPassword, pgSchema, pgDb, exposePk
     );
 
+    const layerName = 'places';
     await grc.layers.publishFeatureType(
       workSpace,
       postGisDataStore,
-      'places',
-      'places',
-      'places',
+      layerName,
+      layerName,
+      layerName,
       'EPSG:4326',
       true,
       'Sample Abstract'
     );
+
+    const result = await grc.layers.getFeatureType(workSpace, postGisDataStore, layerName);
+    expect(result.featureType.name).equals(layerName);
   });
 
   it('can read information of a FeatureType', async () => {
@@ -362,6 +366,9 @@ describe('Layer', () => {
       'Sample Abstract native BBOX',
       nativeBoundingBox
     );
+
+    const result = await grc.layers.getFeatureType(workSpace, wfsDataStore, ftName);
+    expect(result.featureType.name).equals(ftName);
   });
 
   it('can publish a WMS layer', async () => {
