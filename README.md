@@ -4,35 +4,35 @@
 [![Website](https://img.shields.io/website?up_message=API-Docs&url=https%3A%2F%2Fmeggsimum.github.io%2Fgeoserver-node-client%2F)](https://meggsimum.github.io/geoserver-node-client)
 ![GitHub Release Date](https://img.shields.io/github/release-date/meggsimum/geoserver-node-client)
 ![GitHub last commit](https://img.shields.io/github/last-commit/meggsimum/geoserver-node-client)
-![](https://github.com/meggsimum/geoserver-node-client/actions/workflows/ci-geoserver-node-client.yml/badge.svg)
+![CI Badge](https://github.com/meggsimum/geoserver-node-client/actions/workflows/ci-geoserver-node-client.yml/badge.svg)
 
 ![GeoSever Node Client Logo](/img/geoserver-node-client-logo_150px.png)
 
 Node.js / JavaScript Client for the [GeoServer REST API](https://docs.geoserver.org/stable/en/user/rest/).
 
-### API-Docs ###
+## API-Docs
 
 Detailed [API-Docs](https://meggsimum.github.io/geoserver-node-client/) are automatically created with JSDoc.
 
-### Meta information
+## Meta information
 
 Compatible with [GeoServer](https://geoserver.org)
 
-  - v2.22.x
-  - v2.21.x
-  - v2.20.x (no more maintained and officially deprecated)
-  - v2.19.x (no more maintained and officially deprecated)
-  - v2.18.x (no more maintained and officially deprecated)
-  - v2.17.x (no more maintained and officially deprecated)
+- v2.22.x
+- v2.21.x
+- v2.20.x (no more maintained and officially deprecated)
+- v2.19.x (no more maintained and officially deprecated)
+- v2.18.x (no more maintained and officially deprecated)
+- v2.17.x (no more maintained and officially deprecated)
 
-
-### Usage
+## Usage
 
 ```shell
 npm i geoserver-node-client
 ```
 
 usage with require (ES5):
+
 ```js
 var grcImport = require('geoserver-node-client');
 var GeoServerRestClient = grcImport.GeoServerRestClient;
@@ -52,6 +52,7 @@ main();
 ```
 
 usage as ES module (ES6)
+
 ```js
 import {GeoServerRestClient} from 'geoserver-node-client';
 
@@ -68,7 +69,7 @@ async function main () {
 main();
 ```
 
-### Setup
+## Setup
 
 Run as local checkout (mainly for development purposes)
 
@@ -82,7 +83,7 @@ npm install
 npm run demo
 ```
 
-### Error Handling
+## Error Handling
 
 A request either succeeds or throws the custom `GeoServerResponseError`. It has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exist and can either be a simple text or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used. It also shows how to filter by error type:
 
@@ -105,7 +106,7 @@ A request either succeeds or throws the custom `GeoServerResponseError`. It has 
     }
 ```
 
-### Unit Tests
+## Unit Tests
 
 First start a test setup using this Docker compose file:
 
@@ -120,7 +121,7 @@ Then, in an other terminal, run:
 GEOSERVER_VERSION=2.20.4 npm run test
 ```
 
-### Release
+## Release
 
 Setting a git tag and increasing the version in the `package.json` as well as releasing to npm is done via [release-it](https://github.com/release-it/release-it).
 
@@ -152,11 +153,11 @@ npm run release
   - makes a release commit and pushes it to GitHub
   - publishes the new version to npm
 
-### Who do I talk to? ###
+## Who do I talk to?
 
-* meggsimum (Christian Mayer) - info __at## meggsimum ~~dot** de
+- meggsimum (Christian Mayer) - info __at## meggsimum ~~dot** de
 
-### Credits
+## Credits
 
 This project was initiated by [meggsimum](https://meggsimum.de) within the [mFund](https://www.bmvi.de/EN/Topics/Digital-Matters/mFund/mFund.html) research project [SAUBER](https://sauber-projekt.de/) and is further developed in the mFund research project [KLIPS](http://www.klips-projekt.de/):
 <p><img src="https://sauber-projekt.de/wp-content/uploads/2018/12/SAG_SAUBER_Logo_Dez3_transparent-1-e1543843688935.png" alt="SAUBER Logo" width="200"/></p>.
