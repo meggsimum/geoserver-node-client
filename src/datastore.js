@@ -65,7 +65,6 @@ export default class DatastoreClient {
   }
 
   /**
-   * @private
    * Get information about various store types in a workspace.
    *
    * @param {String} workspace The workspace name
@@ -74,6 +73,7 @@ export default class DatastoreClient {
    * @throws Error if request fails
    *
    * @returns {Object} An object containing store details or undefined if it cannot be found
+   * @private
    */
   async getStores (workspace, storeType) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/' + storeType + '.json', {
@@ -140,7 +140,6 @@ export default class DatastoreClient {
   }
 
   /**
-   * @private
    * Get GeoServer store by type
    *
    * @param {String} workspace The name of the workspace
@@ -150,6 +149,7 @@ export default class DatastoreClient {
    * @throws Error if request fails
    *
    * @returns {Object} An object containing store details or undefined if it cannot be found
+   * @private
    */
   async getStore (workspace, storeName, storeType) {
     const url = this.url + 'workspaces/' + workspace + '/' + storeType + '/' + storeName + '.json';
