@@ -138,7 +138,7 @@ export default class ImageMosaicClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
 
-    // we only avoid to check if the false is set explicitly
+    // we only avoid to check if false is set explicitly
     checkIfSuccessful = checkIfSuccessful === false ? false : true;
 
     if (checkIfSuccessful) {
