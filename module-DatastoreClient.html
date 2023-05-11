@@ -486,6 +486,294 @@ is running.
     
 
     
+    <h4 class="name" id="createGeotiffFromStream"><span class="type-signature">(async) </span>createGeotiffFromStream<span class="signature">(workspace, coverageStore, layerName, layerTitle, readStream, fileSizeInBytes)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates a GeoTIFF store from a file by stream and publishes it as layer.
+The GeoTIFF file has to be placed on the server, where your GeoServer
+is running.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workspace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The workspace to create GeoTIFF store in</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>coverageStore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the new GeoTIFF store</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>layerName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The published name of the new layer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>layerTitle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The published title of the new layer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>readStream</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Stream</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The stream of the GeoTIFF file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileSizeInBytes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The number of bytes of the stream</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line217">line 217</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The successful response text
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="createGpkgStore"><span class="type-signature">(async) </span>createGpkgStore<span class="signature">(workspace, dataStore, gpkgPath)</span><span class="type-signature"></span></h4>
     
 
@@ -633,7 +921,7 @@ is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line540">line 540</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line561">line 561</a>
     </li></ul></dd>
     
 
@@ -834,7 +1122,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line324">line 324</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line345">line 345</a>
     </li></ul></dd>
     
 
@@ -1296,7 +1584,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line237">line 237</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line258">line 258</a>
     </li></ul></dd>
     
 
@@ -1605,7 +1893,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line427">line 427</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line448">line 448</a>
     </li></ul></dd>
     
 
@@ -1800,7 +2088,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line355">line 355</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line376">line 376</a>
     </li></ul></dd>
     
 
@@ -1995,7 +2283,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line390">line 390</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line411">line 411</a>
     </li></ul></dd>
     
 
@@ -2190,7 +2478,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line506">line 506</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line527">line 527</a>
     </li></ul></dd>
     
 
@@ -2385,7 +2673,7 @@ placed on the server, where your GeoServer is running.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line477">line 477</a>
+        <a href="src_datastore.js.html">src/datastore.js</a>, <a href="src_datastore.js.html#line498">line 498</a>
     </li></ul></dd>
     
 
@@ -3813,7 +4101,7 @@ placed on the server, where your GeoServer is running.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Apr 21 2023 09:11:53 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Thu May 11 2023 08:52:26 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
