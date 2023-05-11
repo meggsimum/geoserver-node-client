@@ -191,7 +191,6 @@ export default class DatastoreClient {
    * @returns {String} The successful response text
    */
   async createGeotiffFromFile (workspace, coverageStore, layerName, layerTitle, filePath) {
-    const lyrTitle = layerTitle || layerName;
     const stats = fs.statSync(filePath);
     const fileSizeInBytes = stats.size;
     const readStream = fs.createReadStream(filePath);
@@ -200,7 +199,7 @@ export default class DatastoreClient {
   }
   
     /**
-   * Creates a GeoTIFF store from a file by path and publishes it as layer.
+   * Creates a GeoTIFF store from a file by stream and publishes it as layer.
    * The GeoTIFF file has to be placed on the server, where your GeoServer
    * is running.
    *
