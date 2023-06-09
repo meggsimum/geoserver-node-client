@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GEOSERVER_VERSION: 2.21.2
+      GEOSERVER_COMMUNITY_VERSION: 2.21
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -24,7 +25,7 @@ jobs:
       # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
-      - run: docker-compose -f test/docker-compose.yml up -d
+      - run: docker-compose -f test/docker-compose.yml up -d --build
 
       # finishes when tomcat of GeoServer is running
       - run: wait-for-it "localhost:8080"
@@ -39,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GEOSERVER_VERSION: 2.22.0
+      GEOSERVER_COMMUNITY_VERSION: 2.22
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -52,7 +54,7 @@ jobs:
       # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
-      - run: docker-compose -f test/docker-compose.yml up -d
+      - run: docker-compose -f test/docker-compose.yml up -d --build
 
       # finishes when tomcat of GeoServer is running
       - run: wait-for-it "localhost:8080"

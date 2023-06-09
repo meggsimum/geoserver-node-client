@@ -3,12 +3,16 @@ version: '3'
 services:
 
   geoserver:
-    image: meggsimum/geoserver:${GEOSERVER_VERSION}
+    build:
+       context: ./geoserver
+       args:
+        - GEOSERVER_VERSION=${GEOSERVER_VERSION}
+        - GEOSERVER_COMMUNITY_VERSION=${GEOSERVER_COMMUNITY_VERSION}
     restart: unless-stopped
     ports:
-     - 8080:8080
+      - 8080:8080
     environment:
-      - USE_CORS=1
+      - SKIP_DEMO_DATA=true
 
   postgres:
     image: postgis/postgis:${POSTGRES_VERSION}-${POSTGIS_VERSION}
@@ -21,3 +25,11 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./sample_data:/usr/share/nginx/html:ro

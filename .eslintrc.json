@@ -16,5 +16,6 @@
     },
     "rules": {
       "semi": "off"
-    }
+    },
+    "ignorePatterns": ["test/sample_data"]
 }
