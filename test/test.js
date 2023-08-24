@@ -165,10 +165,8 @@ describe('Namespace', () => {
 });
 
 describe('Datastore', () => {
-  let createdWorkSpace;
-
   before('create workspace', async () => {
-    createdWorkSpace = await grc.workspaces.create(workSpace);
+    await grc.workspaces.create(workSpace);
   });
 
   it('can create a PostGIS store', async () => {
@@ -272,12 +270,13 @@ describe('Datastore', () => {
 
   after('delete Workspace', async () => {
     const recursive = true;
-    await grc.workspaces.delete(createdWorkSpace, recursive);
+    const wsResp = await grc.workspaces.get(workSpace);
+    const wsName = wsResp.workspace.name;
+    await grc.workspaces.delete(wsName, recursive);
   });
 });
 
 describe('Layer', () => {
-  let createdWorkSpace;
   const wmsDataStore = 'my-wms-datastore';
   const wmsLayerName = 'my-wms-layer-name';
   const wmsNativeName = 'mgsm-ger:postal_codes_germany';
@@ -287,7 +286,7 @@ describe('Layer', () => {
   const rasterLayerName = 'my-raster-name';
 
   before('create workspace', async () => {
-    createdWorkSpace = await grc.workspaces.create(workSpace);
+    await grc.workspaces.create(workSpace);
   });
 
   it('can publish a FeatureType from a WFS', async () => {
@@ -480,18 +479,19 @@ describe('Layer', () => {
 
   after('delete Workspace', async () => {
     const recursive = true;
-    await grc.workspaces.delete(createdWorkSpace, recursive);
+    const wsResp = await grc.workspaces.get(workSpace);
+    const wsName = wsResp.workspace.name;
+    await grc.workspaces.delete(wsName, recursive);
   });
 });
 
 describe('Style', () => {
-  let createdWorkSpace;
   const styleName = 'my-style-name';
   const featureLayerName = 'my-feature-layer-name'
   const wfsDataStore = 'my-wfs-datastore';
 
   before('create workspace', async () => {
-    createdWorkSpace = await grc.workspaces.create(workSpace);
+    await grc.workspaces.create(workSpace);
   });
 
   it('can get default styles', async () => {
@@ -607,18 +607,18 @@ describe('Style', () => {
 
   after('delete Workspace', async () => {
     const recursive = true;
-    await grc.workspaces.delete(createdWorkSpace, recursive);
+    const wsResp = await grc.workspaces.get(workSpace);
+    const wsName = wsResp.workspace.name;
+    await grc.workspaces.delete(wsName, recursive);
   });
 });
 
 describe('Security', () => {
-  let createdWorkSpace;
-
   const dummyUser = 'dummyUser';
   const dummyPassword = 'dummyPassword';
 
   before('create workspace', async () => {
-    createdWorkSpace = await grc.workspaces.create(workSpace);
+    await grc.workspaces.create(workSpace);
   });
 
   it('can create a user', async () => {
@@ -636,7 +636,9 @@ describe('Security', () => {
 
   after(async () => {
     const recursive = true;
-    await grc.workspaces.delete(createdWorkSpace, recursive);
+    const wsResp = await grc.workspaces.get(workSpace);
+    const wsName = wsResp.workspace.name;
+    await grc.workspaces.delete(wsName, recursive);
   });
 });
 
