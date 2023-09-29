@@ -3,12 +3,13 @@ version: '3'
 services:
 
   geoserver:
-    image: meggsimum/geoserver:${GEOSERVER_VERSION}
+    image: docker.osgeo.org/geoserver:${GEOSERVER_VERSION}
     restart: unless-stopped
     ports:
      - 8080:8080
     environment:
-      - USE_CORS=1
+      - CORS_ENABLED=1
+      - SKIP_DEMO_DATA=true
 
   postgres:
     image: postgis/postgis:${POSTGRES_VERSION}-${POSTGIS_VERSION}
