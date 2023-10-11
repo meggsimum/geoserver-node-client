@@ -100,7 +100,8 @@ describe('Workspace', () => {
   });
 
   it('creates one workspace', async () => {
-    await grc.workspaces.create(workSpace);
+    const wsName = await grc.workspaces.create(workSpace);
+    expect(wsName).to.equal(workSpace, 'incorrect WS name returned by "create"');
   });
 
   it('has one workspace', async () => {
