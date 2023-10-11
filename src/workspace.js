@@ -86,7 +86,7 @@ export default class WorkspaceClient {
   async create (name) {
     const body = {
       workspace: {
-        name: name
+        name
       }
     };
 
@@ -109,8 +109,9 @@ export default class WorkspaceClient {
           throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-
-    return response.text();
+    // query the WS object again to return the name of the created WS
+    const wsObject = await this.get(name);
+    return wsObject.workspace.name;
   }
 
   /**
