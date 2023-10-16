@@ -1,0 +1,14 @@
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "npm" # see documentation for possible values
+    directory: "/" # location of package.json
+    schedule:
+      interval: "weekly"
+      # check for npm updates on Wednesdays
+      day: "wednesday"
+      time: "04:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
