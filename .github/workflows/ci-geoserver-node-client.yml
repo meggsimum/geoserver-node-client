@@ -15,7 +15,12 @@ jobs:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      - uses: actions/checkout@v2
+      # use Node.js 16 instead of deprecated v12 in Ubuntu image
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - uses: actions/checkout@v4
 
       # In this step, this action saves a list of existing images,
       # the cache is created without them in the post run.
@@ -43,7 +48,12 @@ jobs:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      - uses: actions/checkout@v2
+      # use Node.js 16 instead of deprecated v12 in Ubuntu image
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - uses: actions/checkout@v4
 
       # In this step, this action saves a list of existing images,
       # the cache is created without them in the post run.
