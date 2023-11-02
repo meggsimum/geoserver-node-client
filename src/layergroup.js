@@ -28,7 +28,7 @@ export default class LayerGroupClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} An object with layer information or undefined if it cannot be found
+   * @returns {Object} An object with layer group information or undefined if it cannot be found
    */
   async get (workspace, layerGroupName) {
     const response = await fetch(
