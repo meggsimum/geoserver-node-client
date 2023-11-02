@@ -55,15 +55,15 @@ export default class LayerGroupClient {
   }
 
   /**
-   * Modifies an existing GeoServer layergroup
+   * Updates an existing GeoServer layergroup
    *
    * @param {String} workspace The name of the workspace
-   * @param {String} layerName The name of the layergroup to modify
-   * @param {Object} layerGroupDefinition The modified definiton of the layergroup
+   * @param {String} layerName The name of the layergroup to update
+   * @param {Object} layerGroupDefinition The updated definiton of the layergroup
    *
    * @throws Error if request fails
    */
-  async modify (workspace, layerGroupName, layerGroupDefinition) {
+  async update (workspace, layerGroupName, layerGroupDefinition) {
     const url = `${this.url}/workspaces/${workspace}/layergroups/${layerGroupName}.json`;
     const response = await fetch(url, {
       credentials: 'include',
