@@ -10,7 +10,7 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.23.2
+      GEOSERVER_VERSION: 2.23.3
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
