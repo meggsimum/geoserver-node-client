@@ -5,7 +5,7 @@ import AboutClient from './about.js'
 /**
  * Client for GeoServer layergroups
  *
- * @module LayerClient
+ * @module LayerGroupClient
  */
 export default class LayerGroupClient {
   /**
