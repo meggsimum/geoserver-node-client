@@ -24,7 +24,7 @@ export default class LayerGroupClient {
    * e.g. "myWs:myLayergroup".
    *
    * @param {String} workspace The name of the workspace
-   * @param {String} layerGroupName The name of the layer to query
+   * @param {String} layerGroupName The name of the layer group to query
    *
    * @throws Error if request fails
    *
