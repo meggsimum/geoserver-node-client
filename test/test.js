@@ -664,3 +664,60 @@ describe('Reset/Reload', () => {
     expect(assume).to.equal(0);
   })
 });
+
+describe('Layergroups', () => {
+  const rasterStoreName = 'my-rasterstore';
+  const rasterLayerName = 'my-raster-name';
+  const layerGroupName = 'testLayerGroup';
+  const layerGroupName2 = 'testLayerGroup2';
+
+  before('create workspace', async () => {
+    await grc.workspaces.create(workSpace);
+    const geotiff = 'test/sample_data/world.tif'
+    await grc.datastores.createGeotiffFromFile(
+      workSpace,
+      rasterStoreName,
+      rasterLayerName,
+      'My Raster Title',
+      geotiff);
+  })
+
+  it('can create a layergroup', async () => {
+    const layergroup = await grc.layergroups.create(workSpace, layerGroupName, [rasterLayerName]);
+    expect(layergroup).to.equal(`${url}layergroups/${layerGroupName}`);
+  })
+
+  it('can get a layergroup by name and workspace negative test', async () => {
+    const nonExistentLayerGroup = 'non-existent-layer-group';
+    const nonExistentResult = await grc.layergroups.get(workSpace, nonExistentLayerGroup);
+    expect(nonExistentResult).to.be.undefined;
+  })
+
+  it('can get a layergroup by name and workspace positive test', async () => {
+    const existentResult = await grc.layergroups.get(workSpace, layerGroupName);
+    expect(existentResult).not.to.be.undefined;
+  })
+
+  it('can create a layergroup with custom options', async () => {
+    const options = {
+      bounds: {
+        minx: -20037508.34,
+        maxx: -20048966.1,
+        miny: 20037508.34,
+        maxy: 20048966.1,
+        crs: 'EPSG:3857'
+      }
+    }
+    await grc.layergroups.create(workSpace, layerGroupName2, [rasterLayerName], options);
+    // get options of layergroup
+    const layergroup = await grc.layergroups.get(workSpace, layerGroupName2);
+    expect(layergroup.layerGroup.bounds.minx).to.equal(options.bounds.minx);
+  })
+
+  after('clean workspace', async () => {
+    const recursive = true;
+    const wsResp = await grc.workspaces.get(workSpace);
+    const wsName = wsResp.workspace.name;
+    await grc.workspaces.delete(wsName, recursive);
+  })
+})
