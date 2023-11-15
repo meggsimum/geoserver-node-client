@@ -33,7 +33,6 @@ export default class LayerGroupClient {
    * Create a GeoServer layergroup by the given workspace, layerGroupName, layers and options
    * @param {String} workspace The name of the workspace
    * @param {String} layerGroupName The name of the layer group
-   * @param {String} layerGroupTitle The title of the layer group
    * @param {Array.<String>} layers List of layers to be added to the group. Must be in same workspace as layergroup
    * @param {String} options.mode The mode of the layergroup. Default to SINGLE
    * @param {String} options.layerGroupTitle The title of the layergroup.
@@ -41,7 +40,7 @@ export default class LayerGroupClient {
    *
    * @throws Error if request fails
    *
-   * @returns {Object} A string with layer group location or undefined if not found
+   * @returns {string} A string with layer group location or undefined if not found
    */
   async create (workspace, layerGroupName, layers, layerGroupOptions) {
     const options = {
@@ -106,9 +105,10 @@ export default class LayerGroupClient {
         throw new GeoServerResponseError(null, geoServerResponse);
       }
     }
-    // return resource location in header
+    // get resource location from response header
     const location = response.headers.get('location');
 
+    // return resource location
     return location;
   }
 
