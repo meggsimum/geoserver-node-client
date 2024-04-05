@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: module:ImageMosaicClient</title>
+    <title>JSDoc: Class: module:LayerGroupClient</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: module:ImageMosaicClient</h1>
+    <h1 class="page-title">Class: module:LayerGroupClient</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>module:ImageMosaicClient<span class="signature">(url, auth)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>module:LayerGroupClient<span class="signature">(url, auth)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="module:ImageMosaicClient"><span class="type-signature"></span>new module:ImageMosaicClient<span class="signature">(url, auth)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="module:LayerGroupClient"><span class="type-signature"></span>new module:LayerGroupClient<span class="signature">(url, auth)</span><span class="type-signature"></span></h4>
     
 
     
@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    Creates a GeoServer REST ImageMosaicClient instance.
+    Creates a GeoServer REST LayerGroupClient instance.
 </div>
 
 
@@ -165,7 +165,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line16">line 16</a>
+        <a href="src_layergroup.js.html">src/layergroup.js</a>, <a href="src_layergroup.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -221,7 +221,7 @@
     
 
     
-    <h4 class="name" id="addGranuleByServerFile"><span class="type-signature">(async) </span>addGranuleByServerFile<span class="signature">(workspace, coverageStore, filePath)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="create"><span class="type-signature">(async) </span>create<span class="signature">(workspace, layerGroupName, layers)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -229,7 +229,7 @@
 
 
 <div class="description">
-    Adds a granule (defined by a server file) to an image mosaic.
+    Create a GeoServer layergroup by the given workspace, layerGroupName, layers and options
 </div>
 
 
@@ -281,14 +281,14 @@
 
             
 
-            <td class="description last">Workspace of image mosaic</td>
+            <td class="description last">The name of the workspace</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>coverageStore</code></td>
+                <td class="name"><code>layerGroupName</code></td>
             
 
             <td class="type">
@@ -304,14 +304,37 @@
 
             
 
-            <td class="description last">CoverageStore of image mosaic</td>
+            <td class="description last">The name of the layer group</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>filePath</code></td>
+                <td class="name"><code>layers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of layers to be added to the group. Must be in same workspace as layergroup</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.mode</code></td>
             
 
             <td class="type">
@@ -327,7 +350,53 @@
 
             
 
-            <td class="description last">Server file path of new granule</td>
+            <td class="description last">The mode of the layergroup. Default to SINGLE</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.layerGroupTitle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the layergroup.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.bounds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">bounds</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bounds of the layer group.</td>
         </tr>
 
     
@@ -368,420 +437,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line93">line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Throws:</h5>
-
-        
-
-    <div class="param-desc">
-    
-        Error if request fails
-    
-    </div>
-
-
-    
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="deleteSingleGranule"><span class="type-signature">(async) </span>deleteSingleGranule<span class="signature">(workspace, coverageStore, coverage, covFileLocation)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Deletes a single granule of an image mosaic.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>workspace</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Workspace of image mosaic</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>coverageStore</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">CoverageStore of image mosaic</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>coverage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Name of image mosaic</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>covFileLocation</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Location of coverage file</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line122">line 122</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Throws:</h5>
-
-        
-
-    <div class="param-desc">
-    
-        Error if request fails
-    
-    </div>
-
-
-    
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getGranules"><span class="type-signature">(async) </span>getGranules<span class="signature">(workspace, coverageStore, coverage)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns all granules of an image mosaic.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>workspace</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Workspace of image mosaic</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>coverageStore</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">CoverageStore of image mosaic</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>coverage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Name of image mosaic</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line32">line 32</a>
+        <a href="src_layergroup.js.html">src/layergroup.js</a>, <a href="src_layergroup.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -822,7 +478,7 @@
 
         
 <div class="param-desc">
-    An object with the granules
+    A string with layer group location or undefined if not found
 </div>
 
 
@@ -833,7 +489,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -851,7 +507,7 @@
     
 
     
-    <h4 class="name" id="harvestGranules"><span class="type-signature">(async) </span>harvestGranules<span class="signature">(workspace, coverageStore, filePath)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(workspace, layerGroupName)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -859,7 +515,8 @@
 
 
 <div class="description">
-    Harvests all granules in the given folder for an image mosaic.
+    Returns a GeoServer layergroup by the given workspace and layergroup name,
+e.g. "myWs:myLayergroup".
 </div>
 
 
@@ -911,14 +568,14 @@
 
             
 
-            <td class="description last">Workspace of image mosaic</td>
+            <td class="description last">The name of the workspace</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>coverageStore</code></td>
+                <td class="name"><code>layerGroupName</code></td>
             
 
             <td class="type">
@@ -934,30 +591,7 @@
 
             
 
-            <td class="description last">CoverageStore of image mosaic</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filePath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Server path of folder to harvest</td>
+            <td class="description last">The name of the layer group to query</td>
         </tr>
 
     
@@ -998,7 +632,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_imagemosaic.js.html">src/imagemosaic.js</a>, <a href="src_imagemosaic.js.html#line63">line 63</a>
+        <a href="src_layergroup.js.html">src/layergroup.js</a>, <a href="src_layergroup.js.html#line126">line 126</a>
     </li></ul></dd>
     
 
@@ -1039,7 +673,7 @@
 
         
 <div class="param-desc">
-    An object with the granules
+    An object with layer group information or undefined if it cannot be found
 </div>
 
 
@@ -1063,8 +697,419 @@
 
 
         
+            
+
     
 
+    
+    <h4 class="name" id="update"><span class="type-signature">(async) </span>update<span class="signature">(workspace, layerName, layerGroupDefinition)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates an existing GeoServer layergroup
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workspace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the workspace</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>layerName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the layergroup to update</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>layerGroupDefinition</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The updated definiton of the layergroup</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_layergroup.js.html">src/layergroup.js</a>, <a href="src_layergroup.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="~bounds">bounds</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>minx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The minimum x coordinates. Default: -180</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>miny</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The minimum y coordinates. Default: -90</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The maximum x coordinates. Default: 180</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxy</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The maximum y coordinates. Default: 90</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>crs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The crs of the bounds. Default: 'EPSG:4326'</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_layergroup.js.html">src/layergroup.js</a>, <a href="src_layergroup.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
     
 
     
