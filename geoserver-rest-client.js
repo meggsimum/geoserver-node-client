@@ -8,6 +8,7 @@ import SettingsClient from './src/settings.js';
 import NamespaceClient from './src/namespace.js';
 import AboutClient from './src/about.js';
 import ResetReloadClient from './src/reset-reload.js';
+import LayerGroupClient from './src/layergroup.js';
 
 export { GeoServerResponseError } from './src/util/geoserver.js'
 
@@ -32,6 +33,8 @@ export class GeoServerRestClient {
 
     /** @member {LayerClient} layers GeoServer REST client instance for layers */
     this.layers = new LayerClient(this.url, this.auth);
+    /** @member {LayerGroupClient} layers GeoServer REST client instance for layergroups */
+    this.layergroups = new LayerGroupClient(this.url, this.auth);
     /** @member {StyleClient} styles GeoServer REST client instance for styles */
     this.styles = new StyleClient(this.url, this.auth);
     /** @member {WorkspaceClient} workspaces GeoServer REST client instance for workspaces */
