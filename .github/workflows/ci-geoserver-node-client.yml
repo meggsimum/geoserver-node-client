@@ -10,7 +10,7 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.24.2
+      GEOSERVER_VERSION: 2.24.4
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -43,7 +43,7 @@ jobs:
   run-tests-stable:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.25.0
+      GEOSERVER_VERSION: 2.25.2
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
