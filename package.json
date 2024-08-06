@@ -12,6 +12,7 @@
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
     "release": "release-it",
+    "release:dry": "release-it --dry-run",
     "build": "npm run build:clean && npm run build:babel && npm run build:fixup",
     "build:clean": "rm -rf dist",
     "build:babel": "babel geoserver-rest-client.js -d dist && babel src -d dist/src",
