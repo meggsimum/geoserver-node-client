@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     ports:
      - 8080:8080
+    volumes:
+     - "${TEMP_DIR}:/opt/geoserver_data/:Z"
     environment:
       - CORS_ENABLED=1
       - SKIP_DEMO_DATA=true

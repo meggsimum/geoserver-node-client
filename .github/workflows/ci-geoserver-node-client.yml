@@ -10,7 +10,7 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.25.3
+      GEOSERVER_VERSION: 2.25.6
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -29,7 +29,19 @@ jobs:
       # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
-      - run: docker compose -f test/docker-compose.yml up -d
+      - name: Create empty temp directory as volume for GeoServer data
+        run: |
+          RANDOM_FOLDER="docker-temp-$(uuidgen)"
+          TEMP_DIR="${{ runner.temp }}/$RANDOM_FOLDER"
+          echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
+          rm -rf "$TEMP_DIR"
+          mkdir -p "$TEMP_DIR"
+          echo "Temp directory is ready at $TEMP_DIR"
+
+      - name: Run docker-compose test setup
+        run: |
+          export TEMP_DIR="$TEMP_DIR"
+          docker compose -f test/docker-compose.yml up -d
 
       # finishes when tomcat of GeoServer is running
       - run: wait-for-it "localhost:8080"
@@ -43,7 +55,7 @@ jobs:
   run-tests-stable:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.26.0
+      GEOSERVER_VERSION: 2.26.2
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -62,7 +74,19 @@ jobs:
       # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
-      - run: docker compose -f test/docker-compose.yml up -d
+      - name: Create empty temp directory as volume for GeoServer data
+        run: |
+          RANDOM_FOLDER="docker-temp-$(uuidgen)"
+          TEMP_DIR="${{ runner.temp }}/$RANDOM_FOLDER"
+          echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
+          rm -rf "$TEMP_DIR"
+          mkdir -p "$TEMP_DIR"
+          echo "Temp directory is ready at $TEMP_DIR"
+
+      - name: Run docker-compose test setup
+        run: |
+          export TEMP_DIR="$TEMP_DIR"
+          docker compose -f test/docker-compose.yml up -d
 
       # finishes when tomcat of GeoServer is running
       - run: wait-for-it "localhost:8080"
