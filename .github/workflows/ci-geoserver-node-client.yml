@@ -10,7 +10,8 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.24.4
+      GEOSERVER_VERSION: 2.25.3
+      TMPDIR: "/home/runner/work/_temp/empty_dir1"
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -28,6 +29,9 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
       # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
+
+      - name: Create empty directory GS data maintenance
+        run: rm -r /home/runner/work/_temp/empty_dir1 && mkdir -p /home/runner/work/_temp/empty_dir1
 
       - run: docker compose -f test/docker-compose.yml up -d
 
@@ -43,7 +47,8 @@ jobs:
   run-tests-stable:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.25.2
+      GEOSERVER_VERSION: 2.26.0
+      TMPDIR: "/home/runner/work/_temp/empty_dir2"
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -61,6 +66,9 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
       # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
+
+      - name: Create empty directory GS data stable
+        run: rm -r /home/runner/work/_temp/empty_dir2 && mkdir -p /home/runner/work/_temp/empty_dir2
 
       - run: docker compose -f test/docker-compose.yml up -d
 
