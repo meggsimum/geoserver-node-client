@@ -50,7 +50,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "jsdoc": "^4.0.2",
-    "mocha": "^10.2.0",
+    "mocha": "^11.0.1",
     "release-it": "^17.0.3"
   }
 }
