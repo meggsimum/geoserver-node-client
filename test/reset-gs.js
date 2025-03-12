@@ -1,34 +1,36 @@
 import { GeoServerRestClient } from '../geoserver-rest-client.js';
 
+/**
+ * Helper script to empty a default GeoServer instance
+ */
+
 const port = process.env.GEOSERVER_PORT || 8080;
 const url = `http://localhost:${port}/geoserver/rest/`;
 const user = 'admin';
 const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);
 
-const wsToDelete = [
-  'cite',
-  'it.geosolutions.json', // hack: add .json to get first '.' ignored by GS
-  'ne',
-  'nurc',
-  'sde',
-  'sf',
-  'tiger',
-  'topp'
-];
-
 main();
 
 /**
- * Async function containing all demo request
+ * Async main function triggering all required requests
  */
 async function main () {
   const recurse = true;
-  for (let index = 0; index < wsToDelete.length; index++) {
-    const ws = wsToDelete[index];
-    console.info('Deleting', ws, '...');
+
+  const allWs = await grc.workspaces.getAll();
+  const wsArray = allWs.workspaces.workspace;
+  for (let index = 0; index < wsArray.length; index++) {
+    const wsObj = wsArray[index];
+    let wsName = wsObj.name;
+    // hack: add .json to get first '.' ignored by GS
+    if (wsName === 'it.geosolutions') {
+      wsName += '.json';
+    }
+
     try {
-      await grc.workspaces.delete(ws, recurse);
+      console.info('Deleting', wsName, '...');
+      await grc.workspaces.delete(wsName, recurse);
       console.info('... done');
     } catch (error) {
       console.error(error);
