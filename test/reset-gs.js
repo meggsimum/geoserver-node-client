@@ -16,20 +16,20 @@ main();
  * Async main function triggering all required requests
  */
 async function main () {
+  // delete all workspaces
   const recurse = true;
-
   const allWs = await grc.workspaces.getAll();
   const wsArray = allWs.workspaces.workspace;
   for (let index = 0; index < wsArray.length; index++) {
     const wsObj = wsArray[index];
     let wsName = wsObj.name;
-    // hack: add .json to get first '.' ignored by GS
-    if (wsName === 'it.geosolutions') {
+    // hack: add .json to get other '.' in name ignored by GS
+    if (wsName.includes('.') === true) {
       wsName += '.json';
     }
 
     try {
-      console.info('Deleting', wsName, '...');
+      console.info('Deleting workspace', wsName, '...');
       await grc.workspaces.delete(wsName, recurse);
       console.info('... done');
     } catch (error) {
@@ -37,7 +37,9 @@ async function main () {
     }
   }
 
+  // delete all styles
   const defaultStyles = await grc.styles.getDefaults();
+  // following styles are not allowed to delete by GS
   const nonDeletable = [
     'generic',
     'line',
@@ -53,7 +55,7 @@ async function main () {
       const styleName = styleObj.name;
       try {
         if (!nonDeletable.includes(styleName)) {
-          console.log('Deleting style', styleName);
+          console.info('Deleting style', styleName, '...');
           await grc.styles.delete(undefined, styleName, recurse, purge);
           console.info('... done');
         }
