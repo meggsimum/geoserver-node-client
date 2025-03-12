@@ -11,6 +11,7 @@
     "lint-fix": "eslint --fix  src/**/*.js test/**/*.js scripts/**/*.js geoserver-rest-client.js",
     "pretest": "npm run lint",
     "test": "mocha --timeout 10000",
+    "test:reset-gs": "node test/reset-gs.js",
     "release": "release-it",
     "release:dry": "release-it --dry-run",
     "build": "npm run build:clean && npm run build:babel && npm run build:fixup",

@@ -50,6 +50,7 @@ jobs:
       - run: wget http://localhost:8080/geoserver/web
 
       - run: npm install
+      - run: npm run test:reset-gs # ensure empty GeoServer
       - run: npm run test
 
   run-tests-stable:
@@ -95,4 +96,5 @@ jobs:
       - run: wget http://localhost:8080/geoserver/web
 
       - run: npm install
+      - run: npm run test:reset-gs # ensure empty GeoServer
       - run: npm run test

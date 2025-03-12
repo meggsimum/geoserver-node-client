@@ -9,9 +9,13 @@ services:
      - 8080:8080
     volumes:
      - "${TEMP_DIR}:/opt/geoserver_data/:Z"
+
+
+# REMAINING TODO: Check with GS 2.26 and check why REST-API not functional, maybe add user for REST API due to empty geoserver_data
+
     environment:
       - CORS_ENABLED=1
-      - SKIP_DEMO_DATA=true
+      # - SKIP_DEMO_DATA=true
 
   postgres:
     image: postgis/postgis:${POSTGRES_VERSION}-${POSTGIS_VERSION}
