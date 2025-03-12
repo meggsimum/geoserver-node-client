@@ -3,7 +3,8 @@
 import { expect } from 'chai';
 import { GeoServerRestClient } from '../geoserver-rest-client.js';
 
-const url = 'http://localhost:8080/geoserver/rest/';
+const port = process.env.GEOSERVER_PORT;
+const url = `http://localhost:${port}/geoserver/rest/`;
 const user = 'admin';
 const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);

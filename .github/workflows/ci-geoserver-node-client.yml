@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GEOSERVER_VERSION: 2.25.6
+      GEOSERVER_PORT: 8080
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -57,6 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GEOSERVER_VERSION: 2.26.2
+      GEOSERVER_PORT: 8081
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
@@ -90,10 +92,10 @@ jobs:
           docker compose -f test/docker-compose.yml up -d
 
       # finishes when tomcat of GeoServer is running
-      - run: wait-for-it "localhost:8080"
+      - run: wait-for-it "localhost:8081"
 
       # we use wget to ensure that GeoServer is running
-      - run: wget http://localhost:8080/geoserver/web
+      - run: wget http://localhost:8081/geoserver/web
 
       - run: npm install
       - run: npm run test:reset-gs # ensure empty GeoServer
