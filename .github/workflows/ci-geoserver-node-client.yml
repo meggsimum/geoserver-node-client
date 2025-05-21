@@ -10,7 +10,7 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.25.6
+      GEOSERVER_VERSION: 2.26.3
       GEOSERVER_PORT: 8080
     steps:
       - name: Install program "wait-for-it"
@@ -57,7 +57,7 @@ jobs:
   run-tests-stable:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.26.2
+      GEOSERVER_VERSION: 2.27.1
       GEOSERVER_PORT: 8081
     steps:
       - name: Install program "wait-for-it"
