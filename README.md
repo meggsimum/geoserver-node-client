@@ -154,9 +154,10 @@ npm run release
 ```
 
 4. Follow the questions in the commandline.
-  - automatically upgrades the version in `package.json`
-  - makes a release commit and pushes it to GitHub
-  - publishes the new version to npm
+
+- automatically upgrades the version in `package.json`
+- makes a release commit and pushes it to GitHub
+- publishes the new version to npm
 
 ## Who do I talk to?
 
