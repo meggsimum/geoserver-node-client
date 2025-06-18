@@ -13,7 +13,7 @@ export default class AboutClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -25,7 +25,7 @@ export default class AboutClient {
    *
    * @returns {Object} The version of GeoServer
    */
-  async getVersion () {
+  async getVersion() {
     const url = this.url + 'about/version.json';
     const response = await fetch(url, {
       credentials: 'include',
@@ -47,11 +47,11 @@ export default class AboutClient {
    *
    * @returns {Boolean} If the connection exists
    */
-  async exists () {
+  async exists() {
     let versionInfo;
     try {
       versionInfo = await this.getVersion();
-      return !!versionInfo
+      return !!versionInfo;
     } catch (error) {
       return false;
     }

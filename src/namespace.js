@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import AboutClient from './about.js'
+import AboutClient from './about.js';
 
 /**
  * Client for GeoServer namespace
@@ -14,7 +14,7 @@ export default class NamespaceClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -26,7 +26,7 @@ export default class NamespaceClient {
    *
    * @returns {Object} An object describing the namespace
    */
-  async getAll () {
+  async getAll() {
     const response = await fetch(this.url + 'namespaces.json', {
       credentials: 'include',
       method: 'GET',
@@ -51,7 +51,7 @@ export default class NamespaceClient {
    *
    * @returns {String} The name of the created namespace
    */
-  async create (prefix, uri) {
+  async create(prefix, uri) {
     const body = {
       namespace: {
         prefix: prefix,
@@ -86,7 +86,7 @@ export default class NamespaceClient {
    *
    * @returns {Object} An object describing the namespace or undefined if it cannot be found
    */
-  async get (name) {
+  async get(name) {
     const response = await fetch(this.url + 'namespaces/' + name + '.json', {
       credentials: 'include',
       method: 'GET',
@@ -115,7 +115,7 @@ export default class NamespaceClient {
    *
    * @throws Error if request fails
    */
-  async delete (name) {
+  async delete(name) {
     const response = await fetch(this.url + 'namespaces/' + name, {
       credentials: 'include',
       method: 'DELETE',
@@ -130,13 +130,14 @@ export default class NamespaceClient {
         case 403:
           throw new GeoServerResponseError(
             'Namespace or related Workspace is not empty (and recurse not true)',
-            geoServerResponse);
+            geoServerResponse
+          );
         case 404:
-          throw new GeoServerResponseError('Namespace doesn\'t exist', geoServerResponse);
+          throw new GeoServerResponseError("Namespace doesn't exist", geoServerResponse);
         case 405:
-          throw new GeoServerResponseError('Can\'t delete default namespace', geoServerResponse);
+          throw new GeoServerResponseError("Can't delete default namespace", geoServerResponse);
         default:
-          throw new GeoServerResponseError('Response not recognized', geoServerResponse)
+          throw new GeoServerResponseError('Response not recognized', geoServerResponse);
       }
     }
   }

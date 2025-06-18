@@ -13,7 +13,7 @@ export default class SettingsClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -25,7 +25,7 @@ export default class SettingsClient {
    *
    * @returns {Object} Settings object
    */
-  async getSettings () {
+  async getSettings() {
     const response = await fetch(this.url + 'settings.json', {
       credentials: 'include',
       method: 'GET',
@@ -45,7 +45,7 @@ export default class SettingsClient {
    *
    * @param {Object} settings The adapted GeoServer settings object
    */
-  async updateSettings (settings) {
+  async updateSettings(settings) {
     const response = await fetch(this.url + 'settings', {
       credentials: 'include',
       method: 'PUT',
@@ -67,7 +67,7 @@ export default class SettingsClient {
    *
    * @param {String} proxyBaseUrl The proxy base URL
    */
-  async updateProxyBaseUrl (proxyBaseUrl) {
+  async updateProxyBaseUrl(proxyBaseUrl) {
     const settingsJson = await this.getSettings();
 
     // check if settings are correctly formatted
@@ -88,7 +88,7 @@ export default class SettingsClient {
    *
    * @returns {Object} An object with contact information
    */
-  async getContactInformation () {
+  async getContactInformation() {
     const response = await fetch(this.url + 'settings/contact', {
       credentials: 'include',
       method: 'GET',
@@ -120,7 +120,17 @@ export default class SettingsClient {
    *
    * @throws Error if request fails
    */
-  async updateContactInformation (address, city, country, postalCode, state, email, organization, contactPerson, phoneNumber) {
+  async updateContactInformation(
+    address,
+    city,
+    country,
+    postalCode,
+    state,
+    email,
+    organization,
+    contactPerson,
+    phoneNumber
+  ) {
     const contact = {
       address: address,
       addressCity: city,

@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import AboutClient from './about.js'
+import AboutClient from './about.js';
 
 /**
  * Client for GeoServer styles
@@ -15,7 +15,7 @@ export default class StyleClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -27,7 +27,7 @@ export default class StyleClient {
    *
    * @returns {Object} An object with the default styles
    */
-  async getDefaults () {
+  async getDefaults() {
     const response = await fetch(this.url + 'styles.json', {
       credentials: 'include',
       method: 'GET',
@@ -52,7 +52,7 @@ export default class StyleClient {
    *
    * @returns {Object} An object with all styles
    */
-  async getInWorkspace (workspace) {
+  async getInWorkspace(workspace) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/styles.json', {
       credentials: 'include',
       method: 'GET',
@@ -75,15 +75,17 @@ export default class StyleClient {
    *
    * @returns {Object[]} An array with all style objects
    */
-  async getAllWorkspaceStyles () {
+  async getAllWorkspaceStyles() {
     const allStyles = [];
     const ws = new WorkspaceClient(this.url, this.auth);
     const allWs = await ws.getAll();
 
-    if (!allWs ||
+    if (
+      !allWs ||
       !allWs.workspaces ||
       !allWs.workspaces.workspace ||
-      !Array.isArray(allWs.workspaces.workspace)) {
+      !Array.isArray(allWs.workspaces.workspace)
+    ) {
       throw new GeoServerResponseError('Response of available workspaces is malformed');
     }
 
@@ -93,7 +95,7 @@ export default class StyleClient {
       const wsStyles = await this.getInWorkspace(ws.name);
 
       if (wsStyles.styles.style) {
-        wsStyles.styles.style.forEach(wsStyle => {
+        wsStyles.styles.style.forEach((wsStyle) => {
           allStyles.push(wsStyle);
         });
       }
@@ -108,7 +110,7 @@ export default class StyleClient {
    *
    * @returns {Object[]} An array with all style objects
    */
-  async getAll () {
+  async getAll() {
     const defaultStyles = await this.getDefaults();
     const wsStyles = await this.getAllWorkspaceStyles();
     if (
@@ -117,7 +119,7 @@ export default class StyleClient {
       !defaultStyles.styles.style ||
       !Array.isArray(defaultStyles.styles.style)
     ) {
-      throw new GeoServerResponseError('Response of default styles malformed')
+      throw new GeoServerResponseError('Response of default styles malformed');
     }
     const allStyles = defaultStyles.styles.style.concat(wsStyles);
 
@@ -133,7 +135,7 @@ export default class StyleClient {
    *
    * @throws Error if request fails
    */
-  async publish (workspace, name, sldBody) {
+  async publish(workspace, name, sldBody) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
       credentials: 'include',
       method: 'POST',
@@ -158,7 +160,7 @@ export default class StyleClient {
    * @param {Boolean} [recurse=false] If references to the specified style in existing layers should be deleted
    * @param {Boolean} [purge=false] Whether the underlying file containing the style should be deleted on disk
    */
-  async delete (workspace, name, recurse, purge) {
+  async delete(workspace, name, recurse, purge) {
     let paramPurge = false;
     let paramRecurse = false;
 
@@ -173,12 +175,22 @@ export default class StyleClient {
 
     if (workspace) {
       // delete style inside workspace
-      endpoint = this.url + 'workspaces/' + workspace + '/styles/' + name +
-                  '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
+      endpoint =
+        this.url +
+        'workspaces/' +
+        workspace +
+        '/styles/' +
+        name +
+        '?' +
+        'purge=' +
+        paramPurge +
+        '&' +
+        'recurse=' +
+        paramRecurse;
     } else {
       // delete style without workspace
-      endpoint = this.url + 'styles/' + name +
-                  '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
+      endpoint =
+        this.url + 'styles/' + name + '?' + 'purge=' + paramPurge + '&' + 'recurse=' + paramRecurse;
     }
 
     const response = await fetch(endpoint, {
@@ -214,7 +226,13 @@ export default class StyleClient {
    *
    * @throws Error if request fails
    */
-  async assignStyleToLayer (workspaceOfLayer, layerName, workspaceOfStyle, styleName, isDefaultStyle) {
+  async assignStyleToLayer(
+    workspaceOfLayer,
+    layerName,
+    workspaceOfStyle,
+    styleName,
+    isDefaultStyle
+  ) {
     let qualifiedName;
     if (workspaceOfLayer) {
       qualifiedName = `${workspaceOfLayer}:${layerName}`;
@@ -257,7 +275,7 @@ export default class StyleClient {
    *
    * @returns {Object} An object about the style or undefined if it cannot be found
    */
-  async getStyleInformation (workspace, styleName) {
+  async getStyleInformation(workspace, styleName) {
     let url;
     if (workspace) {
       url = this.url + 'workspaces/' + workspace + '/styles/' + styleName + '.json';

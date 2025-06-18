@@ -36,22 +36,23 @@
   "author": "C. Mayer, meggsimum (info_at*meggsimum?dot?de)",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@babel/runtime": "^7.23.1",
+    "@babel/runtime": "^7.27.6",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
-    "@babel/core": "^7.23.0",
-    "@babel/plugin-transform-runtime": "^7.22.15",
+    "@babel/core": "^7.27.4",
+    "@babel/plugin-transform-runtime": "^7.27.4",
     "@babel/preset-env": "^7.22.20",
+    "@eslint/compat": "^1.2.9",
     "chai": "^5.0.3",
-    "eslint": "^8.51.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
     "jsdoc": "^4.0.2",
-    "mocha": "^11.0.1",
-    "release-it": "^19.0.1"
+    "mocha": "^11.7.1",
+    "neostandard": "^0.12.1",
+    "prettier": "^3.6.1",
+    "release-it": "^19.0.3"
   }
 }

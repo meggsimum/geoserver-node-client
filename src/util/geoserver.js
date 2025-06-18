@@ -9,9 +9,10 @@
  *
  * @returns {String} The response text if available
  */
-async function getGeoServerResponseText (response) {
+async function getGeoServerResponseText(response) {
   try {
-    return response.text()
+    return response.text();
+    // eslint-disable-next-line
   } catch (e) {
     // return nothing
   }
@@ -25,17 +26,14 @@ class GeoServerResponseError extends Error {
    * @param {String} [message=GeoServer Response Error] The error message
    * @param {String} [geoServerOutput] The error output from GeoServer (useful for debugging)
    */
-  constructor (message, geoServerOutput) {
-    super(message)
+  constructor(message, geoServerOutput) {
+    super(message);
     this.name = 'GeoServerResponseError';
-    this.message = message || 'GeoServer Response Error'
+    this.message = message || 'GeoServer Response Error';
 
     // custom property as explained here: https://xjamundx.medium.com/custom-javascript-errors-in-es6-aa891b173f87
     this.geoServerOutput = geoServerOutput;
   }
 }
 
-export {
-  getGeoServerResponseText,
-  GeoServerResponseError
-}
+export { getGeoServerResponseText, GeoServerResponseError };

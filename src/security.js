@@ -13,7 +13,7 @@ export default class SecurityClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -25,7 +25,7 @@ export default class SecurityClient {
    *
    * @returns {Object} An object with all users
    */
-  async getAllUsers () {
+  async getAllUsers() {
     const response = await fetch(this.url + 'security/usergroup/users.json', {
       credentials: 'include',
       method: 'GET',
@@ -49,7 +49,7 @@ export default class SecurityClient {
    *
    * @throws Error if request fails
    */
-  async createUser (username, password) {
+  async createUser(username, password) {
     const body = {
       user: {
         userName: username,
@@ -72,7 +72,10 @@ export default class SecurityClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 404:
-          throw new GeoServerResponseError(`User ${username} might already exists.`, geoServerResponse);
+          throw new GeoServerResponseError(
+            `User ${username} might already exists.`,
+            geoServerResponse
+          );
         default:
           throw new GeoServerResponseError(null, geoServerResponse);
       }
@@ -89,7 +92,7 @@ export default class SecurityClient {
    *
    * @throws Error if request fails
    */
-  async updateUser (username, password, enabled) {
+  async updateUser(username, password, enabled) {
     const body = {
       user: {
         password: password,
@@ -121,7 +124,7 @@ export default class SecurityClient {
    *
    * @throws Error if request fails
    */
-  async associateUserRole (username, role) {
+  async associateUserRole(username, role) {
     const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
       credentials: 'include',
       method: 'POST',
