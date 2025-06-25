@@ -16,10 +16,10 @@ jobs:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      # use Node.js 16 instead of deprecated v12 in Ubuntu image
+      # use Node.js 22 instead of deprecated v12 in Ubuntu image
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '22'
 
       - uses: actions/checkout@v4
 
@@ -63,10 +63,10 @@ jobs:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      # use Node.js 16 instead of deprecated v12 in Ubuntu image
+      # use Node.js 22 instead of deprecated v12 in Ubuntu image
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '22'
 
       - uses: actions/checkout@v4
 

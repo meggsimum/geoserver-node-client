@@ -15,7 +15,7 @@ main();
 /**
  * Async main function triggering all required requests
  */
-async function main () {
+async function main() {
   // delete all workspaces
   const recurse = true;
   const allWs = await grc.workspaces.getAll();
@@ -40,13 +40,7 @@ async function main () {
   // delete all styles
   const defaultStyles = await grc.styles.getDefaults();
   // following styles are not allowed to delete by GS
-  const nonDeletable = [
-    'generic',
-    'line',
-    'point',
-    'polygon',
-    'raster'
-  ];
+  const nonDeletable = ['generic', 'line', 'point', 'polygon', 'raster'];
   const purge = true;
   const defaultStylesArray = defaultStyles.styles.style;
   if (defaultStylesArray) {

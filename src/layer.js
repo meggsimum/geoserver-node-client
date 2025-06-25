@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import AboutClient from './about.js'
+import AboutClient from './about.js';
 
 /**
  * Client for GeoServer layers
@@ -14,7 +14,7 @@ export default class LayerClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -30,7 +30,7 @@ export default class LayerClient {
    *
    * @returns {Object} An object with layer information or undefined if it cannot be found
    */
-  async get (workspace, layerName) {
+  async get(workspace, layerName) {
     let qualifiedName;
     if (workspace) {
       qualifiedName = `${workspace}:${layerName}`;
@@ -69,7 +69,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async modifyAttribution (workspace, layerName, attributionText, attributionLink) {
+  async modifyAttribution(workspace, layerName, attributionText, attributionLink) {
     let qualifiedName;
     if (workspace) {
       qualifiedName = `${workspace}:${layerName}`;
@@ -117,7 +117,7 @@ export default class LayerClient {
    *
    * @returns {Object} An object with all layer information
    */
-  async getAll () {
+  async getAll() {
     const response = await fetch(this.url + 'layers.json', {
       credentials: 'include',
       method: 'GET',
@@ -142,12 +142,12 @@ export default class LayerClient {
    *
    * @return {Object} An object with the information about the layers
    */
-  async getLayers (workspace) {
+  async getLayers(workspace) {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/layers.json', {
       credentials: 'include',
       method: 'GET',
       headers: {
-        Authorization: this.auth,
+        Authorization: this.auth
       }
     });
 
@@ -170,14 +170,24 @@ export default class LayerClient {
    *
    * @returns {Object} An object with layer information or undefined if it cannot be found
    */
-  async getWmsLayer (workspace, datastore, layerName) {
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/wmsstores/' + datastore + '/wmslayers/' + layerName + '.json', {
-      credentials: 'include',
-      method: 'GET',
-      headers: {
-        Authorization: this.auth,
+  async getWmsLayer(workspace, datastore, layerName) {
+    const response = await fetch(
+      this.url +
+        'workspaces/' +
+        workspace +
+        '/wmsstores/' +
+        datastore +
+        '/wmslayers/' +
+        layerName +
+        '.json',
+      {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: this.auth
+        }
       }
-    });
+    );
 
     if (!response.ok) {
       const grc = new AboutClient(this.url, this.auth);
@@ -206,14 +216,24 @@ export default class LayerClient {
    *
    * @returns {Object} An object with layer information or undefined if it cannot be found
    */
-   async getWmtsLayer (workspace, datastore, layerName) {
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/wmtsstores/' + datastore + '/layers/' + layerName + '.json', {
-      credentials: 'include',
-      method: 'GET',
-      headers: {
-        Authorization: this.auth,
+  async getWmtsLayer(workspace, datastore, layerName) {
+    const response = await fetch(
+      this.url +
+        'workspaces/' +
+        workspace +
+        '/wmtsstores/' +
+        datastore +
+        '/layers/' +
+        layerName +
+        '.json',
+      {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: this.auth
+        }
       }
-    });
+    );
 
     if (!response.ok) {
       const grc = new AboutClient(this.url, this.auth);
@@ -243,7 +263,15 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async publishFeatureTypeDefaultDataStore (workspace, nativeName, name, title, srs, enabled, abstract) {
+  async publishFeatureTypeDefaultDataStore(
+    workspace,
+    nativeName,
+    name,
+    title,
+    srs,
+    enabled,
+    abstract
+  ) {
     const body = {
       featureType: {
         name: name,
@@ -286,13 +314,23 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async publishFeatureType (workspace, dataStore, nativeName, name, title, srs, enabled, abstract, nativeBoundingBox) {
+  async publishFeatureType(
+    workspace,
+    dataStore,
+    nativeName,
+    name,
+    title,
+    srs,
+    enabled,
+    abstract,
+    nativeBoundingBox
+  ) {
     // apply CRS info for native BBOX if not provided
     if (nativeBoundingBox && !nativeBoundingBox.crs) {
       nativeBoundingBox.crs = {
         '@class': 'projected',
         $: srs
-      }
+      };
     }
 
     const body = {
@@ -307,15 +345,18 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes', {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        Authorization: this.auth,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
+    const response = await fetch(
+      this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes',
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          Authorization: this.auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
@@ -334,8 +375,16 @@ export default class LayerClient {
    *
    * @returns {Object} The object of the FeatureType
    */
-  async getFeatureType (workspace, datastore, name) {
-    const url = this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '.json';
+  async getFeatureType(workspace, datastore, name) {
+    const url =
+      this.url +
+      'workspaces/' +
+      workspace +
+      '/datastores/' +
+      datastore +
+      '/featuretypes/' +
+      name +
+      '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
@@ -372,7 +421,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async publishWmsLayer (workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
+  async publishWmsLayer(workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
     const body = {
       wmsLayer: {
         name: name || nativeName,
@@ -384,15 +433,18 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/wmsstores/' + dataStore + '/wmslayers', {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        Authorization: this.auth,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
+    const response = await fetch(
+      this.url + 'workspaces/' + workspace + '/wmsstores/' + dataStore + '/wmslayers',
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          Authorization: this.auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
@@ -414,7 +466,7 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async publishDbRaster (workspace, coverageStore, nativeName, name, title, srs, enabled, abstract) {
+  async publishDbRaster(workspace, coverageStore, nativeName, name, title, srs, enabled, abstract) {
     const body = {
       coverage: {
         name: name || nativeName,
@@ -426,15 +478,18 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages', {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        Authorization: this.auth,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
+    const response = await fetch(
+      this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages',
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          Authorization: this.auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
@@ -452,14 +507,25 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async deleteFeatureType (workspace, datastore, name, recurse) {
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/datastores/' + datastore + '/featuretypes/' + name + '?recurse=' + recurse, {
-      credentials: 'include',
-      method: 'DELETE',
-      headers: {
-        Authorization: this.auth
+  async deleteFeatureType(workspace, datastore, name, recurse) {
+    const response = await fetch(
+      this.url +
+        'workspaces/' +
+        workspace +
+        '/datastores/' +
+        datastore +
+        '/featuretypes/' +
+        name +
+        '?recurse=' +
+        recurse,
+      {
+        credentials: 'include',
+        method: 'DELETE',
+        headers: {
+          Authorization: this.auth
+        }
       }
-    });
+    );
 
     if (!response.ok) {
       const geoServerResponse = await getGeoServerResponseText(response);
@@ -482,7 +548,17 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async enableTimeCoverage (workspace, dataStore, name, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
+  async enableTimeCoverage(
+    workspace,
+    dataStore,
+    name,
+    presentation,
+    resolution,
+    defaultValue,
+    nearestMatchEnabled,
+    rawNearestMatchEnabled,
+    acceptableInterval
+  ) {
     const body = {
       coverage: {
         metadata: {
@@ -507,7 +583,15 @@ export default class LayerClient {
       }
     };
 
-    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + name + '.json';
+    const url =
+      this.url +
+      'workspaces/' +
+      workspace +
+      '/coveragestores/' +
+      dataStore +
+      '/coverages/' +
+      name +
+      '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
@@ -539,7 +623,18 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async enableTimeFeatureType (workspace, dataStore, name, attribute, presentation, resolution, defaultValue, nearestMatchEnabled, rawNearestMatchEnabled, acceptableInterval) {
+  async enableTimeFeatureType(
+    workspace,
+    dataStore,
+    name,
+    attribute,
+    presentation,
+    resolution,
+    defaultValue,
+    nearestMatchEnabled,
+    rawNearestMatchEnabled,
+    acceptableInterval
+  ) {
     const body = {
       featureType: {
         metadata: {
@@ -564,7 +659,15 @@ export default class LayerClient {
       }
     };
 
-    const url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes/' + name + '.json';
+    const url =
+      this.url +
+      'workspaces/' +
+      workspace +
+      '/datastores/' +
+      dataStore +
+      '/featuretypes/' +
+      name +
+      '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
@@ -592,8 +695,16 @@ export default class LayerClient {
    *
    * @returns {Object} An object with coverage information or undefined if it cannot be found
    */
-  async getCoverage (workspace, coverageStore, name) {
-    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages/' + name + '.json';
+  async getCoverage(workspace, coverageStore, name) {
+    const url =
+      this.url +
+      'workspaces/' +
+      workspace +
+      '/coveragestores/' +
+      coverageStore +
+      '/coverages/' +
+      name +
+      '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
@@ -628,26 +739,31 @@ export default class LayerClient {
    *
    * @throws Error if request fails
    */
-  async renameCoverageBands (workspace, dataStore, layername, bandNames) {
+  async renameCoverageBands(workspace, dataStore, layername, bandNames) {
     const body = {
       coverage: {
         dimensions: {
-          coverageDimension: [
-          ]
+          coverageDimension: []
         }
       }
     };
 
     // dynamically create the body
-    bandNames.forEach(bandName => {
-      body.coverage.dimensions.coverageDimension.push(
-        {
-          name: bandName
-        }
-      );
-    })
+    bandNames.forEach((bandName) => {
+      body.coverage.dimensions.coverageDimension.push({
+        name: bandName
+      });
+    });
 
-    const url = this.url + 'workspaces/' + workspace + '/coveragestores/' + dataStore + '/coverages/' + layername + '.json';
+    const url =
+      this.url +
+      'workspaces/' +
+      workspace +
+      '/coveragestores/' +
+      dataStore +
+      '/coverages/' +
+      layername +
+      '.json';
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',

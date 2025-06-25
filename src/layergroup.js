@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import AboutClient from './about.js'
-import LayerClient from './layer.js';
+import AboutClient from './about.js';
 
 /**
  * Client for GeoServer layergroups
@@ -15,7 +14,7 @@ export default class LayerGroupClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -42,7 +41,7 @@ export default class LayerGroupClient {
    *
    * @returns {string} A string with layer group location or undefined if not found
    */
-  async create (workspace, layerGroupName, layers, layerGroupOptions) {
+  async create(workspace, layerGroupName, layers, layerGroupOptions) {
     const options = {
       mode: 'SINGLE',
       layerGroupTitle: '',
@@ -82,17 +81,15 @@ export default class LayerGroupClient {
         ...options
       }
     };
-    const response = await fetch(
-      `${this.url}/workspaces/${workspace}/layergroups`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          Authorization: this.auth,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      }
-    );
+    const response = await fetch(`${this.url}/workspaces/${workspace}/layergroups`, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
     if (!response.ok) {
       const grc = new AboutClient(this.url, this.auth);
@@ -123,15 +120,17 @@ export default class LayerGroupClient {
    *
    * @returns {Object} An object with layer group information or undefined if it cannot be found
    */
-  async get (workspace, layerGroupName) {
+  async get(workspace, layerGroupName) {
     const response = await fetch(
-      `${this.url}/workspaces/${workspace}/layergroups/${layerGroupName}.json`, {
+      `${this.url}/workspaces/${workspace}/layergroups/${layerGroupName}.json`,
+      {
         credentials: 'include',
         method: 'GET',
         headers: {
           Authorization: this.auth
         }
-      });
+      }
+    );
 
     if (!response.ok) {
       const grc = new AboutClient(this.url, this.auth);
@@ -156,7 +155,7 @@ export default class LayerGroupClient {
    *
    * @throws Error if request fails
    */
-  async update (workspace, layerGroupName, layerGroupDefinition) {
+  async update(workspace, layerGroupName, layerGroupDefinition) {
     const url = `${this.url}/workspaces/${workspace}/layergroups/${layerGroupName}.json`;
     const response = await fetch(url, {
       credentials: 'include',

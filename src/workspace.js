@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
-import AboutClient from './about.js'
+import AboutClient from './about.js';
 
 /**
  * Client for GeoServer workspaces
@@ -16,7 +16,7 @@ export default class WorkspaceClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -28,7 +28,7 @@ export default class WorkspaceClient {
    *
    * @returns {Object} An Object describing the workspaces
    */
-  async getAll () {
+  async getAll() {
     const response = await fetch(this.url + 'workspaces.json', {
       credentials: 'include',
       method: 'GET',
@@ -52,7 +52,7 @@ export default class WorkspaceClient {
    *
    * @returns {Object} An object describing the workspaces
    */
-  async get (name) {
+  async get(name) {
     const response = await fetch(this.url + 'workspaces/' + name + '.json', {
       credentials: 'include',
       method: 'GET',
@@ -83,7 +83,7 @@ export default class WorkspaceClient {
    *
    * @returns {String} The name of the created workspace
    */
-  async create (name) {
+  async create(name) {
     const body = {
       workspace: {
         name
@@ -104,7 +104,10 @@ export default class WorkspaceClient {
       const geoServerResponse = await getGeoServerResponseText(response);
       switch (response.status) {
         case 409:
-          throw new GeoServerResponseError('Unable to add workspace as it already exists', geoServerResponse);
+          throw new GeoServerResponseError(
+            'Unable to add workspace as it already exists',
+            geoServerResponse
+          );
         default:
           throw new GeoServerResponseError(null, geoServerResponse);
       }
@@ -122,7 +125,7 @@ export default class WorkspaceClient {
    *
    * @throws Error if request fails
    */
-  async delete (name, recurse) {
+  async delete(name, recurse) {
     const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
       credentials: 'include',
       method: 'DELETE',
@@ -139,9 +142,10 @@ export default class WorkspaceClient {
           // https://docs.geoserver.org/latest/en/api/#1.0.0/workspaces.yaml
           throw new GeoServerResponseError(
             'Workspace or related Namespace is not empty (and recurse not true)',
-            geoServerResponse);
+            geoServerResponse
+          );
         case 404:
-          throw new GeoServerResponseError('Workspace doesn\'t exist', geoServerResponse);
+          throw new GeoServerResponseError("Workspace doesn't exist", geoServerResponse);
         default:
           throw new GeoServerResponseError(null, geoServerResponse);
       }

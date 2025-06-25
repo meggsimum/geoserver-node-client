@@ -10,7 +10,7 @@ import AboutClient from './src/about.js';
 import ResetReloadClient from './src/reset-reload.js';
 import LayerGroupClient from './src/layergroup.js';
 
-export { GeoServerResponseError } from './src/util/geoserver.js'
+export { GeoServerResponseError } from './src/util/geoserver.js';
 
 /**
  * Client for GeoServer REST API.
@@ -27,7 +27,7 @@ export class GeoServerRestClient {
    * @param {String} user The user for the GeoServer REST API
    * @param {String} password The password for the GeoServer REST API
    */
-  constructor (url, user, password) {
+  constructor(url, user, password) {
     this.url = url.endsWith('/') ? url : url + '/';
     this.auth = 'Basic ' + Buffer.from(user + ':' + password).toString('base64');
 

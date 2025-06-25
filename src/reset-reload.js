@@ -14,7 +14,7 @@ export default class ResetReloadClient {
    * @param {String} url The URL of the GeoServer REST API endpoint
    * @param {String} auth The Basic Authentication string
    */
-  constructor (url, auth) {
+  constructor(url, auth) {
     this.url = url;
     this.auth = auth;
   }
@@ -28,7 +28,7 @@ export default class ResetReloadClient {
    *
    * @throws Error if request fails
    */
-  async reset () {
+  async reset() {
     const url = this.url + 'reset';
     const response = await fetch(url, {
       credentials: 'include',
@@ -52,7 +52,7 @@ export default class ResetReloadClient {
    *
    * @throws Error if request fails
    */
-  async reload () {
+  async reload() {
     const url = this.url + 'reload';
     const response = await fetch(url, {
       credentials: 'include',
