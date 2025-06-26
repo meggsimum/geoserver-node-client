@@ -52,7 +52,7 @@ export default class AboutClient {
     try {
       versionInfo = await this.getVersion();
       return !!versionInfo;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
