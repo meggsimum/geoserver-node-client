@@ -436,6 +436,42 @@ export default class LayerClient {
   }
 
   /**
+   * Get detailed information about a FeatureType.
+   *
+   * @param {String} workspace The workspace of the FeatureType
+   * @param {String} name The name of the FeatureType
+   *
+   * @throws GeoServerResponseError if request fails or layer does not exist or lacks the right properties.
+   *
+   * @returns {Object} The object of the FeatureType
+   */
+  async getFeatureTypeFromLayer(workspace, layer) {
+    const layerObj = await this.get(workspace, layer);
+
+    if (!layerObj || !layerObj.layer || !layerObj.layer.resource || !layerObj.layer.resource.href) {
+      throw new GeoServerResponseError(
+        `Layer '${workspace}:${layer}' does not exist or lacks the layer.resource.href property.`
+      );
+    }
+
+    const url = layerObj?.layer?.resource?.href;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+    return response.json();
+  }
+
+  /**
    *  Publishes a WMS layer.
    *
    * @param {String} workspace Workspace to publish WMS layer in
@@ -756,6 +792,40 @@ export default class LayerClient {
   }
 
   /**
+   * Returns a dedicated coverage object.
+   *
+   * @param {String} workspace Workspace containing the coverage
+   * @param {String} name Coverage to query
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with coverage information or undefined if it cannot be found
+   */
+  async getCoverageFromLayer(workspace, name) {
+    const url = this.url + '/workspaces/' + workspace + '/coverages/' + name + '.json';
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist, we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
+  }
+
+  /**
    * Renames the existing bands of a coverage layer.
    *
    * Make sure to provide the same number of bands as existing in the layer.
@@ -807,6 +877,102 @@ export default class LayerClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
+
+  /**
+   * Returns the data store of a layer.
+   *
+   * @param {String} workspace The workspace of the layer
+   * @param {String} layer The name of the layer
+   *
+   * @throws GeoServerResponseError if request fails or layer does not exist or lacks a data store.
+   *
+   * @returns {Object} The data store object
+   */
+  async getDataStore(workspace, layer) {
+    const featureTypeObj = await this.getFeatureTypeFromLayer(workspace, layer);
+
+    if (
+      !featureTypeObj ||
+      !featureTypeObj.featureType ||
+      !featureTypeObj.featureType.store ||
+      !featureTypeObj.featureType.store.name
+    ) {
+      throw new GeoServerResponseError(
+        `Layer '${workspace}:${layer}' lacks a feature type or the feature type lacks a data store.`
+      );
+    }
+
+    const url = featureTypeObj?.featureType?.store?.href;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist, we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
+  }
+
+  /**
+   * Returns the coverage store of a layer.
+   *
+   * @param {String} workspace The workspace of the layer
+   * @param {String} layer The name of the layer
+   *
+   * @throws GeoServerResponseError if request fails or layer does not exist or lacks a coverage store.
+   *
+   * @returns {Object} The coverage store object
+   */
+  async getCoverageStore(workspace, layer) {
+    const coverageObj = await this.getCoverageFromLayer(workspace, layer);
+
+    if (
+      !coverageObj ||
+      !coverageObj.coverage ||
+      !coverageObj.coverage.store ||
+      !coverageObj.coverage.store.name
+    ) {
+      throw new GeoServerResponseError(
+        `Layer '${workspace}:${layer}' lacks a coverage or the coverage lacks a coverage store.`
+      );
+    }
+
+    const url = coverageObj?.coverage?.store?.href;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const grc = new AboutClient(this.url, this.auth);
+      if (await grc.exists()) {
+        // GeoServer exists, but requested item does not exist, we return empty
+        return;
+      } else {
+        // There was a general problem with GeoServer
+        const geoServerResponse = await getGeoServerResponseText(response);
+        throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+    return response.json();
+  }
 }
 </code></pre>
         </article>
@@ -824,7 +990,7 @@ export default class LayerClient {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jun 25 2025 12:06:34 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Jul 04 2025 10:01:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

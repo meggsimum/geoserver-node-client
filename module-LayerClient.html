@@ -391,7 +391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line510">line 510</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line546">line 546</a>
     </li></ul></dd>
     
 
@@ -804,7 +804,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line551">line 551</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line587">line 587</a>
     </li></ul></dd>
     
 
@@ -1215,7 +1215,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line626">line 626</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line662">line 662</a>
     </li></ul></dd>
     
 
@@ -1727,7 +1727,7 @@ e.g. "myWs:myLayer".
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line698">line 698</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line734">line 734</a>
     </li></ul></dd>
     
 
@@ -1769,6 +1769,588 @@ e.g. "myWs:myLayer".
         
 <div class="param-desc">
     An object with coverage information or undefined if it cannot be found
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getCoverageFromLayer"><span class="type-signature">(async) </span>getCoverageFromLayer<span class="signature">(workspace, name)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns a dedicated coverage object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workspace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Workspace containing the coverage</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Coverage to query</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line776">line 776</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Error if request fails
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An object with coverage information or undefined if it cannot be found
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getCoverageStore"><span class="type-signature">(async) </span>getCoverageStore<span class="signature">(workspace, layer)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns the coverage store of a layer.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workspace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The workspace of the layer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>layer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the layer</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line911">line 911</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        GeoServerResponseError if request fails or layer does not exist or lacks a coverage store.
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The coverage store object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDataStore"><span class="type-signature">(async) </span>getDataStore<span class="signature">(workspace, layer)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns the data store of a layer.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workspace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The workspace of the layer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>layer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the layer</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line863">line 863</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        GeoServerResponseError if request fails or layer does not exist or lacks a data store.
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The data store object
 </div>
 
 
@@ -1974,6 +2556,200 @@ e.g. "myWs:myLayer".
     <div class="param-desc">
     
         Error if request fails
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The object of the FeatureType
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getFeatureTypeFromLayer"><span class="type-signature">(async) </span>getFeatureTypeFromLayer<span class="signature">(workspace, name)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get detailed information about a FeatureType.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workspace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The workspace of the FeatureType</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the FeatureType</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line420">line 420</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        GeoServerResponseError if request fails or layer does not exist or lacks the right properties.
     
     </div>
 
@@ -3245,7 +4021,7 @@ e.g. "myWs:myLayer".
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line469">line 469</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line505">line 505</a>
     </li></ul></dd>
     
 
@@ -4507,7 +5283,7 @@ e.g. "myWs:myLayer".
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line424">line 424</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line460">line 460</a>
     </li></ul></dd>
     
 
@@ -4727,7 +5503,7 @@ Make sure to provide the same number of bands as existing in the layer.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line742">line 742</a>
+        <a href="src_layer.js.html">src/layer.js</a>, <a href="src_layer.js.html#line812">line 812</a>
     </li></ul></dd>
     
 
@@ -4791,7 +5567,7 @@ Make sure to provide the same number of bands as existing in the layer.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jun 25 2025 12:06:34 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Jul 04 2025 10:01:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
