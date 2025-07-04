@@ -349,6 +349,16 @@ describe('Layer', () => {
     expect(layerInfo.featureType.name).to.equal(featureLayerName);
   });
 
+  it('can read information of a FeatureType by layer', async () => {
+    const ftInfo = await grc.layers.getFeatureTypeFromLayer(workSpace, featureLayerName);
+    expect(ftInfo.featureType.name).equals(featureLayerName);
+  });
+
+  it('can read information of a DataStore by layer', async () => {
+    const dsInfo = await grc.layers.getDataStore(workSpace, featureLayerName);
+    expect(dsInfo.dataStore.name).equals(wfsDataStore);
+  });
+
   it('can publish a FeatureType with explicit native BBOX', async () => {
     const ftName = featureLayerName + '_native_bbox';
     const nativeBoundingBox = {
@@ -466,6 +476,16 @@ describe('Layer', () => {
 
     const result = await grc.layers.getCoverage(workSpace, rasterStoreName, rasterLayerName);
     expect(result.coverage.name).to.equal(rasterLayerName);
+  });
+
+  it('can query coverage information by layer', async () => {
+    const coverageInfo = await grc.layers.getCoverageFromLayer(workSpace, rasterLayerName);
+    expect(coverageInfo.coverage.name).equals(rasterLayerName);
+  });
+
+  it('can query CoverageStore by layer', async () => {
+    const coverageStoreInfo = await grc.layers.getCoverageStore(workSpace, rasterLayerName);
+    expect(coverageStoreInfo.coverageStore.name).equals(rasterStoreName);
   });
 
   it('can rename band names of a coverage', async () => {
