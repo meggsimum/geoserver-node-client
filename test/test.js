@@ -638,8 +638,19 @@ describe('Security', () => {
     await grc.workspaces.create(workSpace);
   });
 
+  it('can return all user objects', async () => {
+    const allUsers = await grc.security.getAllUsers();
+
+    expect(allUsers.users.length).to.equal(1); // admin always exists
+    expect(allUsers.users[0].userName).to.equal('admin');
+  });
+
   it('can create a user', async () => {
     await grc.security.createUser(dummyUser, dummyPassword);
+
+    const allUsers = await grc.security.getAllUsers();
+    expect(allUsers.users.length).to.equal(2);
+    expect(allUsers.users[1].userName).to.equal(dummyUser);
   });
 
   it('can associate a user role', async () => {
@@ -649,10 +660,18 @@ describe('Security', () => {
   it('can update a user', async () => {
     const enabled = false;
     await grc.security.updateUser(dummyUser, dummyPassword, enabled);
+
+    const allUsers = await grc.security.getAllUsers();
+    expect(allUsers.users.length).to.equal(2);
+    expect(allUsers.users[1].userName).to.equal(dummyUser);
+    expect(allUsers.users[1].enabled).to.equal(enabled);
   });
 
   it('can delete a user', async () => {
     await grc.security.deleteUser(dummyUser);
+
+    const allUsers = await grc.security.getAllUsers();
+    expect(allUsers.users.length).to.equal(1); // admin always exists
   });
 
   after(async () => {
