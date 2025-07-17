@@ -2,6 +2,11 @@
 import { expect } from 'chai';
 import { GeoServerRestClient } from '../geoserver-rest-client.js';
 
+const pgPort = process.env.POSTGRES_PORT || 5432;
+const pgUser = process.env.POSTGRES_USER;
+const pgPassword = process.env.POSTGRES_PASSWORD;
+const pgDb = process.env.POSTGRES_DB;
+
 const port = process.env.GEOSERVER_PORT;
 const url = `http://localhost:${port}/geoserver/rest/`;
 const user = 'admin';
@@ -179,11 +184,7 @@ describe('Datastore', () => {
   it('can create a PostGIS store', async () => {
     const dataStore = 'my-postgis-datastore';
     const pgHost = 'postgres';
-    const pgPort = 5432;
-    const pgUser = 'postgres';
-    const pgPassword = 'postgres';
     const pgSchema = 'public';
-    const pgDb = 'demo';
     const exposePk = true;
 
     await grc.datastores.createPostgisStore(
@@ -308,11 +309,7 @@ describe('Layer', () => {
   it('can publish a FeatureType from PostGIS', async () => {
     const postGisDataStore = 'my-postgis-datastore';
     const pgHost = 'postgres';
-    const pgPort = 5432;
-    const pgUser = 'postgres';
-    const pgPassword = 'postgres';
     const pgSchema = 'public';
-    const pgDb = 'demo';
     const exposePk = true;
 
     await grc.datastores.createPostgisStore(
