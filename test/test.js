@@ -436,7 +436,7 @@ describe('Layer', () => {
 
   it('can create Coverage layer', async () => {
     const geotiff = 'test/sample_data/world.tif';
-    grc.datastores.createGeotiffFromFile(
+    await grc.datastores.createGeotiffFromFile(
       workSpace,
       rasterStoreName,
       rasterLayerName,
