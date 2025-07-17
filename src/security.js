@@ -117,6 +117,28 @@ export default class SecurityClient {
   }
 
   /**
+   * Deletes an existing user.
+   *
+   * @param {String} username The name of the user to be deleted
+   *
+   * @throws Error if request fails
+   */
+  async deleteUser(username) {
+    const response = await fetch(this.url + 'security/usergroup/user/' + username, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
+
+  /**
    * Associates the given role to the user.
    *
    * @param {String} username The name of the user to add the role to

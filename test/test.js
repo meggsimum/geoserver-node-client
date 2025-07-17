@@ -651,6 +651,10 @@ describe('Security', () => {
     await grc.security.updateUser(dummyUser, dummyPassword, enabled);
   });
 
+  it('can delete a user', async () => {
+    await grc.security.deleteUser(dummyUser);
+  });
+
   after(async () => {
     const recursive = true;
     const wsResp = await grc.workspaces.get(workSpace);
