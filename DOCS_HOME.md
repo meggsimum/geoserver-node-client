@@ -22,13 +22,10 @@ Compatible with [GeoServer](https://geoserver.org)
 
 ## Who do I talk to?
 
+You need professional support, maintenance or project-driven development around ***geoserver-node-client***? Please contact a service provider listed below:
+
 - meggsimum (Christian Mayer) - info __at## meggsimum ~~dot** de
 
 ## Credits
 
-This project was initiated by [meggsimum](https://meggsimum.de) within the [mFund](https://www.bmvi.de/EN/Topics/Digital-Matters/mFund/mFund.html) research project [SAUBER](https://sauber-projekt.de/) and is further developed in the mFund research project [KLIPS](http://www.klips-projekt.de/):
-<p><img src="https://sauber-projekt.de/wp-content/uploads/2018/12/SAG_SAUBER_Logo_Dez3_transparent-1-e1543843688935.png" alt="SAUBER Logo" width="200"/></p>.
-<p><img src="https://www.klips-projekt.de/wp-content/uploads/2021/02/SAG_KLIPS-Logo_Jan21.png" alt="KLIPS Logo" width="200"/></p>.
-
-<img src="https://sauber-projekt.de/wp-content/uploads/2018/12/mfund-logo-download-e1547545420815-300x77.jpg" alt="mFund Logo" width="300"/>
-<img src="https://sauber-projekt.de/wp-content/uploads/2019/06/BMVI_Fz_2017_Office_Farbe_de_Bundestag-400x402.png" alt="BMVI Logo" height="200"/>
+This project was initiated by [meggsimum](https://meggsimum.de) within the [mFund](https://www.bmv.de/EN/Topics/Digital-Matters/mFund/mFund.html) research project **SAUBER**  and was further developed in the mFund research project **KLIPS**.
