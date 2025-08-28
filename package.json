@@ -45,7 +45,7 @@
     "@babel/plugin-transform-runtime": "^7.27.4",
     "@babel/preset-env": "^7.22.20",
     "@eslint/compat": "^1.2.9",
-    "chai": "^5.0.3",
+    "chai": "^6.0.1",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
