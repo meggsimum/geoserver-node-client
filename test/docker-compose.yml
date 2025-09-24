@@ -6,7 +6,7 @@ services:
     image: docker.osgeo.org/geoserver:${GEOSERVER_VERSION}
     restart: unless-stopped
     ports:
-     - ${GEOSERVER_PORT}:8080
+     - ${GEOSERVER_PORT:-8080}:8080
     volumes:
      - "${TEMP_DIR}:/opt/geoserver_data/:Z"
     environment:
@@ -18,7 +18,7 @@ services:
     volumes:
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT:-5432}:5432
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
