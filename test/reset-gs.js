@@ -19,7 +19,10 @@ async function main() {
   // delete all workspaces
   const recurse = true;
   const allWs = await grc.workspaces.getAll();
-  const wsArray = allWs.workspaces.workspace;
+  const wsArray =
+    allWs.workspaces.workspace && allWs.workspaces.workspace !== ''
+      ? allWs.workspaces.workspace
+      : [];
   for (let index = 0; index < wsArray.length; index++) {
     const wsObj = wsArray[index];
     let wsName = wsObj.name;
@@ -58,4 +61,20 @@ async function main() {
       }
     }
   }
+
+  // delete all non-default roles
+  const allRoles = await grc.security.getAllRoles();
+  const nonDefaultRoles = allRoles.roles?.filter(
+    (role) => role !== 'ADMIN' && role !== 'GROUP_ADMIN'
+  );
+
+  nonDefaultRoles.forEach(async (role) => {
+    try {
+      console.info('Deleting role', role, '...');
+      await grc.security.deleteRole(role);
+      console.info('... done');
+    } catch (error) {
+      console.error(error);
+    }
+  });
 }
