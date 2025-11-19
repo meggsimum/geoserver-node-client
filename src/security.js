@@ -243,4 +243,92 @@ export default class SecurityClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
+
+  /**
+   * Returns all data access rules registered in GeoServer.
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with all data access rules like { "*.*.r": ["ADMIN", "GROUP_ADMIN"] }
+   */
+  async getAllAccessRules() {
+    const url = `${this.url}security/acl/layers.json`;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+    return response.json();
+  }
+
+  /**
+   * Creates a new data access rule.
+   *
+   * @param {String} rule The rule in the form '<MY_WS>.<MY_LAYER>.r'
+   * @param {String[]} roles The roles to allow access to rule
+   *
+   * @throws Error if request fails
+   */
+  async createDataAccessRule(rule, roles) {
+    const url = `${this.url}security/acl/layers`;
+    const body = {};
+    body[rule] = roles.join(',');
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 404:
+          throw new GeoServerResponseError(`Rule ${rule} might already exists.`, geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+  }
+
+  /**
+   * Deletes an existing data access rule.
+   *
+   * @param {String} rule The rule to be deleted, like '<MY_WS>.<MY_LAYER>.r'
+   *
+   * @throws Error if request fails
+   */
+  async deleteDataAccessRule(rule) {
+    const url = `${this.url}security/acl/layers/${rule}`;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 404:
+          throw new GeoServerResponseError(`Rule ${rule} not existing.`, geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+  }
 }

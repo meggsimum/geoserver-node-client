@@ -697,6 +697,22 @@ describe('Security', () => {
     expect(allRoles.roles.length).to.equal(2); // ADMIN and GROUP_ADMIN always exist
   });
 
+  it('can add data access rule (ACL)', async () => {
+    const rule = `${workSpace}.*.r`;
+    await grc.security.createDataAccessRule(rule, ['ADMIN']);
+
+    const accessRules = await grc.security.getAllAccessRules();
+    expect(Object.entries(accessRules).length).to.equal(3); // always 2 default roles existing
+  });
+
+  it('can delete data access rule (ACL)', async () => {
+    const rule = `${workSpace}.*.r`;
+    await grc.security.deleteDataAccessRule(rule);
+
+    const accessRules = await grc.security.getAllAccessRules();
+    expect(Object.entries(accessRules).length).to.equal(2); // always 2 default roles existing
+  });
+
   after(async () => {
     const recursive = true;
     const wsResp = await grc.workspaces.get(workSpace);
