@@ -117,14 +117,14 @@ A request either succeeds or throws the custom `GeoServerResponseError`. It has 
 First start a test setup using this Docker compose file:
 
 ```shell
-docker-compose -f test/docker-compose.yml up
+GEOSERVER_VERSION=2.28.0 TEMP_DIR=/tmp/gs docker compose -f test/docker-compose.yml up
 ```
 
 Then, in an other terminal, run:
 
 ```shell
 # specify the GeoServer version and run the test suite
-GEOSERVER_VERSION=2.20.4 npm run test
+GEOSERVER_VERSION=2.28.0 npm run test
 ```
 
 ## Release
