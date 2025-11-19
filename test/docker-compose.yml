@@ -1,14 +1,13 @@
 version: '3'
 
 services:
-
   geoserver:
     image: docker.osgeo.org/geoserver:${GEOSERVER_VERSION}
     restart: unless-stopped
     ports:
-     - ${GEOSERVER_PORT}:8080
+      - ${GEOSERVER_PORT:-8080}:8080
     volumes:
-     - "${TEMP_DIR}:/opt/geoserver_data/:Z"
+      - '${TEMP_DIR}:/opt/geoserver_data/:Z'
     environment:
       - CORS_ENABLED=1
 
