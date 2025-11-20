@@ -139,6 +139,89 @@ export default class SecurityClient {
   }
 
   /**
+   * Returns all roles registered in GeoServer.
+   *
+   * @throws Error if request fails
+   *
+   * @returns {Object} An object with all roles like { "roles": ["ADMIN", "GROUP_ADMIN"] }
+   */
+  async getAllRoles() {
+    const url = `${this.url}security/roles.json`;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+    return response.json();
+  }
+
+  /**
+   * Creates a new role.
+   *
+   * @param {String} role The name of the role to be created
+   *
+   * @throws Error if request fails
+   */
+  async createRole(role) {
+    const url = `${this.url}security/roles/role/${role}`;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 404:
+          throw new GeoServerResponseError(`Role ${role} might already exist.`, geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+  }
+
+  /**
+   * Deletes an existing role.
+   *
+   * @param {String} role The name of the role to be deleted
+   *
+   * @throws Error if request fails
+   */
+  async deleteRole(role) {
+    const url = `${this.url}security/roles/role/${role}`;
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      switch (response.status) {
+        case 404:
+          throw new GeoServerResponseError(`Role ${role} not existing.`, geoServerResponse);
+        default:
+          throw new GeoServerResponseError(null, geoServerResponse);
+      }
+    }
+  }
+
+  /**
    * Associates the given role to the user.
    *
    * @param {String} username The name of the user to add the role to
