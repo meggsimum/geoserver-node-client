@@ -148,7 +148,7 @@ npm login
 # then enter your credentials
 ```
 
-3. Locally checkout the latest `master` branch that you would like to release, then run:
+3. Locally checkout the latest `main` branch that you would like to release, then run:
 
 ```shell
 npm run release
