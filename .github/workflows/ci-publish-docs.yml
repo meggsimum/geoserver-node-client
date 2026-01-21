@@ -7,7 +7,7 @@ jobs:
   build-and-publish-docs:
     runs-on: ubuntu-latest
     steps:
-      # use Node.js 16 instead of deprecated v12 in Ubuntu image
+      # use a current Node.js version instead of deprecated v12 in Ubuntu image
       - uses: actions/setup-node@v3
         with:
           node-version: '22'
@@ -23,7 +23,7 @@ jobs:
           touch out/.nojekyll
 
       - name: Publish docs
-        uses: JamesIves/github-pages-deploy-action@4.0.0
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: out # The folder the action should deploy.
