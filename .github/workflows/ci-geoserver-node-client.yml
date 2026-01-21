@@ -2,10 +2,10 @@ name: ci-geoserver-node-client
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
