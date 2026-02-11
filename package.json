@@ -46,7 +46,7 @@
     "@babel/preset-env": "^7.22.20",
     "@eslint/compat": "^2.0.0",
     "chai": "^6.0.1",
-    "eslint": "^9.29.0",
+    "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
     "jsdoc": "^4.0.2",
