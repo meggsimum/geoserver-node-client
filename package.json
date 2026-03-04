@@ -51,7 +51,7 @@
     "eslint-plugin-prettier": "^5.5.1",
     "jsdoc": "^4.0.2",
     "mocha": "^11.7.1",
-    "neostandard": "^0.12.1",
+    "neostandard": "^0.13.0",
     "prettier": "^3.6.1",
     "release-it": "^19.0.3"
   }
