@@ -4,6 +4,7 @@
   "description": "Node.js client for GeoServer REST API",
   "type": "module",
   "main": "geoserver-rest-client.js",
+  "types": "./dist/types/geoserver-rest-client.d.ts",
   "scripts": {
     "demo": "node demo/index.js",
     "docs": "./node_modules/.bin/jsdoc geoserver-rest-client.js src/*.js DOCS_HOME.md && cp img/*.png out/",
@@ -14,14 +15,18 @@
     "test:reset-gs": "node test/reset-gs.js",
     "release": "release-it",
     "release:dry": "release-it --dry-run",
-    "build": "npm run build:clean && npm run build:babel && npm run build:fixup",
+    "build": "npm run build:clean && npm run build:babel && npm run build:types && npm run build:fixup",
     "build:clean": "rm -rf dist",
     "build:babel": "babel geoserver-rest-client.js -d dist && babel src -d dist/src",
+    "build:types": "tsc -p tsconfig.json",
     "build:fixup": "node scripts/create-custom-package-json.js"
   },
   "exports": {
-    "import": "./geoserver-rest-client.js",
-    "require": "./dist/geoserver-rest-client.js"
+    ".": {
+      "types": "./dist/types/geoserver-rest-client.d.ts",
+      "import": "./geoserver-rest-client.js",
+      "require": "./dist/geoserver-rest-client.js"
+    }
   },
   "files": [
     "geoserver-rest-client.js",
@@ -53,6 +58,7 @@
     "mocha": "^11.7.1",
     "neostandard": "^0.13.0",
     "prettier": "^3.6.1",
-    "release-it": "^19.0.3"
+    "release-it": "^19.0.3",
+    "typescript": "^5.9.3"
   }
 }
