@@ -53,6 +53,6 @@
     "mocha": "^11.7.1",
     "neostandard": "^0.13.0",
     "prettier": "^3.6.1",
-    "release-it": "^19.0.3"
+    "release-it": "^20.0.0"
   }
 }
