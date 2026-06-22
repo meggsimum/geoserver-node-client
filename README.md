@@ -38,6 +38,24 @@ Compatible with [GeoServer](https://geoserver.org)
 npm i geoserver-node-client
 ```
 
+usage as ES module (ES6)
+
+```js
+import {GeoServerRestClient} from 'geoserver-node-client';
+
+const url = 'http://localhost:8080/geoserver/rest/';
+const user = 'admin';
+const pw = 'geoserver';
+const grc = new GeoServerRestClient(url, user, pw);
+
+async function main () {
+  const result =  await grc.about.exists();
+  console.log(result);
+};
+
+main();
+```
+
 usage with require (ES5):
 
 ```js
@@ -50,27 +68,9 @@ var pw = 'geoserver';
 var grc = new GeoServerRestClient(url, user, pw);
 
 function main () {
-    grc.about.exists().then(function (result) {
-      console.log(result);
-    });
-};
-
-main();
-```
-
-usage as ES module (ES6)
-
-```js
-import {GeoServerRestClient} from 'geoserver-node-client';
-
-const url = 'http://localhost:8080/geoserver/rest/';
-const user = 'admin';
-const pw = 'geoserver';
-const grc = new GeoServerRestClient(url, user, pw);
-
-async function main () {
-    const result =  await grc.about.exists();
+  grc.about.exists().then(function (result) {
     console.log(result);
+  });
 };
 
 main();
