@@ -10,16 +10,16 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.27.5
+      GEOSERVER_VERSION: 2.28.4
       GEOSERVER_PORT: 8080
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      # use Node.js 22 instead of deprecated v12 in Ubuntu image
+      # use a current Node.js version instead of deprecated v12 in Ubuntu image
       - uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '24'
 
       - uses: actions/checkout@v4
 
@@ -57,16 +57,16 @@ jobs:
   run-tests-stable:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.28.2
+      GEOSERVER_VERSION: 3.0.0
       GEOSERVER_PORT: 8081
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      # use Node.js 22 instead of deprecated v12 in Ubuntu image
+      # use a current Node.js version instead of deprecated v12 in Ubuntu image
       - uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '24'
 
       - uses: actions/checkout@v4
 

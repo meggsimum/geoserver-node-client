@@ -1,6 +1,6 @@
 {
   "name": "geoserver-node-client",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "description": "Node.js client for GeoServer REST API",
   "type": "module",
   "main": "geoserver-rest-client.js",
@@ -41,14 +41,14 @@
   "author": "C. Mayer, meggsimum (info_at*meggsimum?dot?de)",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@babel/runtime": "^7.27.6",
+    "@babel/runtime": "^8.0.0",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.0",
-    "@babel/core": "^7.27.4",
-    "@babel/plugin-transform-runtime": "^7.27.4",
-    "@babel/preset-env": "^7.22.20",
+    "@babel/cli": "^8.0.0",
+    "@babel/core": "^8.0.0",
+    "@babel/plugin-transform-runtime": "^8.0.0",
+    "@babel/preset-env": "^8.0.0",
     "@eslint/compat": "^2.0.0",
     "chai": "^6.0.1",
     "eslint": "^9.29.0",
@@ -56,9 +56,9 @@
     "eslint-plugin-prettier": "^5.5.1",
     "jsdoc": "^4.0.2",
     "mocha": "^11.7.1",
-    "neostandard": "^0.12.1",
+    "neostandard": "^0.13.0",
     "prettier": "^3.6.1",
-    "release-it": "^19.0.3",
+    "release-it": "^20.0.0",
     "typescript": "^5.9.3"
   }
 }
