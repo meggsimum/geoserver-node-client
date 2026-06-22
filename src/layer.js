@@ -254,11 +254,11 @@ export default class LayerClient {
    * Publishes a FeatureType in the default data store of the workspace.
    *
    * @param {String} workspace Workspace to publish FeatureType in
-   * @param {String} [nativeName] Native name of FeatureType
-   * @param {String} name Published name of FeatureType
-   * @param {String} [title] Published title of FeatureType
+   * @param {String} nativeName Native name of FeatureType
+   * @param {String} [name] Published name of FeatureType, defaults to `nativeName`
+   * @param {String} [title] Published title of FeatureType, defaults to `name` or `nativeName`
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
-   * @param {String} enabled Flag to enable FeatureType by default
+   * @param {Boolean} [enabled=true] Flag to enable FeatureType by default
    * @param {String} [abstract] The abstract of the layer
    *
    * @throws Error if request fails
@@ -274,11 +274,11 @@ export default class LayerClient {
   ) {
     const body = {
       featureType: {
-        name: name,
-        nativeName: nativeName || name,
-        title: title || name,
+        nativeName: nativeName,
+        name: name || nativeName,
+        title: title || name || nativeName,
         srs: srs || 'EPSG:4326',
-        enabled: enabled,
+        enabled: typeof enabled === 'boolean' ? enabled : true,
         abstract: abstract || ''
       }
     };
@@ -304,11 +304,11 @@ export default class LayerClient {
    *
    * @param {String} workspace Workspace to publish FeatureType in
    * @param {String} dataStore The datastore where the FeatureType's data is in
-   * @param {String} [nativeName] Native name of FeatureType
-   * @param {String} name Published name of FeatureType
-   * @param {String} [title] Published title of FeatureType
+   * @param {String} nativeName Native name of FeatureType
+   * @param {String} [name] Published name of FeatureType, defaults to `nativeName`
+   * @param {String} [title] Published title of FeatureType, defaults to `name` or `nativeName`
    * @param {String} [srs="EPSG:4326"] The SRS of the FeatureType
-   * @param {String} enabled Flag to enable FeatureType by default
+   * @param {Boolean} [enabled=true] Flag to enable FeatureType by default
    * @param {String} [abstract] The abstract of the layer
    * @param {String} [nativeBoundingBox] The native BoundingBox of the FeatureType (has to be set if no data is in store at creation time)
    *
@@ -335,11 +335,11 @@ export default class LayerClient {
 
     const body = {
       featureType: {
-        name: name || nativeName,
         nativeName: nativeName,
-        title: title || name,
+        name: name || nativeName,
+        title: title || name || nativeName,
         srs: srs || 'EPSG:4326',
-        enabled: enabled,
+        enabled: typeof enabled === 'boolean' ? enabled : true,
         abstract: abstract || '',
         nativeBoundingBox: nativeBoundingBox
       }
@@ -449,10 +449,10 @@ export default class LayerClient {
    * @param {String} workspace Workspace to publish WMS layer in
    * @param {String} dataStore The datastore where the WMS is connected
    * @param {String} nativeName Native name of WMS layer
-   * @param {String} [name] Published name of WMS layer
-   * @param {String} [title] Published title of WMS layer
+   * @param {String} [name] Published name of WMS layer, defaults to `nativeName`
+   * @param {String} [title] Published title of WMS layer, defaults to `name` or `nativeName`
    * @param {String} [srs="EPSG:4326"] The SRS of the WMS layer
-   * @param {String} enabled Flag to enable WMS layer by default
+   * @param {Boolean} [enabled=true] Flag to enable WMS layer by default
    * @param {String} [abstract] The abstract of the layer
    *
    * @throws Error if request fails
@@ -460,11 +460,11 @@ export default class LayerClient {
   async publishWmsLayer(workspace, dataStore, nativeName, name, title, srs, enabled, abstract) {
     const body = {
       wmsLayer: {
-        name: name || nativeName,
         nativeName: nativeName,
+        name: name || nativeName,
         title: title || name || nativeName,
         srs: srs || 'EPSG:4326',
-        enabled: enabled,
+        enabled: typeof enabled === 'boolean' ? enabled : true,
         abstract: abstract || ''
       }
     };
@@ -494,10 +494,10 @@ export default class LayerClient {
    * @param {String} workspace Workspace to publish layer in
    * @param {String} coverageStore The coveragestore where the layer's data is in
    * @param {String} nativeName Native name of raster
-   * @param {String} name Published name of layer
-   * @param {String} [title] Published title of layer
+   * @param {String} [name] Published name of layer, defaults to `nativeName`
+   * @param {String} [title] Published title of layer, defaults to `name` or `nativeName`
    * @param {String} [srs="EPSG:4326"] The SRS of the layer
-   * @param {String} enabled Flag to enable layer by default
+   * @param {Boolean} [enabled=true] Flag to enable layer by default
    * @param {String} [abstract] The abstract of the layer
    *
    * @throws Error if request fails
@@ -505,9 +505,9 @@ export default class LayerClient {
   async publishDbRaster(workspace, coverageStore, nativeName, name, title, srs, enabled, abstract) {
     const body = {
       coverage: {
-        name: name || nativeName,
         nativeName: nativeName,
-        title: title || name,
+        name: name || nativeName,
+        title: title || name || nativeName,
         srs: srs,
         enabled: enabled,
         abstract: abstract || ''
