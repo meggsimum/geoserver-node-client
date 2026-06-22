@@ -214,7 +214,7 @@ export default class DatastoreClient {
    * @param {String} coverageStore The name of the new GeoTIFF store
    * @param {String} layerName The published name of the new layer
    * @param {String} layerTitle The published title of the new layer
-   * @param {Stream} readStream The stream of the GeoTIFF file
+   * @param {import("fs").ReadStream} readStream The stream of the GeoTIFF file
    * @param {Number} fileSizeInBytes The number of bytes of the stream
    *
    * @throws Error if request fails
