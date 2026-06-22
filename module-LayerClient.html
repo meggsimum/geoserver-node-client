@@ -3651,7 +3651,7 @@ e.g. "myWs:myLayer".
     
 
     
-    <h4 class="name" id="publishDbRaster"><span class="type-signature">(async) </span>publishDbRaster<span class="signature">(workspace, coverageStore, nativeName, name, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled, abstract<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="publishDbRaster"><span class="type-signature">(async) </span>publishDbRaster<span class="signature">(workspace, coverageStore, nativeName, name<span class="signature-attributes">opt</span>, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled<span class="signature-attributes">opt</span>, abstract<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -3819,6 +3819,8 @@ e.g. "myWs:myLayer".
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -3832,7 +3834,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published name of layer</td>
+            <td class="description last">Published name of layer, defaults to `nativeName`</td>
         </tr>
 
     
@@ -3869,7 +3871,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published title of layer</td>
+            <td class="description last">Published title of layer, defaults to `name` or `nativeName`</td>
         </tr>
 
     
@@ -3921,7 +3923,7 @@ e.g. "myWs:myLayer".
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -3929,6 +3931,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -3939,6 +3943,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="default">
+                
+                    true
                 
                 </td>
             
@@ -4069,7 +4075,7 @@ e.g. "myWs:myLayer".
     
 
     
-    <h4 class="name" id="publishFeatureType"><span class="type-signature">(async) </span>publishFeatureType<span class="signature">(workspace, dataStore, nativeName<span class="signature-attributes">opt</span>, name, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled, abstract<span class="signature-attributes">opt</span>, nativeBoundingBox<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="publishFeatureType"><span class="type-signature">(async) </span>publishFeatureType<span class="signature">(workspace, dataStore, nativeName, name<span class="signature-attributes">opt</span>, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled<span class="signature-attributes">opt</span>, abstract<span class="signature-attributes">opt</span>, nativeBoundingBox<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -4202,8 +4208,6 @@ e.g. "myWs:myLayer".
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -4239,6 +4243,8 @@ e.g. "myWs:myLayer".
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -4252,7 +4258,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published name of FeatureType</td>
+            <td class="description last">Published name of FeatureType, defaults to `nativeName`</td>
         </tr>
 
     
@@ -4289,7 +4295,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published title of FeatureType</td>
+            <td class="description last">Published title of FeatureType, defaults to `name` or `nativeName`</td>
         </tr>
 
     
@@ -4341,7 +4347,7 @@ e.g. "myWs:myLayer".
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -4349,6 +4355,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -4359,6 +4367,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="default">
+                
+                    true
                 
                 </td>
             
@@ -4526,7 +4536,7 @@ e.g. "myWs:myLayer".
     
 
     
-    <h4 class="name" id="publishFeatureTypeDefaultDataStore"><span class="type-signature">(async) </span>publishFeatureTypeDefaultDataStore<span class="signature">(workspace, nativeName<span class="signature-attributes">opt</span>, name, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled, abstract<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="publishFeatureTypeDefaultDataStore"><span class="type-signature">(async) </span>publishFeatureTypeDefaultDataStore<span class="signature">(workspace, nativeName, name<span class="signature-attributes">opt</span>, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled<span class="signature-attributes">opt</span>, abstract<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -4624,8 +4634,6 @@ e.g. "myWs:myLayer".
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -4661,6 +4669,8 @@ e.g. "myWs:myLayer".
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -4674,7 +4684,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published name of FeatureType</td>
+            <td class="description last">Published name of FeatureType, defaults to `nativeName`</td>
         </tr>
 
     
@@ -4711,7 +4721,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published title of FeatureType</td>
+            <td class="description last">Published title of FeatureType, defaults to `name` or `nativeName`</td>
         </tr>
 
     
@@ -4763,7 +4773,7 @@ e.g. "myWs:myLayer".
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -4771,6 +4781,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -4781,6 +4793,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="default">
+                
+                    true
                 
                 </td>
             
@@ -4911,7 +4925,7 @@ e.g. "myWs:myLayer".
     
 
     
-    <h4 class="name" id="publishWmsLayer"><span class="type-signature">(async) </span>publishWmsLayer<span class="signature">(workspace, dataStore, nativeName, name<span class="signature-attributes">opt</span>, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled, abstract<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="publishWmsLayer"><span class="type-signature">(async) </span>publishWmsLayer<span class="signature">(workspace, dataStore, nativeName, name<span class="signature-attributes">opt</span>, title<span class="signature-attributes">opt</span>, srs<span class="signature-attributes">opt</span>, enabled<span class="signature-attributes">opt</span>, abstract<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -5094,7 +5108,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published name of WMS layer</td>
+            <td class="description last">Published name of WMS layer, defaults to `nativeName`</td>
         </tr>
 
     
@@ -5131,7 +5145,7 @@ e.g. "myWs:myLayer".
                 </td>
             
 
-            <td class="description last">Published title of WMS layer</td>
+            <td class="description last">Published title of WMS layer, defaults to `name` or `nativeName`</td>
         </tr>
 
     
@@ -5183,7 +5197,7 @@ e.g. "myWs:myLayer".
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -5191,6 +5205,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -5201,6 +5217,8 @@ e.g. "myWs:myLayer".
 
             
                 <td class="default">
+                
+                    true
                 
                 </td>
             
@@ -5567,7 +5585,7 @@ Make sure to provide the same number of bands as existing in the layer.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Jun 22 2026 07:48:04 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Jun 22 2026 09:43:42 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
