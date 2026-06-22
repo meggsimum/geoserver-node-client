@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist/types",
+    "rootDir": ".",
+
+    "strict": true,
+    "noImplicitAny": true,
+
+    "target": "ESNext",
+    "module": "ESNext"
+  },
+  "include": [
+    "src/**/*.js",
+    "geoserver-rest-client.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.js"
+  ]
+}
