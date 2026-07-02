@@ -634,4 +634,61 @@ export default class DatastoreClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
+
+  /**
+   * Creates a GeoPackage store from a stream containing a .gpkg file and publishes it as layer.
+   * Data will be uploaded to GeoServer's platform.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {fs.ReadStream} readStream The stream of the GeoTIFF file
+   * @param {Number} fileSizeInBytes The number of bytes of the stream
+   * @param {String} [fileName] Target file name on server
+   */
+  async createGpkgFromStream(workspace, dataStore, readStream, fileSizeInBytes, fileName) {
+    let url =
+      this.url +
+      'workspaces/' +
+      workspace +
+      '/datastores/' +
+      dataStore +
+      '/file.gpkg?update=overwrite';
+
+    if (fileName) {
+      url += '&filename=' + fileName;
+    }
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/x-sqlite3',
+        'Content-Length': fileSizeInBytes
+      },
+      body: readStream,
+      duplex: 'half'
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
+
+  /**
+   * Creates a GeoPackage store from a local file and publishes it as layer.
+   * Data will be uploaded to GeoServer's platform.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {String} gpkgPath  Local path to GeoPackage file
+   * @param {String} [fileName] Target file name on server
+   */
+  async createGpkgFromFile(workspace, dataStore, gpkgPath, fileName) {
+    const stats = fs.statSync(gpkgPath);
+    const readStream = fs.createReadStream(gpkgPath);
+
+    return this.createGpkgFromStream(workspace, dataStore, readStream, stats.size, fileName);
+  }
 }
