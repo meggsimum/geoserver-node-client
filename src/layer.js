@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 import AboutClient from './about.js';
+import DatastoreClient from './datastore.js';
 
 /**
  * Client for GeoServer layers
@@ -944,5 +945,103 @@ export default class LayerClient {
       }
     }
     return response.json();
+  }
+
+  /**
+   * Publishes a Coverage layer based on a local GeoTIFF file stream.
+   * Also creates underlying GeoTIFF store from a file stream.
+   * The GeoTIFF file will therefore be uploaded to GeoServer's platform.
+   *
+   * @param {String} workspace The workspace to create GeoTIFF store in
+   * @param {String} coverageStore The name of the new GeoTIFF store
+   * @param {String} layerName Name of the newly created coverage/layer
+   * @param {fs.ReadStream} readStream The stream of the GeoTIFF file
+   * @param {Number} fileSizeInBytes The number of bytes of the stream
+   * @param {String} [fileName] Target file name on server, will appear as layer title in GS
+   *
+   * @throws Error if request fails
+   *
+   * @returns {String} The successful response text
+   */
+  async publishGeotiffFromStream(
+    workspace,
+    coverageStore,
+    layerName,
+    readStream,
+    fileSizeInBytes,
+    fileName
+  ) {
+    const storeClient = new DatastoreClient(this.url, this.auth);
+    return storeClient.createGeotiffFromStream(
+      workspace,
+      coverageStore,
+      layerName,
+      fileName,
+      readStream,
+      fileSizeInBytes
+    );
+  }
+
+  /**
+   * Publishes a Coverage layer based on a local GeoTIFF file.
+   * Also creates underlying GeoTIFF store from a local file.
+   * The GeoTIFF file will therefore be uploaded to GeoServer's platform.
+   *
+   * @param {String} workspace The workspace to create GeoTIFF store in
+   * @param {String} coverageStore The name of the new GeoTIFF store
+   * @param {String} layerName Name of the newly created coverage/layer
+   * @param {String} filePath Local path to the GeoTIFF file
+   * @param {String} [fileName] Target file name on server, will appear as layer title in GS
+   *
+   * @throws Error if request fails
+   *
+   * @returns {String} The successful response text
+   */
+  async publishGeotiffFromFile(workspace, coverageStore, layerName, filePath, fileName) {
+    const storeClient = new DatastoreClient(this.url, this.auth);
+    return storeClient.createGeotiffFromFile(
+      workspace,
+      coverageStore,
+      layerName,
+      fileName,
+      filePath
+    );
+  }
+
+  /**
+   * Publishes a layer based on a local GPKG file stream.
+   * Also creates underlying GeoPackage store from a stream containing a .gpkg file.
+   * Data will therefore be uploaded to GeoServer's platform.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {fs.ReadStream} readStream The stream of the GeoPackage file
+   * @param {Number} fileSizeInBytes The number of bytes of the stream
+   * @param {String} [fileName] Target file name on server
+   */
+  async publishGpkgFromStream(workspace, dataStore, readStream, fileSizeInBytes, fileName) {
+    const storeClient = new DatastoreClient(this.url, this.auth);
+    return storeClient.createGpkgFromStream(
+      workspace,
+      dataStore,
+      readStream,
+      fileSizeInBytes,
+      fileName
+    );
+  }
+
+  /**
+   * Publishes a layer based on a local GPKG file.
+   * Also creates underlying GeoPackage store from a local file.
+   * Data will therefore be uploaded to GeoServer's platform.
+   *
+   * @param {String} workspace The WS to create the data store in
+   * @param {String} dataStore The data store name
+   * @param {String} filePath  Local path to GeoPackage file
+   * @param {String} [fileName] Target file name on server
+   */
+  async publishGpkgFromFile(workspace, dataStore, filePath, fileName) {
+    const storeClient = new DatastoreClient(this.url, this.auth);
+    return storeClient.createGpkgFromFile(workspace, dataStore, filePath, fileName);
   }
 }

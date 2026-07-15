@@ -1,5 +1,6 @@
 /* global describe:false, it:false, before:false, after:false */
 import { expect } from 'chai';
+import fs from 'fs';
 import { GeoServerRestClient } from '../geoserver-rest-client.js';
 
 const port = process.env.GEOSERVER_PORT || 8080;
@@ -434,14 +435,28 @@ describe('Layer', () => {
     await grc.layers.deleteFeatureType(workSpace, wfsDataStore, featureLayerName, recursive);
   });
 
+  // ---------
+  //  publish directly from files
+  // ---------
+
   it('can create Coverage layer directly from GeoTiff file', async () => {
     const geotiff = 'test/sample_data/world.tif';
-    await grc.datastores.createGeotiffFromFile(
+    await grc.layers.publishGeotiffFromFile(workSpace, rasterStoreName, rasterLayerName, geotiff);
+  });
+
+  it('can create Coverage layer directly from GeoTiff stream', async () => {
+    const geotiff = 'test/sample_data/world.tif';
+    const layerName = 'geotiff-stream';
+    const stats = fs.statSync(geotiff);
+    const fileSizeInBytes = stats.size;
+    const readStream = fs.createReadStream(geotiff);
+
+    await grc.layers.publishGeotiffFromStream(
       workSpace,
       rasterStoreName,
-      rasterLayerName,
-      'My Raster Title',
-      geotiff
+      layerName,
+      readStream,
+      fileSizeInBytes
     );
   });
 
@@ -449,12 +464,24 @@ describe('Layer', () => {
     const storeName = 'gpkg-store';
     const gpkg = 'test/sample_data/iceland.gpkg';
     const fileNameOnServer = 'my-super-gpkg-file';
-    await grc.datastores.createGpkgFromFile(workSpace, storeName, gpkg, fileNameOnServer);
+
+    await grc.layers.publishGpkgFromFile(workSpace, storeName, gpkg, fileNameOnServer);
+  });
+
+  it('can create layer directly from GPKG stream', async () => {
+    const storeName = 'gpkg-store-stream';
+    const gpkg = 'test/sample_data/iceland.gpkg';
+
+    const stats = fs.statSync(gpkg);
+    const fileSizeInBytes = stats.size;
+    const readStream = fs.createReadStream(gpkg);
+
+    await grc.layers.publishGpkgFromStream(workSpace, storeName, readStream, fileSizeInBytes);
   });
 
   it('can get layers by workspace', async () => {
     const result = await grc.layers.getLayers(workSpace);
-    expect(result.layers.layer.length).to.equal(5);
+    expect(result.layers.layer.length).to.equal(7);
   });
 
   it('works with non-existing workspaces', async () => {
