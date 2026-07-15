@@ -434,7 +434,7 @@ describe('Layer', () => {
     await grc.layers.deleteFeatureType(workSpace, wfsDataStore, featureLayerName, recursive);
   });
 
-  it('can create Coverage layer', async () => {
+  it('can create Coverage layer directly from GeoTiff file', async () => {
     const geotiff = 'test/sample_data/world.tif';
     await grc.datastores.createGeotiffFromFile(
       workSpace,
@@ -445,9 +445,16 @@ describe('Layer', () => {
     );
   });
 
+  it('can create layer directly from GPKG file', async () => {
+    const storeName = 'gpkg-store';
+    const gpkg = 'test/sample_data/iceland.gpkg';
+    const fileNameOnServer = 'my-super-gpkg-file';
+    await grc.datastores.createGpkgFromFile(workSpace, storeName, gpkg, fileNameOnServer);
+  });
+
   it('can get layers by workspace', async () => {
     const result = await grc.layers.getLayers(workSpace);
-    expect(result.layers.layer.length).to.equal(4);
+    expect(result.layers.layer.length).to.equal(5);
   });
 
   it('works with non-existing workspaces', async () => {
