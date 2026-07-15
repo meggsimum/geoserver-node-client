@@ -83,18 +83,6 @@ async function main() {
 
     console.log('GeoServer wmts store ', prettyJson(await grc.datastores.getWmtsStore(ws, 'foo')));
 
-    const geotiff = 'world.tif';
-    console.log(
-      'GeoServer create GeoTIFF',
-      await grc.datastores.createGeotiffFromFile(
-        'test',
-        'my-cov-store',
-        'my-layer-name',
-        'my-layer-title',
-        geotiff
-      )
-    );
-
     console.log(
       'Created Image Mosaic Store',
       await grc.datastores.createImageMosaicStore(
