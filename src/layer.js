@@ -976,7 +976,7 @@ export default class LayerClient {
       workspace,
       coverageStore,
       layerName,
-      fileName,
+      fileName || layerName,
       readStream,
       fileSizeInBytes
     );
@@ -1003,7 +1003,7 @@ export default class LayerClient {
       workspace,
       coverageStore,
       layerName,
-      fileName,
+      fileName || layerName,
       filePath
     );
   }
