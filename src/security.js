@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import { getGeoServerResponseText, GeoServerResponseError, httpPost } from './util/geoserver.js';
 
 /**
  * Client for GeoServer security.
@@ -58,9 +57,7 @@ export default class SecurityClient {
       }
     };
 
-    const response = await fetch(this.url + 'security/usergroup/users.json', {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(this.url + 'security/usergroup/users.json', {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -100,9 +97,7 @@ export default class SecurityClient {
       }
     };
 
-    const response = await fetch(this.url + 'security/usergroup/user/' + username, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(this.url + 'security/usergroup/user/' + username, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -173,9 +168,7 @@ export default class SecurityClient {
   async createRole(role) {
     const url = `${this.url}security/roles/role/${role}`;
 
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth
       }
@@ -230,9 +223,7 @@ export default class SecurityClient {
    * @throws Error if request fails
    */
   async associateUserRole(username, role) {
-    const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(`${this.url}security/roles/role/${role}/user/${username}`, {
       headers: {
         Authorization: this.auth
       }
@@ -282,9 +273,7 @@ export default class SecurityClient {
     const body = {};
     body[rule] = roles.join(',');
 
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

@@ -1,6 +1,5 @@
-import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import { getGeoServerResponseText, GeoServerResponseError, httpPost } from './util/geoserver.js';
 import AboutClient from './about.js';
 
 /**
@@ -136,9 +135,7 @@ export default class StyleClient {
    * @throws Error if request fails
    */
   async publish(workspace, name, sldBody) {
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/vnd.ogc.sld+xml'
@@ -249,9 +246,7 @@ export default class StyleClient {
       url = this.url + 'layers/' + qualifiedName + '/styles';
     }
 
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

@@ -1,5 +1,9 @@
-import fetch from 'node-fetch';
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import {
+  getGeoServerResponseText,
+  GeoServerResponseError,
+  httpPut,
+  httpPost
+} from './util/geoserver.js';
 import AboutClient from './about.js';
 
 /**
@@ -81,9 +85,7 @@ export default class LayerGroupClient {
         ...options
       }
     };
-    const response = await fetch(`${this.url}/workspaces/${workspace}/layergroups`, {
-      credentials: 'include',
-      method: 'POST',
+    const response = await httpPost(`${this.url}/workspaces/${workspace}/layergroups`, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -157,9 +159,7 @@ export default class LayerGroupClient {
    */
   async update(workspace, layerGroupName, layerGroupDefinition) {
     const url = `${this.url}/workspaces/${workspace}/layergroups/${layerGroupName}.json`;
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
