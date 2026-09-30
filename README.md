@@ -24,13 +24,6 @@ Compatible with [GeoServer](https://geoserver.org)
 - v2.26.x (no more maintained and officially deprecated)
 - v2.25.x (no more maintained and officially deprecated)
 - v2.24.x (no more maintained and officially deprecated)
-- v2.23.x (no more maintained and officially deprecated)
-- v2.22.x (no more maintained and officially deprecated)
-- v2.21.x (no more maintained and officially deprecated)
-- v2.20.x (no more maintained and officially deprecated)
-- v2.19.x (no more maintained and officially deprecated)
-- v2.18.x (no more maintained and officially deprecated)
-- v2.17.x (no more maintained and officially deprecated)
 
 ## Usage
 
@@ -41,17 +34,17 @@ npm i geoserver-node-client
 usage as ES module (ES6)
 
 ```js
-import {GeoServerRestClient} from 'geoserver-node-client';
+import { GeoServerRestClient } from 'geoserver-node-client';
 
 const url = 'http://localhost:8080/geoserver/rest/';
 const user = 'admin';
 const pw = 'geoserver';
 const grc = new GeoServerRestClient(url, user, pw);
 
-async function main () {
-  const result =  await grc.about.exists();
+async function main() {
+  const result = await grc.about.exists();
   console.log(result);
-};
+}
 
 main();
 ```
@@ -67,11 +60,11 @@ var user = 'admin';
 var pw = 'geoserver';
 var grc = new GeoServerRestClient(url, user, pw);
 
-function main () {
+function main() {
   grc.about.exists().then(function (result) {
     console.log(result);
   });
-};
+}
 
 main();
 ```
@@ -95,22 +88,22 @@ npm run demo
 A request either succeeds or throws the custom `GeoServerResponseError`. It has the standard `message` property with a "human-readable" text. Additionally the error has the property `geoServerOutput` which contains the direct response from GeoServer. This output is not guaranteed to exist and can either be a simple text or a complete HTML document. The latter is difficult to read, but might still be helpful for debugging. This example shows how these error properties can be used. It also shows how to filter by error type:
 
 ```javascript
-  try {
-      // call any function from this library
-      await grc.styles.publish(workspace, styleName, sldBody)
-    } catch (error) {
-      // the standard error message
-      console.error(error.message);
+try {
+  // call any function from this library
+  await grc.styles.publish(workspace, styleName, sldBody);
+} catch (error) {
+  // the standard error message
+  console.error(error.message);
 
-      // the whole error including stack trace and (if available) the property 'geoServerOutput'
-      console.error(error);
+  // the whole error including stack trace and (if available) the property 'geoServerOutput'
+  console.error(error);
 
-      if (error instanceof GeoServerResponseError) {
-        // a GeoServer specific error happened
-      } else {
-        // another error happened
-      }
-    }
+  if (error instanceof GeoServerResponseError) {
+    // a GeoServer specific error happened
+  } else {
+    // another error happened
+  }
+}
 ```
 
 ## Unit Tests
@@ -118,14 +111,14 @@ A request either succeeds or throws the custom `GeoServerResponseError`. It has 
 First start a test setup using this Docker compose file:
 
 ```shell
-GEOSERVER_VERSION=3.0.0 TEMP_DIR=/tmp/gs docker compose -f test/docker-compose.yml up
+GEOSERVER_VERSION=3.0.1 TEMP_DIR=/tmp/gs docker compose -f test/docker-compose.yml up
 ```
 
 Then, in an other terminal, run:
 
 ```shell
 # specify the GeoServer version and run the test suite
-GEOSERVER_VERSION=3.0.0 npm run test
+GEOSERVER_VERSION=3.0.1 npm run test
 ```
 
 ## Release
@@ -163,10 +156,10 @@ npm run release
 
 ## Who do I talk to?
 
-You need professional support, maintenance or project-driven development around ***geoserver-node-client***? Please contact a service provider listed below:
+You need professional support, maintenance or project-driven development around _**geoserver-node-client**_? Please contact a service provider listed below:
 
 - meggsimum (Christian Mayer) - info __at## meggsimum ~~dot** de
 
 ## Credits
 
-This project was initiated by [meggsimum](https://meggsimum.de) within the [mFund](https://www.bmv.de/EN/Topics/Digital-Matters/mFund/mFund.html) research project **SAUBER**  and was further developed in the mFund research project **KLIPS**.
+This project was initiated by [meggsimum](https://meggsimum.de) within the [mFund](https://www.bmv.de/DE/Themen/Mobilitaet/mFund/Ueberblick/ueberblick.html) research project **SAUBER** and was further developed in the mFund research project **KLIPS**.
