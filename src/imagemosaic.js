@@ -1,4 +1,4 @@
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import { getGeoServerResponseText, GeoServerResponseError, httpPost } from './util/geoserver.js';
 
 /**
  * Client for GeoServer image mosaics
@@ -75,10 +75,7 @@ export default class ImageMosaicClient {
       coverageStore +
       '/external.imagemosaic';
 
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'text/plain'
@@ -112,10 +109,7 @@ export default class ImageMosaicClient {
       coverageStore +
       '/external.imagemosaic';
 
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-type': 'text/plain'

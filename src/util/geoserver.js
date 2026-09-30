@@ -3,6 +3,42 @@
  */
 
 /**
+ * Helper to perform HTTP POST with native fetch API.
+ *
+ * @param {String} url
+ * @param {Object} options
+ * @returns The native fetch response
+ */
+async function httpPost(url, options = {}) {
+  const { body, ...additionalOptions } = options;
+  return fetch(url, {
+    credentials: 'include',
+    method: 'POST',
+    duplex: 'half',
+    body,
+    ...additionalOptions
+  });
+}
+
+/**
+ * Helper to perform HTTP PUT with native fetch API.
+ *
+ * @param {String} url
+ * @param {Object} options
+ * @returns The native fetch response
+ */
+async function httpPut(url, options = {}) {
+  const { body, ...additionalOptions } = options;
+  return fetch(url, {
+    credentials: 'include',
+    method: 'PUT',
+    duplex: 'half',
+    body,
+    ...additionalOptions
+  });
+}
+
+/**
  * Return the GeoServer response text if available.
  *
  * @param {Response} response The response of the GeoServer
@@ -36,4 +72,4 @@ class GeoServerResponseError extends Error {
   }
 }
 
-export { getGeoServerResponseText, GeoServerResponseError };
+export { httpPost, httpPut, getGeoServerResponseText, GeoServerResponseError };

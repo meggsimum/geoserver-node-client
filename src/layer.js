@@ -1,4 +1,9 @@
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import {
+  getGeoServerResponseText,
+  GeoServerResponseError,
+  httpPut,
+  httpPost
+} from './util/geoserver.js';
 import AboutClient from './about.js';
 import DatastoreClient from './datastore.js';
 
@@ -94,10 +99,7 @@ export default class LayerClient {
     }
 
     const url = this.url + 'layers/' + qualifiedName + '.json';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -284,10 +286,7 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(this.url + 'workspaces/' + workspace + '/featuretypes', {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(this.url + 'workspaces/' + workspace + '/featuretypes', {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -347,12 +346,9 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(
+    const response = await httpPost(
       this.url + 'workspaces/' + workspace + '/datastores/' + dataStore + '/featuretypes',
       {
-        credentials: 'include',
-        method: 'POST',
-        duplex: 'half',
         headers: {
           Authorization: this.auth,
           'Content-Type': 'application/json'
@@ -472,12 +468,9 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(
+    const response = await httpPost(
       this.url + 'workspaces/' + workspace + '/wmsstores/' + dataStore + '/wmslayers',
       {
-        credentials: 'include',
-        method: 'POST',
-        duplex: 'half',
         headers: {
           Authorization: this.auth,
           'Content-Type': 'application/json'
@@ -518,12 +511,9 @@ export default class LayerClient {
       }
     };
 
-    const response = await fetch(
+    const response = await httpPost(
       this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/coverages',
       {
-        credentials: 'include',
-        method: 'POST',
-        duplex: 'half',
         headers: {
           Authorization: this.auth,
           'Content-Type': 'application/json'
@@ -633,10 +623,7 @@ export default class LayerClient {
       '/coverages/' +
       name +
       '.json';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -710,10 +697,7 @@ export default class LayerClient {
       '/featuretypes/' +
       name +
       '.json';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -841,10 +825,7 @@ export default class LayerClient {
       '/coverages/' +
       layername +
       '.json';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

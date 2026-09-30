@@ -1,4 +1,4 @@
-import { GeoServerResponseError, getGeoServerResponseText } from './util/geoserver.js';
+import { GeoServerResponseError, getGeoServerResponseText, httpPost } from './util/geoserver.js';
 
 /**
  * Client for GeoServer "Reset/Reload" to clear internal caches and reload
@@ -29,10 +29,7 @@ export default class ResetReloadClient {
    */
   async reset() {
     const url = this.url + 'reset';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth
       }
@@ -54,10 +51,7 @@ export default class ResetReloadClient {
    */
   async reload() {
     const url = this.url + 'reload';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth
       }

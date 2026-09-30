@@ -1,5 +1,10 @@
 import fs from 'fs';
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import {
+  getGeoServerResponseText,
+  GeoServerResponseError,
+  httpPut,
+  httpPost
+} from './util/geoserver.js';
 import AboutClient from './about.js';
 
 /**
@@ -229,10 +234,7 @@ export default class DatastoreClient {
     let url =
       this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore + '/file.geotiff';
     url += '?filename=' + fileName + '&coverageName=' + layerName;
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'image/tiff',
@@ -329,10 +331,7 @@ export default class DatastoreClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/datastores';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -374,10 +373,7 @@ export default class DatastoreClient {
       '/coveragestores/' +
       coverageStore +
       '/file.imagemosaic';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/zip'
@@ -412,10 +408,7 @@ export default class DatastoreClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/wmsstores';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -448,10 +441,7 @@ export default class DatastoreClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/wmtsstores';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -507,10 +497,7 @@ export default class DatastoreClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/datastores';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -620,10 +607,7 @@ export default class DatastoreClient {
     };
 
     const url = this.url + 'workspaces/' + workspace + '/datastores';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -660,10 +644,7 @@ export default class DatastoreClient {
       url += '&filename=' + fileName;
     }
 
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/x-sqlite3',

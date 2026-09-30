@@ -1,4 +1,4 @@
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import { getGeoServerResponseText, GeoServerResponseError, httpPost } from './util/geoserver.js';
 import AboutClient from './about.js';
 
 /**
@@ -58,10 +58,7 @@ export default class NamespaceClient {
       }
     };
 
-    const response = await fetch(this.url + 'namespaces', {
-      credentials: 'include',
-      method: 'POST',
-      duplex: 'half',
+    const response = await httpPost(this.url + 'namespaces', {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

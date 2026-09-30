@@ -1,4 +1,4 @@
-import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
+import { getGeoServerResponseText, GeoServerResponseError, httpPut } from './util/geoserver.js';
 
 /**
  * Client for GeoServer settings.
@@ -45,10 +45,7 @@ export default class SettingsClient {
    * @param {Object} settings The adapted GeoServer settings object
    */
   async updateSettings(settings) {
-    const response = await fetch(this.url + 'settings', {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(this.url + 'settings', {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -148,10 +145,7 @@ export default class SettingsClient {
     };
 
     const url = this.url + 'settings/contact';
-    const response = await fetch(url, {
-      credentials: 'include',
-      method: 'PUT',
-      duplex: 'half',
+    const response = await httpPut(url, {
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
