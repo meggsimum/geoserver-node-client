@@ -24,7 +24,7 @@ jobs:
   run-tests-maintenance:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 2.28.4
+      GEOSERVER_VERSION: 2.28.5
       GEOSERVER_PORT: 8080
     steps:
       - name: Install program "wait-for-it"
@@ -41,7 +41,7 @@ jobs:
       # the cache is created without them in the post run.
       # It also restores the cache if it exists.
       - uses: satackey/action-docker-layer-caching@v0.0.11
-      # Ignore the failure of a step and avoid terminating the job.
+        # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
       - name: Create empty temp directory as volume for GeoServer data
@@ -71,7 +71,7 @@ jobs:
   run-tests-stable:
     runs-on: ubuntu-latest
     env:
-      GEOSERVER_VERSION: 3.0.0
+      GEOSERVER_VERSION: 3.0.1
       GEOSERVER_PORT: 8081
     steps:
       - name: Install program "wait-for-it"
@@ -88,7 +88,7 @@ jobs:
       # the cache is created without them in the post run.
       # It also restores the cache if it exists.
       - uses: satackey/action-docker-layer-caching@v0.0.11
-      # Ignore the failure of a step and avoid terminating the job.
+        # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
       - name: Create empty temp directory as volume for GeoServer data
