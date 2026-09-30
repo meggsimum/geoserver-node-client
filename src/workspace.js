@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 import AboutClient from './about.js';
 
@@ -93,6 +92,7 @@ export default class WorkspaceClient {
     const response = await fetch(this.url + 'workspaces', {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

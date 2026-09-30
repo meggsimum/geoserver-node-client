@@ -41,8 +41,7 @@
   "author": "C. Mayer, meggsimum (info_at*meggsimum?dot?de)",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@babel/runtime": "^8.0.0",
-    "node-fetch": "^3.3.2"
+    "@babel/runtime": "^8.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.1",

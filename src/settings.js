@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
@@ -49,6 +48,7 @@ export default class SettingsClient {
     const response = await fetch(this.url + 'settings', {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -151,6 +151,7 @@ export default class SettingsClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

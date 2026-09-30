@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import fs from 'fs';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 import AboutClient from './about.js';
@@ -233,6 +232,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'image/tiff',
@@ -332,6 +332,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -376,6 +377,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/zip'
@@ -413,6 +415,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -448,6 +451,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -506,6 +510,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -618,6 +623,7 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -657,13 +663,13 @@ export default class DatastoreClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/x-sqlite3',
         'Content-Length': fileSizeInBytes
       },
-      body: readStream,
-      duplex: 'half'
+      body: readStream
     });
 
     if (!response.ok) {

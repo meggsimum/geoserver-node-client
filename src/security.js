@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
@@ -61,6 +60,7 @@ export default class SecurityClient {
     const response = await fetch(this.url + 'security/usergroup/users.json', {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -103,6 +103,7 @@ export default class SecurityClient {
     const response = await fetch(this.url + 'security/usergroup/user/' + username, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -176,6 +177,7 @@ export default class SecurityClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth
       }
@@ -233,6 +235,7 @@ export default class SecurityClient {
     const response = await fetch(`${this.url}security/roles/role/${role}/user/${username}`, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth
       }
@@ -285,6 +288,7 @@ export default class SecurityClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

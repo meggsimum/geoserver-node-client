@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { GeoServerResponseError, getGeoServerResponseText } from './util/geoserver.js';
 
 /**

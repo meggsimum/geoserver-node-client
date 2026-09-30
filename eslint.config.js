@@ -23,7 +23,8 @@ export default [
       globals: {
         Buffer: true,
         console: true,
-        process: true
+        process: true,
+        fetch: 'readonly'
       }
     },
     plugins: {

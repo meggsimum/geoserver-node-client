@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 import AboutClient from './about.js';
 import DatastoreClient from './datastore.js';
@@ -98,6 +97,7 @@ export default class LayerClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -287,6 +287,7 @@ export default class LayerClient {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/featuretypes', {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -351,6 +352,7 @@ export default class LayerClient {
       {
         credentials: 'include',
         method: 'POST',
+        duplex: 'half',
         headers: {
           Authorization: this.auth,
           'Content-Type': 'application/json'
@@ -475,6 +477,7 @@ export default class LayerClient {
       {
         credentials: 'include',
         method: 'POST',
+        duplex: 'half',
         headers: {
           Authorization: this.auth,
           'Content-Type': 'application/json'
@@ -520,6 +523,7 @@ export default class LayerClient {
       {
         credentials: 'include',
         method: 'POST',
+        duplex: 'half',
         headers: {
           Authorization: this.auth,
           'Content-Type': 'application/json'
@@ -632,6 +636,7 @@ export default class LayerClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -708,6 +713,7 @@ export default class LayerClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'
@@ -838,6 +844,7 @@ export default class LayerClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'PUT',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

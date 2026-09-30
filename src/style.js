@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import WorkspaceClient from './workspace.js';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 import AboutClient from './about.js';
@@ -139,6 +138,7 @@ export default class StyleClient {
     const response = await fetch(this.url + 'workspaces/' + workspace + '/styles?name=' + name, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/vnd.ogc.sld+xml'
@@ -252,6 +252,7 @@ export default class StyleClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'application/json'

@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { getGeoServerResponseText, GeoServerResponseError } from './util/geoserver.js';
 
 /**
@@ -79,6 +78,7 @@ export default class ImageMosaicClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-Type': 'text/plain'
@@ -115,6 +115,7 @@ export default class ImageMosaicClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth,
         'Content-type': 'text/plain'

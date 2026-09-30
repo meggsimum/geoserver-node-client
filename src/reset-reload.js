@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { GeoServerResponseError, getGeoServerResponseText } from './util/geoserver.js';
 
 /**
@@ -33,6 +32,7 @@ export default class ResetReloadClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth
       }
@@ -57,6 +57,7 @@ export default class ResetReloadClient {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'POST',
+      duplex: 'half',
       headers: {
         Authorization: this.auth
       }
