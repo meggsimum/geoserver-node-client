@@ -206,7 +206,7 @@ describe('Datastore', () => {
 
   it('can create a coverage store', async () => {
     const geotiff = 'test/sample_data/world.tif';
-    grc.datastores.createGeotiffFromFile(
+    await grc.datastores.createGeotiffFromFile(
       workSpace,
       'my-rasterstore',
       'my-raster-name',
