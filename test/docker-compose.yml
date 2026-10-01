@@ -10,6 +10,7 @@ services:
       - '${TEMP_DIR}:/opt/geoserver_data/:Z'
     environment:
       - CORS_ENABLED=1
+      - SKIP_DEMO_DATA=true
 
   postgres:
     image: postgis/postgis:${POSTGRES_VERSION}-${POSTGIS_VERSION}

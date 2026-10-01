@@ -1,7 +1,7 @@
 /* global describe:false, it:false, before:false, after:false */
 import { expect } from 'chai';
 import fs from 'fs';
-import { GeoServerRestClient } from '../geoserver-rest-client.js';
+import { GeoServerRestClient } from '../../geoserver-rest-client.js';
 
 const port = process.env.GEOSERVER_PORT || 8080;
 const url = `http://localhost:${port}/geoserver/rest/`;
@@ -785,7 +785,7 @@ describe('Security', () => {
     await grc.security.createDataAccessRule(rule, ['ADMIN']);
 
     const accessRules = await grc.security.getAllAccessRules();
-    expect(Object.entries(accessRules).length).to.equal(3); // always 2 default roles existing
+    expect(Object.entries(accessRules).length).to.equal(1);
   });
 
   it('can delete data access rule (ACL)', async () => {
@@ -793,7 +793,7 @@ describe('Security', () => {
     await grc.security.deleteDataAccessRule(rule);
 
     const accessRules = await grc.security.getAllAccessRules();
-    expect(Object.entries(accessRules).length).to.equal(2); // always 2 default roles existing
+    expect(Object.entries(accessRules).length).to.equal(0);
   });
 
   after(async () => {
