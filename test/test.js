@@ -57,7 +57,11 @@ describe('Settings', () => {
     await grc.settings.updateSettings(settingsJson);
 
     const settings = await grc.settings.getSettings();
-    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose);
+    expect(settings.global.settings.verbose).to.equal(settingsJson.global.settings.verbose); // update settings and retrieve again
+
+    // reset WMS settings to default values
+    const wmsSettings = { wms: { name: 'Maps' } };
+    await grc.settings.updateWmsSettings(wmsSettings);
   });
 
   it('updates proxyBaseUrl', async () => {
@@ -101,6 +105,53 @@ describe('Settings', () => {
     // test two sample values
     expect(address).to.equal(contactResponse.contact.address);
     expect(state).to.equal(contactResponse.contact.addressState);
+  });
+
+  it('can retrieve WMS settings', async () => {
+    const wmsSettings = await grc.settings.getWmsSettings();
+
+    // test 3 sample values
+    expect(wmsSettings.wms).to.be.an('object');
+    expect(wmsSettings.wms.name).to.equal('Maps');
+  });
+
+  it('can update WMS settings', async () => {
+    const wmsSettings = await grc.settings.getWmsSettings();
+
+    // update settings and retrieve again
+    wmsSettings.wms.name = 'My new WMS name';
+    await grc.settings.updateWmsSettings(wmsSettings);
+    const updatedWmsSettings = await grc.settings.getWmsSettings();
+
+    expect(updatedWmsSettings.wms).to.be.an('object');
+    expect(updatedWmsSettings.wms.name).to.equal('My new WMS name');
+  });
+
+  it('can handle malformed WMS settings while updating', async () => {
+    const wmsSettings = { foo: 'bar' };
+    let error;
+
+    try {
+      await grc.settings.updateWmsSettings(wmsSettings);
+    } catch (caughtError) {
+      error = caughtError;
+    }
+
+    expect(error).to.be.instanceOf(Error);
+  });
+
+  it('can update WMS SRS limitation', async () => {
+    const supportedSrs = ['EPSG:4326', 'EPSG:3857', 'EPSG:25832'];
+
+    await grc.settings.updateWmsSrsLimitation(supportedSrs);
+
+    const wmsSettings = await grc.settings.getWmsSettings();
+
+    // test 3 sample values
+    expect(wmsSettings.wms.srs.string.length).to.equal(3);
+    expect(wmsSettings.wms.srs.string.includes('EPSG:4326')).to.equal(true);
+    expect(wmsSettings.wms.srs.string.includes('EPSG:3857')).to.equal(true);
+    expect(wmsSettings.wms.srs.string.includes('EPSG:25832')).to.equal(true);
   });
 });
 
