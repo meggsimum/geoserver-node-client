@@ -205,7 +205,7 @@ export default class SettingsClient {
   }
 
   /**
-   * Updates the WMS SRS limitation to a given list of supported SRS.
+   * Updates the SRS limitation to a given list of supported SRS.
    *
    * @param {string[]} supportedSrs The list of supported SRS, e.g. ['EPSG:4326', 'EPSG:3857']
    */

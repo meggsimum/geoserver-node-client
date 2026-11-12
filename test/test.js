@@ -110,7 +110,6 @@ describe('Settings', () => {
   it('can retrieve WMS settings', async () => {
     const wmsSettings = await grc.settings.getWmsSettings();
 
-    // test 3 sample values
     expect(wmsSettings.wms).to.be.an('object');
     expect(wmsSettings.wms.name).to.equal('Maps');
   });
@@ -118,7 +117,7 @@ describe('Settings', () => {
   it('can update WMS settings', async () => {
     const wmsSettings = await grc.settings.getWmsSettings();
 
-    // update settings and retrieve again
+    // update settings and retrieve again to check
     wmsSettings.wms.name = 'My new WMS name';
     await grc.settings.updateWmsSettings(wmsSettings);
     const updatedWmsSettings = await grc.settings.getWmsSettings();
@@ -128,7 +127,7 @@ describe('Settings', () => {
   });
 
   it('can handle malformed WMS settings while updating', async () => {
-    const wmsSettings = { foo: 'bar' };
+    const wmsSettings = { foo: 'bar' }; // invalid settings object, missing 'wms' property
     let error;
 
     try {
@@ -143,15 +142,14 @@ describe('Settings', () => {
   it('can update WMS SRS limitation', async () => {
     const supportedSrs = ['EPSG:4326', 'EPSG:3857', 'EPSG:25832'];
 
+    // update settings and retrieve again to check
     await grc.settings.updateWmsSrsLimitation(supportedSrs);
+    const updatedWmsSettings = await grc.settings.getWmsSettings();
 
-    const wmsSettings = await grc.settings.getWmsSettings();
-
-    // test 3 sample values
-    expect(wmsSettings.wms.srs.string.length).to.equal(3);
-    expect(wmsSettings.wms.srs.string.includes('EPSG:4326')).to.equal(true);
-    expect(wmsSettings.wms.srs.string.includes('EPSG:3857')).to.equal(true);
-    expect(wmsSettings.wms.srs.string.includes('EPSG:25832')).to.equal(true);
+    expect(updatedWmsSettings.wms.srs.string.length).to.equal(3);
+    expect(updatedWmsSettings.wms.srs.string.includes('EPSG:4326')).to.equal(true);
+    expect(updatedWmsSettings.wms.srs.string.includes('EPSG:3857')).to.equal(true);
+    expect(updatedWmsSettings.wms.srs.string.includes('EPSG:25832')).to.equal(true);
   });
 });
 
