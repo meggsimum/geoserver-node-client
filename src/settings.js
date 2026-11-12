@@ -157,4 +157,65 @@ export default class SettingsClient {
       throw new GeoServerResponseError(null, geoServerResponse);
     }
   }
+
+  // ==== WMS Settings ====
+
+  /**
+   * Get the complete settings object for the GeoServer WMS.
+   *
+   * @returns {Promise<object>} The WMS settings object
+   */
+  async getWmsSettings() {
+    const response = await fetch(this.url + 'services/wms/settings.json', {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        Authorization: this.auth
+      }
+    });
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+    return response.json();
+  }
+
+  /**
+   * Updates the WMS settings with a given settings object.
+   *
+   * @param {object} wmsSettings The adapted WMS settings object
+   */
+  async updateWmsSettings(wmsSettings) {
+    if (!wmsSettings || !wmsSettings.wms) {
+      throw new GeoServerResponseError('Invalid WMS settings object');
+    }
+
+    const response = await httpPut(this.url + 'services/wms/settings.json', {
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(wmsSettings)
+    });
+
+    if (!response.ok) {
+      const geoServerResponse = await getGeoServerResponseText(response);
+      throw new GeoServerResponseError(null, geoServerResponse);
+    }
+  }
+
+  /**
+   * Updates the SRS limitation to a given list of supported SRS.
+   *
+   * @param {string[]} supportedSrs The list of supported SRS, e.g. ['EPSG:4326', 'EPSG:3857']
+   */
+  async updateWmsSrsLimitation(supportedSrs) {
+    const wmsSettings = await this.getWmsSettings();
+
+    // apply the new SRS limitations
+    wmsSettings.wms.srs ??= {};
+    wmsSettings.wms.srs.string = supportedSrs;
+
+    await this.updateWmsSettings(wmsSettings);
+  }
 }
