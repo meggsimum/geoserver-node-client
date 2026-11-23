@@ -118,11 +118,11 @@ export default class WorkspaceClient {
    * Deletes a workspace.
    *
    * @param {String} name Name of the workspace to delete
-   * @param {Boolean} recurse Flag to enable recursive deletion
+   * @param {Boolean} [recurse=false] Flag to enable recursive deletion
    *
    * @throws Error if request fails
    */
-  async delete(name, recurse) {
+  async delete(name, recurse = false) {
     const response = await fetch(this.url + 'workspaces/' + name + '?recurse=' + recurse, {
       credentials: 'include',
       method: 'DELETE',

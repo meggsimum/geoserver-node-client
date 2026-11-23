@@ -534,11 +534,11 @@ export default class LayerClient {
    * @param {String} workspace Workspace where layer to delete is in
    * @param {String} datastore The datastore where the layer to delete is in
    * @param {String} name Layer to delete
-   * @param {Boolean} recurse Flag to enable recursive deletion
+   * @param {Boolean} [recurse=false] Flag to enable recursive deletion
    *
    * @throws Error if request fails
    */
-  async deleteFeatureType(workspace, datastore, name, recurse) {
+  async deleteFeatureType(workspace, datastore, name, recurse = false) {
     const response = await fetch(
       this.url +
         'workspaces/' +
