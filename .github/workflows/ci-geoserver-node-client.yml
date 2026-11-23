@@ -36,28 +36,34 @@ jobs:
       - run: npm run lint
       - run: npm run test:unit
 
-  run-integration-tests-maintenance:
+  run-integration-tests:
     needs: run-unit-tests
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # let both GeoServer versions finish even if one fails
+      matrix:
+        include:
+          - name: maintenance
+            geoserver_version: 2.28.6
+            geoserver_port: 8080
+          - name: stable
+            geoserver_version: 3.0.2
+            geoserver_port: 8081
+    name: run-integration-tests-${{ matrix.name }}
     env:
-      GEOSERVER_VERSION: 2.28.6
-      GEOSERVER_PORT: 8080
+      GEOSERVER_VERSION: ${{ matrix.geoserver_version }}
+      GEOSERVER_PORT: ${{ matrix.geoserver_port }}
     steps:
       - name: Install program "wait-for-it"
         run: sudo apt install wait-for-it
 
-      # use a current Node.js version instead of deprecated v12 in Ubuntu image
       - uses: actions/setup-node@v3
         with:
           node-version: '24'
 
       - uses: actions/checkout@v4
 
-      # In this step, this action saves a list of existing images,
-      # the cache is created without them in the post run.
-      # It also restores the cache if it exists.
       - uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
       - name: Create empty temp directory as volume for GeoServer data
@@ -65,69 +71,14 @@ jobs:
           RANDOM_FOLDER="docker-temp-$(uuidgen)"
           TEMP_DIR="${{ runner.temp }}/$RANDOM_FOLDER"
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
-          rm -rf "$TEMP_DIR"
           mkdir -p "$TEMP_DIR"
-          echo "Temp directory is ready at $TEMP_DIR"
 
       - name: Run docker-compose test setup
-        run: |
-          export TEMP_DIR="$TEMP_DIR"
-          docker compose -f test/docker-compose.yml up -d
+        run: docker compose -f test/docker-compose.yml up -d
 
-      # finishes when tomcat of GeoServer is running
-      - run: wait-for-it "localhost:8080"
-
-      # we use wget to ensure that GeoServer is running
-      - run: wget http://localhost:8080/geoserver/web
+      - run: wait-for-it "localhost:$GEOSERVER_PORT"
+      - run: wget "http://localhost:$GEOSERVER_PORT/geoserver/web"
 
       - run: npm install
-      - run: npm run test:reset-gs # ensure empty GeoServer
-      - run: npm run test:integration
-
-  run-integration-tests-stable:
-    needs: run-unit-tests
-    runs-on: ubuntu-latest
-    env:
-      GEOSERVER_VERSION: 3.0.2
-      GEOSERVER_PORT: 8081
-    steps:
-      - name: Install program "wait-for-it"
-        run: sudo apt install wait-for-it
-
-      # use a current Node.js version instead of deprecated v12 in Ubuntu image
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '24'
-
-      - uses: actions/checkout@v4
-
-      # In this step, this action saves a list of existing images,
-      # the cache is created without them in the post run.
-      # It also restores the cache if it exists.
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.
-        continue-on-error: true
-
-      - name: Create empty temp directory as volume for GeoServer data
-        run: |
-          RANDOM_FOLDER="docker-temp-$(uuidgen)"
-          TEMP_DIR="${{ runner.temp }}/$RANDOM_FOLDER"
-          echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
-          rm -rf "$TEMP_DIR"
-          mkdir -p "$TEMP_DIR"
-          echo "Temp directory is ready at $TEMP_DIR"
-
-      - name: Run docker-compose test setup
-        run: |
-          export TEMP_DIR="$TEMP_DIR"
-          docker compose -f test/docker-compose.yml up -d
-
-      # finishes when tomcat of GeoServer is running
-      - run: wait-for-it "localhost:8081"
-
-      # we use wget to ensure that GeoServer is running
-      - run: wget http://localhost:8081/geoserver/web
-
-      - run: npm install
-      - run: npm run test:reset-gs # ensure empty GeoServer
+      - run: npm run test:reset-gs
       - run: npm run test:integration
