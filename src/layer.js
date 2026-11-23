@@ -326,23 +326,27 @@ export default class LayerClient {
     abstract,
     nativeBoundingBox
   ) {
-    // apply CRS info for native BBOX if not provided
-    if (nativeBoundingBox && !nativeBoundingBox.crs) {
-      nativeBoundingBox.crs = {
+    const resolvedSrs = srs || 'EPSG:4326';
+
+    // apply CRS info for native BBOX if not provided (on a copy, so the
+    // object of the caller stays untouched)
+    const nativeBbox = nativeBoundingBox && {
+      ...nativeBoundingBox,
+      crs: nativeBoundingBox.crs || {
         '@class': 'projected',
-        $: srs
-      };
-    }
+        $: resolvedSrs
+      }
+    };
 
     const body = {
       featureType: {
         nativeName: nativeName,
         name: name || nativeName,
         title: title || name || nativeName,
-        srs: srs || 'EPSG:4326',
+        srs: resolvedSrs,
         enabled: typeof enabled === 'boolean' ? enabled : true,
         abstract: abstract || '',
-        nativeBoundingBox: nativeBoundingBox
+        nativeBoundingBox: nativeBbox
       }
     };
 
@@ -505,8 +509,8 @@ export default class LayerClient {
         nativeName: nativeName,
         name: name || nativeName,
         title: title || name || nativeName,
-        srs: srs,
-        enabled: enabled,
+        srs: srs || 'EPSG:4326',
+        enabled: typeof enabled === 'boolean' ? enabled : true,
         abstract: abstract || ''
       }
     };
