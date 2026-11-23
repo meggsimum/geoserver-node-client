@@ -1,4 +1,4 @@
-/* global describe:false, it:false, afterEach:false, Response:false */
+/* global describe:false, it:false, afterEach:false */
 
 import { expect } from 'chai';
 

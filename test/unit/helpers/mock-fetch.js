@@ -1,5 +1,3 @@
-/* global Response:false */
-
 /**
  * Replaces the global `fetch` with a stub for unit tests.
  *
