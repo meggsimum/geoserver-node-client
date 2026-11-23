@@ -24,7 +24,9 @@ export default [
         Buffer: true,
         console: true,
         process: true,
-        fetch: 'readonly'
+        fetch: 'readonly',
+        Headers: 'readonly',
+        Response: 'readonly'
       }
     },
     plugins: {

@@ -68,7 +68,7 @@ export default class SettingsClient {
     const settingsJson = await this.getSettings();
 
     // check if settings are correctly formatted
-    if (!settingsJson.global && !settingsJson.global.settings) {
+    if (!settingsJson?.global?.settings) {
       return false;
     }
 

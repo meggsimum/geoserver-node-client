@@ -106,7 +106,20 @@ try {
 }
 ```
 
-## Unit Tests
+## Tests
+
+There are two kinds of tests:
+
+- **Unit tests** (`test/unit`) mock the HTTP layer (`fetch`). They need neither Docker nor a GeoServer and run in well under a second.
+- **Integration tests** (`test/integration`) run against a real GeoServer (and PostGIS) started via Docker Compose. They check what GeoServer really answers, e.g. across versions.
+
+### Unit tests
+
+```shell
+npm run test:unit
+```
+
+### Integration tests
 
 First start a test setup using this Docker compose file:
 
@@ -117,7 +130,17 @@ GEOSERVER_VERSION=3.0.1 TEMP_DIR=/tmp/gs docker compose -f test/docker-compose.y
 Then, in an other terminal, run:
 
 ```shell
-# specify the GeoServer version and run the test suite
+# specify the GeoServer version and run the integration tests
+GEOSERVER_VERSION=3.0.1 npm run test:integration
+```
+
+The integration tests expect an empty GeoServer. If an earlier run left data behind, reset it with `npm run test:reset-gs`.
+
+### All tests
+
+`npm run test` lints the code and then runs the unit tests followed by the integration tests, so it needs the Docker setup from above to be running:
+
+```shell
 GEOSERVER_VERSION=3.0.1 npm run test
 ```
 

@@ -516,11 +516,11 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace where the data store is in
    * @param {String} coverageStore Name of data store to delete
-   * @param {String} recurse Flag to enable recursive deletion
+   * @param {Boolean|String} [recurse=false] Flag to enable recursive deletion
    *
    * @throws Error if request fails
    */
-  async deleteDataStore(workspace, dataStore, recurse) {
+  async deleteDataStore(workspace, dataStore, recurse = false) {
     let url = this.url + 'workspaces/' + workspace + '/datastores/' + dataStore;
     url += '?recurse=' + recurse;
 
@@ -545,11 +545,11 @@ export default class DatastoreClient {
    *
    * @param {String} workspace The workspace where the CoverageStore is in
    * @param {String} coverageStore Name of CoverageStore to delete
-   * @param {String} recurse Flag to enable recursive deletion
+   * @param {Boolean|String} [recurse=false] Flag to enable recursive deletion
    *
    * @throws Error if request fails
    */
-  async deleteCoverageStore(workspace, coverageStore, recurse) {
+  async deleteCoverageStore(workspace, coverageStore, recurse = false) {
     let url = this.url + 'workspaces/' + workspace + '/coveragestores/' + coverageStore;
     url += '?recurse=' + recurse;
 

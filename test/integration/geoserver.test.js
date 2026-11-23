@@ -1,7 +1,7 @@
 /* global describe:false, it:false, before:false, after:false */
 import { expect } from 'chai';
 import fs from 'fs';
-import { GeoServerRestClient } from '../geoserver-rest-client.js';
+import { GeoServerResponseError, GeoServerRestClient } from '../../geoserver-rest-client.js';
 
 const port = process.env.GEOSERVER_PORT || 8080;
 const url = `http://localhost:${port}/geoserver/rest/`;
@@ -785,7 +785,7 @@ describe('Security', () => {
     await grc.security.createDataAccessRule(rule, ['ADMIN']);
 
     const accessRules = await grc.security.getAllAccessRules();
-    expect(Object.entries(accessRules).length).to.equal(3); // always 2 default roles existing
+    expect(Object.entries(accessRules).length).to.equal(1);
   });
 
   it('can delete data access rule (ACL)', async () => {
@@ -793,7 +793,7 @@ describe('Security', () => {
     await grc.security.deleteDataAccessRule(rule);
 
     const accessRules = await grc.security.getAllAccessRules();
-    expect(Object.entries(accessRules).length).to.equal(2); // always 2 default roles existing
+    expect(Object.entries(accessRules).length).to.equal(0);
   });
 
   after(async () => {
@@ -849,6 +849,17 @@ describe('Layergroups', () => {
   it('can create a layergroup', async () => {
     const layergroup = await grc.layergroups.create(workSpace, layerGroupName, [rasterLayerName]);
     expect(layergroup).to.equal(`${url}layergroups/${layerGroupName}`);
+  });
+
+  it('rejects a layergroup that already exists', async () => {
+    let error;
+    try {
+      await grc.layergroups.create(workSpace, layerGroupName, [rasterLayerName]);
+    } catch (e) {
+      error = e;
+    }
+    expect(error).to.be.instanceOf(GeoServerResponseError);
+    expect(error.message).to.equal('Unable to add layergroup as it already exists');
   });
 
   it('can get a layergroup by name and workspace negative test', async () => {

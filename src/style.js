@@ -79,6 +79,11 @@ export default class StyleClient {
     const ws = new WorkspaceClient(this.url, this.auth);
     const allWs = await ws.getAll();
 
+    // GeoServer answers with an empty string if there is no workspace at all
+    if (allWs && allWs.workspaces === '') {
+      return allStyles;
+    }
+
     if (
       !allWs ||
       !allWs.workspaces ||

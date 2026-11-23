@@ -43,7 +43,7 @@ export default class LayerGroupClient {
    *
    * @throws Error if request fails
    *
-   * @returns {string} A string with layer group location or undefined if not found
+   * @returns {string} A string with the location of the created layer group
    */
   async create(workspace, layerGroupName, layers, layerGroupOptions) {
     const options = {
@@ -52,8 +52,8 @@ export default class LayerGroupClient {
       abstractTxt: '',
       bounds: {
         minx: -180,
-        maxx: -90,
-        miny: 180,
+        miny: -90,
+        maxx: 180,
         maxy: 90,
         crs: 'EPSG:4326'
       },
@@ -94,21 +94,21 @@ export default class LayerGroupClient {
     });
 
     if (!response.ok) {
-      const grc = new AboutClient(this.url, this.auth);
-      if (await grc.exists()) {
-        // GeoServer exists, but requested item does not exist, we return empty
-        return;
-      } else {
-        // There was a general problem with GeoServer
-        const geoServerResponse = await getGeoServerResponseText(response);
-        throw new GeoServerResponseError(null, geoServerResponse);
+      const geoServerResponse = await getGeoServerResponseText(response);
+      // GeoServer answers with HTTP 500 and a text like "Layer group named
+      // 'x' already exists in workspace y" instead of a 409, so we check both
+      const alreadyExists =
+        response.status === 409 || /already exists/i.test(geoServerResponse || '');
+      if (alreadyExists) {
+        throw new GeoServerResponseError(
+          'Unable to add layergroup as it already exists',
+          geoServerResponse
+        );
       }
+      throw new GeoServerResponseError(null, geoServerResponse);
     }
-    // get resource location from response header
-    const location = response.headers.get('location');
-
-    // return resource location
-    return location;
+    // return resource location from response header
+    return response.headers.get('location');
   }
 
   /**
